@@ -1,0 +1,552 @@
+openapi: 3.0.3
+info:
+  title: Linux Command RAG — внешний Go API
+  version: 0.1.0
+  description: Проект контракта для реализации. На контрольной точке 1 работающий HTTP API не представлен;
+    see api-behavior.md. UTF-8, cookie-сессии; examples не подтверждают corpus coverage.
+servers:
+- url: http://localhost:8081
+  description: Будущий локальный Go API; production same-origin /api/v1
+security:
+- BrowserSession: []
+paths:
+  /api/v1/corpus:
+    get:
+      operationId: getCorpus
+      summary: Доступный проверенный корпус
+      security: []
+      responses:
+        '200':
+          description: Успех
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CorpusInfo'
+        '503':
+          description: Поиск/индекс недоступен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/v1/chats:
+    get:
+      operationId: listChats
+      summary: Чаты текущей browser-сессии; создаёт cookie при отсутствии
+      security: []
+      responses:
+        '200':
+          description: Успех
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatList'
+        '503':
+          description: База недоступна
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    post:
+      operationId: createChat
+      summary: Новый чат с фиксированным target; создаёт cookie при отсутствии
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateChat'
+            example:
+              distribution: debian
+              release: '13'
+              title: Новый чат
+      responses:
+        '201':
+          description: Успех
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Chat'
+        '400':
+          description: Невалидный JSON
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '422':
+          description: Target не входит в проверенный corpus
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '503':
+          description: Зависимость недоступна
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/v1/chats/{chat_id}/messages:
+    parameters:
+    - name: chat_id
+      in: path
+      required: true
+      schema: &id001
+        type: string
+        format: uuid
+    get:
+      operationId: listMessages
+      summary: История собственного чата
+      responses:
+        '200':
+          description: Успех
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageList'
+        '404':
+          description: Чат отсутствует или чужой
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    post:
+      operationId: sendMessage
+      summary: JSON-ответ или поток SSE; подробный протокол api-behavior.md
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendMessage'
+            example:
+              content: Как найти обычные файлы больше 100 МиБ?
+              stream: true
+              client_request_id: b2d1f497-03d1-4ef6-980c-530b46fbc962
+      responses:
+        '200':
+          description: 'stream=false: JSON; stream=true: sources/token/done или terminal error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompletedAnswer'
+            text/event-stream:
+              schema:
+                type: string
+              example: 'event: token
+
+                data: {"delta":"Текст"}
+
+
+                '
+        '400':
+          description: Невалидный вопрос/JSON
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: Чат отсутствует или чужой
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '409':
+          description: REQUEST_EXISTS с message_id либо CHAT_BUSY
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '422':
+          description: Target больше не доступен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '429':
+          description: Очередь заполнена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '503':
+          description: Поиск или модель недоступны
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/v1/chats/{chat_id}/messages/{message_id}/sources/{chunk_id}:
+    parameters:
+    - name: chat_id
+      in: path
+      required: true
+      schema: *id001
+    - name: message_id
+      in: path
+      required: true
+      schema: *id001
+    - name: chunk_id
+      in: path
+      required: true
+      schema: &id002
+        type: string
+    get:
+      operationId: getSourceSnapshot
+      summary: Snapshot источника конкретного собственного ответа
+      responses:
+        '200':
+          description: Успех
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SourceSnapshot'
+        '404':
+          description: Объект отсутствует или чужой
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/v1/health:
+    get:
+      operationId: getHealth
+      summary: Процесс жив; без сессии и без генерации
+      security: []
+      responses:
+        '200':
+          description: Успех
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Health'
+  /api/v1/ready:
+    get:
+      operationId: getReady
+      summary: БД, индекс и подготовленная модель доступны; без полной генерации
+      security: []
+      responses:
+        '200':
+          description: Успех
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ready'
+        '503':
+          description: Не готов
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+components:
+  securitySchemes:
+    BrowserSession:
+      type: apiKey
+      in: cookie
+      name: rag_session
+      description: Анонимная browser session; новая cookie создаётся при первом запросе списка/создания
+        чатов. Чужие объекты недоступны.
+  schemas:
+    Target:
+      type: object
+      properties:
+        distribution: &id003
+          type: string
+          enum:
+          - debian
+          - ubuntu
+          - fedora
+          - arch
+        release: &id004
+          type: string
+          minLength: 1
+      required:
+      - distribution
+      - release
+      additionalProperties: false
+    Release:
+      type: object
+      properties:
+        id: *id002
+        label: *id002
+      required:
+      - id
+      - label
+      additionalProperties: false
+    Distribution:
+      type: object
+      properties:
+        id: *id002
+        label: *id002
+        releases:
+          type: array
+          items:
+            $ref: '#/components/schemas/Release'
+      required:
+      - id
+      - label
+      - releases
+      additionalProperties: false
+    CorpusInfo:
+      type: object
+      properties:
+        corpus_version: *id002
+        distributions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Distribution'
+      required:
+      - corpus_version
+      - distributions
+      additionalProperties: false
+    ApiError:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code: *id002
+            message: *id002
+            message_id: *id001
+          required:
+          - code
+          - message
+          additionalProperties: false
+      required:
+      - error
+      additionalProperties: false
+    Health:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - ok
+      required:
+      - status
+      additionalProperties: false
+    Ready:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - ready
+        corpus_version: *id002
+      required:
+      - status
+      - corpus_version
+      additionalProperties: false
+    CreateChat:
+      type: object
+      properties:
+        distribution: *id003
+        release: *id004
+        title:
+          type: string
+          maxLength: 120
+          default: Новый чат
+      required:
+      - distribution
+      - release
+      additionalProperties: false
+    Chat:
+      type: object
+      properties:
+        id: *id001
+        distribution: *id003
+        release: *id002
+        title: *id002
+        created_at: &id005
+          type: string
+          format: date-time
+      required:
+      - id
+      - distribution
+      - release
+      - title
+      additionalProperties: false
+    SourceCard:
+      type: object
+      properties:
+        ref:
+          type: integer
+          minimum: 1
+        chunk_id: *id002
+        document_id: *id002
+        title: *id002
+        source_url:
+          type: string
+          format: uri
+        distribution: *id002
+        release: *id002
+      required:
+      - ref
+      - chunk_id
+      - document_id
+      - title
+      - source_url
+      - distribution
+      - release
+      additionalProperties: false
+    SourceSnapshot:
+      type: object
+      properties:
+        ref:
+          type: integer
+          minimum: 1
+        chunk_id: *id002
+        document_id: *id002
+        title: *id002
+        source_url:
+          type: string
+          format: uri
+        distribution: *id002
+        release: *id002
+        text: *id002
+        command: *id002
+        section: *id002
+        package_version: *id002
+        corpus_version: *id002
+      required:
+      - ref
+      - chunk_id
+      - document_id
+      - title
+      - source_url
+      - distribution
+      - release
+      - text
+      - command
+      - section
+      - package_version
+      - corpus_version
+      additionalProperties: false
+    Message:
+      type: object
+      properties:
+        id: *id001
+        role:
+          type: string
+          enum:
+          - user
+          - assistant
+        content: *id002
+        status:
+          type: string
+          enum:
+          - complete
+          - generating
+          - cancelled
+          - error
+        sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/SourceCard'
+        created_at: *id005
+      required:
+      - id
+      - role
+      - content
+      - status
+      - sources
+      - created_at
+      additionalProperties: false
+    SendMessage:
+      type: object
+      properties:
+        content:
+          type: string
+          minLength: 1
+          maxLength: 4000
+        stream:
+          type: boolean
+          default: true
+        client_request_id: *id001
+      required:
+      - content
+      - stream
+      - client_request_id
+      additionalProperties: false
+    CompletedAnswer:
+      type: object
+      properties:
+        message_id: *id001
+        answer: *id002
+        sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/SourceCard'
+        finish_reason:
+          type: string
+          enum:
+          - stop
+          - no_context
+        corpus_version: *id002
+      required:
+      - message_id
+      - answer
+      - sources
+      - finish_reason
+      - corpus_version
+      additionalProperties: false
+    ChatList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Chat'
+      required:
+      - items
+      additionalProperties: false
+    MessageList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Message'
+      required:
+      - items
+      additionalProperties: false
+    SseSources:
+      type: object
+      properties:
+        message_id: *id001
+        corpus_version: *id002
+        sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/SourceCard'
+      required:
+      - message_id
+      - corpus_version
+      - sources
+      additionalProperties: false
+    SseToken:
+      type: object
+      properties:
+        delta: *id002
+      required:
+      - delta
+      additionalProperties: false
+    SseDone:
+      type: object
+      properties:
+        message_id: *id001
+        finish_reason:
+          type: string
+          enum:
+          - stop
+          - no_context
+      required:
+      - message_id
+      - finish_reason
+      additionalProperties: false
+    SseError:
+      type: object
+      properties:
+        code: *id002
+        message: *id002
+      required:
+      - code
+      - message
+      additionalProperties: false

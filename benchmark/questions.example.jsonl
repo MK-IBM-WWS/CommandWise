@@ -1,0 +1,1 @@
+{"id": "format-example-001", "split": "example", "query": "Как найти обычные файлы больше 100 МиБ?", "distribution": "debian", "release": "13", "answerable": true, "gold_document_ids": [], "gold_sections": [], "reference_answer": null, "note": "Только образец схемы; gold ещё не размечен, для метрик не использовать."}
