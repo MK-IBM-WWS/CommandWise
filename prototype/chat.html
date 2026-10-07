@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CommandWise</title>
+<link rel="stylesheet" href="style.css">
+<script src="chat.js" defer></script>
+</head>
+<body class="app">
+<aside class="side">
+  <div class="brand"><svg viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#9fe0ff"/><stop offset="1" stop-color="#2f6bff"/></linearGradient></defs><circle cx="16" cy="16" r="15" fill="url(#g)"/><path d="M16 7c1 5 3 7 8 9-5 2-7 4-8 9-1-5-3-7-8-9 5-2 7-4 8-9z" fill="#fff"/></svg>CommandWise</div>
+  <button class="new" id="new-chat" type="button">+ Новый чат</button>
+  <nav class="hist" id="hist" aria-label="История чатов">
+    <h2>Сегодня</h2>
+    <a class="on" data-sample href="#"><span>Как работает нейросеть</span><small>Debian · 13</small></a>
+    <a href="#"><span>Идеи для названия проекта</span><small>Ubuntu · 24.04</small></a>
+    <h2>Вчера</h2>
+    <a href="#"><span>Разбор кода на Python</span><small>Debian · 12</small></a>
+    <a href="#"><span>Письмо преподавателю</span><small>Ubuntu · 24.04</small></a>
+    <h2>Ранее</h2>
+    <a href="#"><span>План подготовки к экзамену</span><small>Debian · 13</small></a>
+    <a href="#"><span>Перевод текста с английского</span><small>Ubuntu · 24.04</small></a>
+  </nav>
+  <a class="me" href="profile.html">
+    <span class="ava">И</span>
+    <span>ivan_k<small>Настройки аккаунта</small></span>
+  </a>
+</aside>
+
+<main class="chat">
+  <section class="msgs" aria-label="Сообщения">
+    <div id="thread">
+      <p class="m u">Объясни простыми словами, как работает нейросеть</p>
+      <p class="m ai">Представьте очень большую таблицу чисел, которые подбираются в ходе обучения. Нейросеть просматривает множество примеров и постепенно находит в них закономерности.</p>
+      <p class="m u">А можно пример?</p>
+      <p class="m ai">Конечно. Если показать ей тысячи фотографий кошек и собак, она начнёт замечать различия: форму ушей, мордочку, позу. Так она учится узнавать животных, которых раньше не видела.</p>
+    </div>
+  </section>
+  <form class="composer" action="chat.html">
+    <textarea id="question" rows="1" placeholder="Напишите сообщение" aria-label="Сообщение"></textarea>
+    <button class="send" type="submit" aria-label="Отправить">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+    </button>
+  </form>
+</main>
+<dialog id="new-dialog">
+  <form id="new-form">
+    <h2>Новый чат</h2>
+    <p class="sub">Выберите систему, по которой будете задавать вопросы.</p>
+    <label class="field">Дистрибутив
+      <select id="distribution">
+        <option value="debian">Debian</option>
+        <option value="ubuntu">Ubuntu</option>
+        <option value="fedora">Fedora</option>
+        <option value="arch">Arch Linux</option>
+      </select>
+    </label>
+    <label class="field">Версия<select id="release"></select></label>
+    <div class="actions">
+      <button class="btn ghost" id="cancel-new" type="button">Отмена</button>
+      <button class="btn" type="submit">Создать чат</button>
+    </div>
+  </form>
+</dialog>
+</body>
+</html>
