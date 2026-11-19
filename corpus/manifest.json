@@ -1,0 +1,223 @@
+{
+  "corpus_version": "ec602e8cb06f12a4",
+  "collected_at": "2026-10-30",
+  "supported_targets": [
+    {
+      "distribution": "debian",
+      "release": "13",
+      "label": "Debian 13 (Trixie)"
+    }
+  ],
+  "documents": [
+    {
+      "document_id": "cat",
+      "path": "docs/cat.md",
+      "package": "coreutils",
+      "source_url": "https://www.gnu.org/software/coreutils/manual/html_node/cat-invocation.html",
+      "package_version": "",
+      "collected_at": null,
+      "verified_targets": []
+    },
+    {
+      "document_id": "chmod",
+      "path": "docs/chmod.md",
+      "package": "coreutils",
+      "package_version": "9.7-3",
+      "source_url": "https://manpages.debian.org/trixie/coreutils/chmod.1.en.html",
+      "collected_at": "2026-10-30",
+      "verification_method": "official_debian_13_manpage_review",
+      "verified_targets": [
+        {
+          "distribution": "debian",
+          "release": "13"
+        }
+      ]
+    },
+    {
+      "document_id": "cp",
+      "path": "docs/cp.md",
+      "package": "coreutils",
+      "source_url": "https://www.gnu.org/software/coreutils/manual/html_node/cp-invocation.html",
+      "package_version": "",
+      "collected_at": null,
+      "verified_targets": []
+    },
+    {
+      "document_id": "df",
+      "path": "docs/df.md",
+      "package": "coreutils",
+      "source_url": "https://www.gnu.org/software/coreutils/manual/html_node/df-invocation.html",
+      "package_version": "",
+      "collected_at": null,
+      "verified_targets": []
+    },
+    {
+      "document_id": "du",
+      "path": "docs/du.md",
+      "package": "coreutils",
+      "source_url": "https://www.gnu.org/software/coreutils/manual/html_node/du-invocation.html",
+      "package_version": "",
+      "collected_at": null,
+      "verified_targets": []
+    },
+    {
+      "document_id": "find",
+      "path": "docs/find.md",
+      "package": "findutils",
+      "package_version": "4.10.0-3",
+      "source_url": "https://manpages.debian.org/trixie/findutils/find.1.en.html",
+      "collected_at": "2026-10-30",
+      "verification_method": "official_debian_13_manpage_review",
+      "verified_targets": [
+        {
+          "distribution": "debian",
+          "release": "13"
+        }
+      ]
+    },
+    {
+      "document_id": "grep",
+      "path": "docs/grep.md",
+      "package": "grep",
+      "package_version": "3.11-4",
+      "source_url": "https://manpages.debian.org/trixie/grep/grep.1.en.html",
+      "collected_at": "2026-10-30",
+      "verification_method": "official_debian_13_manpage_review",
+      "verified_targets": [
+        {
+          "distribution": "debian",
+          "release": "13"
+        }
+      ]
+    },
+    {
+      "document_id": "head",
+      "path": "docs/head.md",
+      "package": "coreutils",
+      "source_url": "https://www.gnu.org/software/coreutils/manual/html_node/head-invocation.html",
+      "package_version": "",
+      "collected_at": null,
+      "verified_targets": []
+    },
+    {
+      "document_id": "kill",
+      "path": "docs/kill.md",
+      "package": "",
+      "source_url": "https://man7.org/linux/man-pages/man1/kill.1.html",
+      "package_version": "",
+      "collected_at": null,
+      "verified_targets": []
+    },
+    {
+      "document_id": "ls",
+      "path": "docs/ls.md",
+      "package": "coreutils",
+      "package_version": "9.7-3",
+      "source_url": "https://manpages.debian.org/trixie/coreutils/ls.1.en.html",
+      "collected_at": "2026-10-30",
+      "verification_method": "official_debian_13_manpage_review",
+      "verified_targets": [
+        {
+          "distribution": "debian",
+          "release": "13"
+        }
+      ]
+    },
+    {
+      "document_id": "mkdir",
+      "path": "docs/mkdir.md",
+      "package": "coreutils",
+      "source_url": "https://www.gnu.org/software/coreutils/manual/html_node/mkdir-invocation.html",
+      "package_version": "",
+      "collected_at": null,
+      "verified_targets": []
+    },
+    {
+      "document_id": "mv",
+      "path": "docs/mv.md",
+      "package": "coreutils",
+      "source_url": "https://www.gnu.org/software/coreutils/manual/html_node/mv-invocation.html",
+      "package_version": "",
+      "collected_at": null,
+      "verified_targets": []
+    },
+    {
+      "document_id": "ps",
+      "path": "docs/ps.md",
+      "package": "procps",
+      "source_url": "https://man7.org/linux/man-pages/man1/ps.1.html",
+      "package_version": "",
+      "collected_at": null,
+      "verified_targets": []
+    },
+    {
+      "document_id": "rm",
+      "path": "docs/rm.md",
+      "package": "coreutils",
+      "source_url": "https://www.gnu.org/software/coreutils/manual/html_node/rm-invocation.html",
+      "package_version": "",
+      "collected_at": null,
+      "verified_targets": []
+    },
+    {
+      "document_id": "sort",
+      "path": "docs/sort.md",
+      "package": "coreutils",
+      "source_url": "https://www.gnu.org/software/coreutils/manual/html_node/sort-invocation.html",
+      "package_version": "",
+      "collected_at": null,
+      "verified_targets": []
+    },
+    {
+      "document_id": "ssh",
+      "path": "docs/ssh.md",
+      "package": "openssh-client",
+      "source_url": "https://man.openbsd.org/ssh",
+      "package_version": "",
+      "collected_at": null,
+      "verified_targets": []
+    },
+    {
+      "document_id": "tail",
+      "path": "docs/tail.md",
+      "package": "coreutils",
+      "source_url": "https://www.gnu.org/software/coreutils/manual/html_node/tail-invocation.html",
+      "package_version": "",
+      "collected_at": null,
+      "verified_targets": []
+    },
+    {
+      "document_id": "tar",
+      "path": "docs/tar.md",
+      "package": "tar",
+      "package_version": "1.35+dfsg-3.1",
+      "source_url": "https://manpages.debian.org/trixie/tar/tar.1.en.html",
+      "collected_at": "2026-10-30",
+      "verification_method": "official_debian_13_manpage_review",
+      "verified_targets": [
+        {
+          "distribution": "debian",
+          "release": "13"
+        }
+      ]
+    },
+    {
+      "document_id": "uniq",
+      "path": "docs/uniq.md",
+      "package": "coreutils",
+      "source_url": "https://www.gnu.org/software/coreutils/manual/html_node/uniq-invocation.html",
+      "package_version": "",
+      "collected_at": null,
+      "verified_targets": []
+    },
+    {
+      "document_id": "wc",
+      "path": "docs/wc.md",
+      "package": "coreutils",
+      "source_url": "https://www.gnu.org/software/coreutils/manual/html_node/wc-invocation.html",
+      "package_version": "",
+      "collected_at": null,
+      "verified_targets": []
+    }
+  ]
+}

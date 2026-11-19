@@ -1,0 +1,18 @@
+{"id":"q001","query":"Как изменить права доступа?","expected_command":"chmod"}
+{"id":"q002","query":"Как сделать файл исполняемым?","expected_command":"chmod"}
+{"id":"q003","query":"Как запретить другим пользователям запись в файл?","expected_command":"chmod"}
+{"id":"q004","query":"Как посмотреть скрытые файлы?","expected_command":"ls"}
+{"id":"q005","query":"Как вывести содержимое каталога?","expected_command":"ls"}
+{"id":"q006","query":"Как получить подробный список файлов?","expected_command":"ls"}
+{"id":"q007","query":"Как найти файлы размером больше 100 МБ?","expected_command":"find"}
+{"id":"q008","query":"Как найти файлы с расширением txt?","expected_command":"find"}
+{"id":"q009","query":"Как найти все каталоги с именем logs?","expected_command":"find"}
+{"id":"q010","query":"Как найти файлы, изменённые за последние 7 дней?","expected_command":"find"}
+{"id":"q011","query":"Как искать слово error в логах?","expected_command":"grep"}
+{"id":"q012","query":"Как искать текст без учёта регистра?","expected_command":"grep"}
+{"id":"q013","query":"Как исключить каталог .git из поиска текста?","expected_command":"grep"}
+{"id":"q014","query":"Как создать архив tar.gz?","expected_command":"tar"}
+{"id":"q015","query":"Как распаковать архив в другую папку?","expected_command":"tar"}
+{"id":"q016","query":"Как показать содержимое архива без распаковки?","expected_command":"tar"}
+{"id":"q017","query":"квантовая запутанность фотонов","expected_command":null}
+{"id":"q018","query":"теорема Ферма и алгебраическая геометрия","expected_command":null}
