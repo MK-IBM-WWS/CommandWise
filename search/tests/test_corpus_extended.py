@@ -25,7 +25,7 @@ def test_twenty_documents_registered():
         for item in manifest["documents"]
     }
 
-    assert len(commands) == 20
+    assert len(commands) == 30
     assert NEW_COMMANDS <= commands
 
 
@@ -49,5 +49,5 @@ def test_index_contains_twenty_commands():
         for item in index["chunks"]
     }
 
-    assert len(commands) == 20
+    assert len(commands) == 30
     assert NEW_COMMANDS <= commands

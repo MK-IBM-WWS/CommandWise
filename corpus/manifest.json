@@ -1,5 +1,5 @@
 {
-  "corpus_version": "ec602e8cb06f12a4",
+  "corpus_version": "6c1c15373b678962",
   "collected_at": "2026-10-30",
   "supported_targets": [
     {
@@ -14,6 +14,15 @@
       "path": "docs/cat.md",
       "package": "coreutils",
       "source_url": "https://www.gnu.org/software/coreutils/manual/html_node/cat-invocation.html",
+      "package_version": "",
+      "collected_at": null,
+      "verified_targets": []
+    },
+    {
+      "document_id": "cd",
+      "path": "docs/cd.md",
+      "package": "bash",
+      "source_url": "https://www.gnu.org/software/bash/manual/html_node/Bourne-Shell-Builtins.html",
       "package_version": "",
       "collected_at": null,
       "verified_targets": []
@@ -56,6 +65,15 @@
       "path": "docs/du.md",
       "package": "coreutils",
       "source_url": "https://www.gnu.org/software/coreutils/manual/html_node/du-invocation.html",
+      "package_version": "",
+      "collected_at": null,
+      "verified_targets": []
+    },
+    {
+      "document_id": "echo",
+      "path": "docs/echo.md",
+      "package": "bash",
+      "source_url": "https://www.gnu.org/software/bash/manual/html_node/Bourne-Shell-Builtins.html",
       "package_version": "",
       "collected_at": null,
       "verified_targets": []
@@ -109,6 +127,24 @@
       "verified_targets": []
     },
     {
+      "document_id": "less",
+      "path": "docs/less.md",
+      "package": "less",
+      "source_url": "https://man7.org/linux/man-pages/man1/less.1.html",
+      "package_version": "",
+      "collected_at": null,
+      "verified_targets": []
+    },
+    {
+      "document_id": "ln",
+      "path": "docs/ln.md",
+      "package": "coreutils",
+      "source_url": "https://www.gnu.org/software/coreutils/manual/html_node/ln-invocation.html",
+      "package_version": "",
+      "collected_at": null,
+      "verified_targets": []
+    },
+    {
       "document_id": "ls",
       "path": "docs/ls.md",
       "package": "coreutils",
@@ -142,6 +178,15 @@
       "verified_targets": []
     },
     {
+      "document_id": "nano",
+      "path": "docs/nano.md",
+      "package": "nano",
+      "source_url": "https://www.nano-editor.org/dist/v7/nano.html",
+      "package_version": "",
+      "collected_at": null,
+      "verified_targets": []
+    },
+    {
       "document_id": "ps",
       "path": "docs/ps.md",
       "package": "procps",
@@ -151,10 +196,28 @@
       "verified_targets": []
     },
     {
+      "document_id": "pwd",
+      "path": "docs/pwd.md",
+      "package": "bash",
+      "source_url": "https://www.gnu.org/software/bash/manual/html_node/Bourne-Shell-Builtins.html",
+      "package_version": "",
+      "collected_at": null,
+      "verified_targets": []
+    },
+    {
       "document_id": "rm",
       "path": "docs/rm.md",
       "package": "coreutils",
       "source_url": "https://www.gnu.org/software/coreutils/manual/html_node/rm-invocation.html",
+      "package_version": "",
+      "collected_at": null,
+      "verified_targets": []
+    },
+    {
+      "document_id": "sed",
+      "path": "docs/sed.md",
+      "package": "sed",
+      "source_url": "https://www.gnu.org/software/sed/manual/sed.html",
       "package_version": "",
       "collected_at": null,
       "verified_targets": []
@@ -173,6 +236,15 @@
       "path": "docs/ssh.md",
       "package": "openssh-client",
       "source_url": "https://man.openbsd.org/ssh",
+      "package_version": "",
+      "collected_at": null,
+      "verified_targets": []
+    },
+    {
+      "document_id": "stat",
+      "path": "docs/stat.md",
+      "package": "coreutils",
+      "source_url": "https://www.gnu.org/software/coreutils/manual/html_node/stat-invocation.html",
       "package_version": "",
       "collected_at": null,
       "verified_targets": []
@@ -200,6 +272,24 @@
           "release": "13"
         }
       ]
+    },
+    {
+      "document_id": "tee",
+      "path": "docs/tee.md",
+      "package": "coreutils",
+      "source_url": "https://www.gnu.org/software/coreutils/manual/html_node/tee-invocation.html",
+      "package_version": "",
+      "collected_at": null,
+      "verified_targets": []
+    },
+    {
+      "document_id": "touch",
+      "path": "docs/touch.md",
+      "package": "coreutils",
+      "source_url": "https://www.gnu.org/software/coreutils/manual/html_node/touch-invocation.html",
+      "package_version": "",
+      "collected_at": null,
+      "verified_targets": []
     },
     {
       "document_id": "uniq",
