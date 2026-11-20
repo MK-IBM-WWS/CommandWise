@@ -62,7 +62,6 @@ def preview(payload: PreviewRequest, request: Request):
         payload.query,
         index["chunks"],
         index["bm25"],
-        index["tokens"],
         top_k=payload.top_k,
     )
 

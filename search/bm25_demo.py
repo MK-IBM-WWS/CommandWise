@@ -3,7 +3,7 @@ from pathlib import Path
 import re
 
 from nltk.stem.snowball import SnowballStemmer
-from rank_bm25 import BM25Okapi
+from bm25_index import BM25Index
 
 
 DOCS_DIR = Path(__file__).resolve().parents[1] / "corpus" / "docs"
@@ -159,7 +159,7 @@ def build_index(chunks):
         for chunk in chunks
     ]
 
-    bm25 = BM25Okapi(
+    bm25 = BM25Index.build(
         tokens,
         k1=1.5,
         b=0.75,
@@ -168,31 +168,17 @@ def build_index(chunks):
     return bm25, tokens
 
 
-def search(query, chunks, bm25, tokens, top_k=5):
+def search(query, chunks, bm25, top_k=5):
     """BM25 с расширением запроса и учётом заголовков."""
 
-    original_tokens = (
-        set(tokenize(query)) - STOP_TOKENS
-    )
-
-    if not original_tokens:
-        return []
-
+    original_tokens = set(tokenize(query)) - STOP_TOKENS
     query_tokens = expand_query(original_tokens)
-
-    scores = bm25.get_scores(
-        sorted(query_tokens)
-    )
+    matched = bm25.matching_documents(original_tokens)
+    scores = bm25.score(query_tokens, matched)
 
     results = []
-
-    for i, chunk in enumerate(chunks):
-        chunk_tokens = set(tokens[i])
-
-        # Нужны хотя бы какие-то совпадения
-        # с исходным вопросом.
-        if not (original_tokens & chunk_tokens):
-            continue
+    for i, score in scores.items():
+        chunk = chunks[i]
 
         # Учитываем заголовок всего документа.
         title_tokens = set(
@@ -222,14 +208,14 @@ def search(query, chunks, bm25, tokens, top_k=5):
         )
 
         final_score = (
-            float(scores[i])
+            score
             + title_bonus
             + section_bonus
         )
 
         results.append({
             **chunk,
-            "bm25_score": float(scores[i]),
+            "bm25_score": score,
             "title_bonus": title_bonus,
             "section_bonus": section_bonus,
             "final_score": final_score,
@@ -240,6 +226,7 @@ def search(query, chunks, bm25, tokens, top_k=5):
             -item["final_score"],
             item["command"],
             item["section"],
+            item.get("chunk_id", ""),
         )
     )
 
@@ -268,7 +255,7 @@ def main():
         if not query:
             continue
 
-        results = search(query, chunks, bm25, tokens)
+        results = search(query, chunks, bm25)
 
         if not results:
             print("Подходящих фрагментов не найдено.")

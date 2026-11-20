@@ -1,0 +1,386 @@
+{
+  "note": "Черновой benchmark: проверяется команда, не gold chunk/section и не совместимость Linux.",
+  "corpus_version": "4161ee7ab4644755",
+  "generated_at": "2026-10-30T10:42:22.189298+00:00",
+  "questions": 18,
+  "answerable": 16,
+  "unanswerable": 2,
+  "hit_at_1_by_command": 0.938,
+  "hit_at_5_by_command": 1.0,
+  "mrr_at_5_by_command": 0.969,
+  "correct_empty_count": 2,
+  "rows": [
+    {
+      "id": "q001",
+      "query": "Как изменить права доступа?",
+      "expected_command": "chmod",
+      "returned_commands": [
+        "chmod",
+        "chmod",
+        "chmod",
+        "chmod",
+        "chmod"
+      ],
+      "returned_chunk_ids": [
+        "0060217e2ac50f71a7db3df7",
+        "8ad76a8074f1228f64f93b38",
+        "dfb28565f1671cb08ca51d3e",
+        "ee49da24a9a93f1f68453077",
+        "e15a635d0f7e4245ec614881"
+      ],
+      "first_correct_rank": 1,
+      "latency_ms": 1.79,
+      "correct_empty": false
+    },
+    {
+      "id": "q002",
+      "query": "Как сделать файл исполняемым?",
+      "expected_command": "chmod",
+      "returned_commands": [
+        "cp",
+        "chmod",
+        "rm",
+        "cat",
+        "mv"
+      ],
+      "returned_chunk_ids": [
+        "94656525855eae6fac92a599",
+        "161f81d76edd273ad61dde45",
+        "ed9a792a3e486e76aa0bebf4",
+        "864a9e019703fc030cdc48c2",
+        "2fda62838373fad753dbd67c"
+      ],
+      "first_correct_rank": 2,
+      "latency_ms": 6.97,
+      "correct_empty": false
+    },
+    {
+      "id": "q003",
+      "query": "Как запретить другим пользователям запись в файл?",
+      "expected_command": "chmod",
+      "returned_commands": [
+        "chmod",
+        "chmod",
+        "cp",
+        "ls",
+        "ls"
+      ],
+      "returned_chunk_ids": [
+        "6f6c77d60b87604874d38c10",
+        "8ad76a8074f1228f64f93b38",
+        "64a0805a7208baf1f458c65a",
+        "a245324e8c58d0d0878be4fe",
+        "aeb81b24036b1bfb585370a4"
+      ],
+      "first_correct_rank": 1,
+      "latency_ms": 9.41,
+      "correct_empty": false
+    },
+    {
+      "id": "q004",
+      "query": "Как посмотреть скрытые файлы?",
+      "expected_command": "ls",
+      "returned_commands": [
+        "ls",
+        "head",
+        "ls",
+        "ls",
+        "kill"
+      ],
+      "returned_chunk_ids": [
+        "8938760d4d068b6db01e8e94",
+        "9bf0e639a595a1f34257e8b6",
+        "a8631d3caf66eaee5442543c",
+        "aeb81b24036b1bfb585370a4",
+        "b83d6603d9bc40721dc53ea0"
+      ],
+      "first_correct_rank": 1,
+      "latency_ms": 8.03,
+      "correct_empty": false
+    },
+    {
+      "id": "q005",
+      "query": "Как вывести содержимое каталога?",
+      "expected_command": "ls",
+      "returned_commands": [
+        "ls",
+        "cp",
+        "rm",
+        "ls",
+        "ls"
+      ],
+      "returned_chunk_ids": [
+        "fdc52606e3a11414df872ee2",
+        "a1611f7e6bb95142005bfeef",
+        "99dfdfcea0a6c0636f812718",
+        "369bf37f0324bee3f6299644",
+        "76b6516c1f63ababcd0da9f7"
+      ],
+      "first_correct_rank": 1,
+      "latency_ms": 5.2,
+      "correct_empty": false
+    },
+    {
+      "id": "q006",
+      "query": "Как получить подробный список файлов?",
+      "expected_command": "ls",
+      "returned_commands": [
+        "ls",
+        "rm",
+        "mv",
+        "ls",
+        "ls"
+      ],
+      "returned_chunk_ids": [
+        "a8631d3caf66eaee5442543c",
+        "0f0a1d3c25ebcd6199830fcb",
+        "b8717a706f07c9eadfd7a39f",
+        "a245324e8c58d0d0878be4fe",
+        "a638d592ee6c38e2b9772345"
+      ],
+      "first_correct_rank": 1,
+      "latency_ms": 7.65,
+      "correct_empty": false
+    },
+    {
+      "id": "q007",
+      "query": "Как найти файлы размером больше 100 МБ?",
+      "expected_command": "find",
+      "returned_commands": [
+        "find",
+        "head",
+        "find",
+        "find",
+        "find"
+      ],
+      "returned_chunk_ids": [
+        "def3c49240aec4946070eeb9",
+        "28784f883b64436bc130caad",
+        "3f028b601d8b83e3837abc54",
+        "0ab71b9ad6294cc16d13a80c",
+        "3f66fff3def4c04467376088"
+      ],
+      "first_correct_rank": 1,
+      "latency_ms": 7.9,
+      "correct_empty": false
+    },
+    {
+      "id": "q008",
+      "query": "Как найти файлы с расширением txt?",
+      "expected_command": "find",
+      "returned_commands": [
+        "find",
+        "find",
+        "find",
+        "find",
+        "find"
+      ],
+      "returned_chunk_ids": [
+        "2bceaecd50b70a7d0ca1e1d4",
+        "8eca6769510a77ff490285f7",
+        "0ab71b9ad6294cc16d13a80c",
+        "3f66fff3def4c04467376088",
+        "3a52b737995cc731a1f124f1"
+      ],
+      "first_correct_rank": 1,
+      "latency_ms": 8.17,
+      "correct_empty": false
+    },
+    {
+      "id": "q009",
+      "query": "Как найти все каталоги с именем logs?",
+      "expected_command": "find",
+      "returned_commands": [
+        "find",
+        "find",
+        "find",
+        "find",
+        "find"
+      ],
+      "returned_chunk_ids": [
+        "3f66fff3def4c04467376088",
+        "af7ca3ed97e3bb1e24d834ec",
+        "8eca6769510a77ff490285f7",
+        "2bceaecd50b70a7d0ca1e1d4",
+        "3a52b737995cc731a1f124f1"
+      ],
+      "first_correct_rank": 1,
+      "latency_ms": 5.08,
+      "correct_empty": false
+    },
+    {
+      "id": "q010",
+      "query": "Как найти файлы, изменённые за последние 7 дней?",
+      "expected_command": "find",
+      "returned_commands": [
+        "find",
+        "find",
+        "tail",
+        "tail",
+        "tail"
+      ],
+      "returned_chunk_ids": [
+        "0ab71b9ad6294cc16d13a80c",
+        "3a52b737995cc731a1f124f1",
+        "0597e6c70592c7759441ace0",
+        "49b5625fd536494490c2eb0f",
+        "477bc30fc83ded7cd73f5cfe"
+      ],
+      "first_correct_rank": 1,
+      "latency_ms": 7.72,
+      "correct_empty": false
+    },
+    {
+      "id": "q011",
+      "query": "Как искать слово error в логах?",
+      "expected_command": "grep",
+      "returned_commands": [
+        "grep",
+        "wc",
+        "wc",
+        "wc",
+        "grep"
+      ],
+      "returned_chunk_ids": [
+        "ead0680c7561ad8c056a5192",
+        "41cd9df9ef71e6dd87af8d3f",
+        "88fef85b61968a3bd4f791cc",
+        "938aa2181e3f64966111d69b",
+        "d73667f3faf091983f731ba3"
+      ],
+      "first_correct_rank": 1,
+      "latency_ms": 1.88,
+      "correct_empty": false
+    },
+    {
+      "id": "q012",
+      "query": "Как искать текст без учёта регистра?",
+      "expected_command": "grep",
+      "returned_commands": [
+        "grep",
+        "find",
+        "grep",
+        "grep",
+        "grep"
+      ],
+      "returned_chunk_ids": [
+        "d73667f3faf091983f731ba3",
+        "8eca6769510a77ff490285f7",
+        "1309b94c50203cd09c19292f",
+        "f531bcc47d19e720bb3e5e7e",
+        "72ec773b541120a7cac06857"
+      ],
+      "first_correct_rank": 1,
+      "latency_ms": 2.03,
+      "correct_empty": false
+    },
+    {
+      "id": "q013",
+      "query": "Как исключить каталог .git из поиска текста?",
+      "expected_command": "grep",
+      "returned_commands": [
+        "grep",
+        "grep",
+        "grep",
+        "find",
+        "grep"
+      ],
+      "returned_chunk_ids": [
+        "f531bcc47d19e720bb3e5e7e",
+        "1309b94c50203cd09c19292f",
+        "681b17f0857bdb15a55e45ae",
+        "1c6fc19b0b7021c8e160972a",
+        "f42415c01b3480c9afb0fdad"
+      ],
+      "first_correct_rank": 1,
+      "latency_ms": 5.11,
+      "correct_empty": false
+    },
+    {
+      "id": "q014",
+      "query": "Как создать архив tar.gz?",
+      "expected_command": "tar",
+      "returned_commands": [
+        "tar",
+        "tar",
+        "tar",
+        "tar",
+        "tar"
+      ],
+      "returned_chunk_ids": [
+        "f8105c9d698a43650b32d19a",
+        "e7d411022280ad04a2aec3b1",
+        "a87a602ac4bd79329dfbef4d",
+        "6e0027306c986b250ff258f8",
+        "95f53e8f3acb8cc6a6426f5a"
+      ],
+      "first_correct_rank": 1,
+      "latency_ms": 1.86,
+      "correct_empty": false
+    },
+    {
+      "id": "q015",
+      "query": "Как распаковать архив в другую папку?",
+      "expected_command": "tar",
+      "returned_commands": [
+        "tar",
+        "tar",
+        "tar",
+        "cp",
+        "ls"
+      ],
+      "returned_chunk_ids": [
+        "95f53e8f3acb8cc6a6426f5a",
+        "6e0027306c986b250ff258f8",
+        "0d37affe113a765b76173b65",
+        "64a0805a7208baf1f458c65a",
+        "aeb81b24036b1bfb585370a4"
+      ],
+      "first_correct_rank": 1,
+      "latency_ms": 2.35,
+      "correct_empty": false
+    },
+    {
+      "id": "q016",
+      "query": "Как показать содержимое архива без распаковки?",
+      "expected_command": "tar",
+      "returned_commands": [
+        "tar",
+        "tar",
+        "tar",
+        "tar",
+        "tar"
+      ],
+      "returned_chunk_ids": [
+        "3bb6cc43bb0c549aec39bdea",
+        "defca01e9343888907a69b38",
+        "d44ce925a0ec91bee8581136",
+        "efc4f3b7da18841dc4beb579",
+        "477311f8bcc1444461c1b1b8"
+      ],
+      "first_correct_rank": 1,
+      "latency_ms": 3.17,
+      "correct_empty": false
+    },
+    {
+      "id": "q017",
+      "query": "квантовая запутанность фотонов",
+      "expected_command": null,
+      "returned_commands": [],
+      "returned_chunk_ids": [],
+      "first_correct_rank": null,
+      "latency_ms": 0.48,
+      "correct_empty": true
+    },
+    {
+      "id": "q018",
+      "query": "теорема Ферма и алгебраическая геометрия",
+      "expected_command": null,
+      "returned_commands": [],
+      "returned_chunk_ids": [],
+      "first_correct_rank": null,
+      "latency_ms": 0.54,
+      "correct_empty": true
+    }
+  ]
+}

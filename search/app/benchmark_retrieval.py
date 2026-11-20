@@ -49,7 +49,6 @@ def main():
             question["query"],
             index["chunks"],
             index["bm25"],
-            index["tokens"],
             top_k=5,
         )
 

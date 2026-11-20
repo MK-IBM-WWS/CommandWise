@@ -6,6 +6,7 @@ from pathlib import Path
 import shutil
 import uuid
 
+from bm25_index import BM25Index
 from bm25_demo import SKIP_SECTIONS, split_sections, tokenize
 
 
@@ -78,6 +79,8 @@ def build(corpus: Path, output: Path):
         (ROOT / "search" / "bm25_demo.py").read_bytes()
     )
 
+    checksum.update((ROOT / "search" / "bm25_index.py").read_bytes())
+    checksum.update(Path(__file__).read_bytes())
     version = checksum.hexdigest()[:16]
 
     chunks = []
@@ -169,14 +172,14 @@ def build(corpus: Path, output: Path):
 
     try:
         write_json(stage / "chunks.json", chunks)
-        write_json(stage / "tokens.json", tokens)
+        write_json(stage / "bm25.json", BM25Index.build(tokens).snapshot())
 
         chunks_hash = hashlib.sha256(
             (stage / "chunks.json").read_bytes()
         ).hexdigest()
 
-        tokens_hash = hashlib.sha256(
-            (stage / "tokens.json").read_bytes()
+        bm25_hash = hashlib.sha256(
+            (stage / "bm25.json").read_bytes()
         ).hexdigest()
 
         write_json(stage / "meta.json", {
@@ -190,7 +193,7 @@ def build(corpus: Path, output: Path):
                 "b": 0.75
             },
             "chunks_sha256": chunks_hash,
-            "tokens_sha256": tokens_hash,
+            "bm25_sha256": bm25_hash,
         })
 
         release_dir = output / version

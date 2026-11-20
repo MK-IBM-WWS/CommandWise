@@ -1,0 +1,454 @@
+{
+  "note": "Черновой benchmark: проверяется команда, не gold chunk/section и не совместимость Linux.",
+  "corpus_version": "ec602e8cb06f12a4",
+  "generated_at": "2026-11-19T09:54:38.624727+00:00",
+  "questions": 20,
+  "answerable": 20,
+  "unanswerable": 0,
+  "hit_at_1_by_command": 0.95,
+  "hit_at_5_by_command": 1.0,
+  "mrr_at_5_by_command": 0.96,
+  "correct_empty_count": 0,
+  "rows": [
+    {
+      "id": "q101",
+      "query": "Как посмотреть первые 15 строк текстового файла?",
+      "expected_command": "head",
+      "returned_commands": [
+        "head",
+        "head",
+        "head",
+        "head",
+        "wc"
+      ],
+      "returned_chunk_ids": [
+        "9bf0e639a595a1f34257e8b6",
+        "fa306318472faf91fd9889d0",
+        "2b750991805a9a97de6f701b",
+        "28784f883b64436bc130caad",
+        "51fc710da64b2c0966f872b9"
+      ],
+      "first_correct_rank": 1,
+      "latency_ms": 27.57,
+      "correct_empty": false
+    },
+    {
+      "id": "q102",
+      "query": "Как вывести начало документа?",
+      "expected_command": "head",
+      "returned_commands": [
+        "head",
+        "head",
+        "head",
+        "find",
+        "uniq"
+      ],
+      "returned_chunk_ids": [
+        "9bf0e639a595a1f34257e8b6",
+        "d43694e558afab8709b7b5d2",
+        "a955b0223513128848a8ceca",
+        "7d03cd242fb18003d3984aca",
+        "09c5cbd6cf66bae45258958e"
+      ],
+      "first_correct_rank": 1,
+      "latency_ms": 1.94,
+      "correct_empty": false
+    },
+    {
+      "id": "q103",
+      "query": "Как следить за новыми записями в логе в реальном времени?",
+      "expected_command": "tail",
+      "returned_commands": [
+        "tail",
+        "tail",
+        "tail",
+        "tail",
+        "chmod"
+      ],
+      "returned_chunk_ids": [
+        "477bc30fc83ded7cd73f5cfe",
+        "0597e6c70592c7759441ace0",
+        "49b5625fd536494490c2eb0f",
+        "092a8e3aa491fb4c82843f5d",
+        "6f6c77d60b87604874d38c10"
+      ],
+      "first_correct_rank": 1,
+      "latency_ms": 2.41,
+      "correct_empty": false
+    },
+    {
+      "id": "q104",
+      "query": "Как посмотреть последние 30 строк файла?",
+      "expected_command": "tail",
+      "returned_commands": [
+        "tail",
+        "tail",
+        "head",
+        "wc",
+        "wc"
+      ],
+      "returned_chunk_ids": [
+        "7dae92684614fd101ef405f3",
+        "a38e3aea30880c5e9a0aa8a5",
+        "9bf0e639a595a1f34257e8b6",
+        "1003206c049f7d3d0d930fe5",
+        "51fc710da64b2c0966f872b9"
+      ],
+      "first_correct_rank": 1,
+      "latency_ms": 18.41,
+      "correct_empty": false
+    },
+    {
+      "id": "q105",
+      "query": "Как отсортировать числа по возрастанию?",
+      "expected_command": "sort",
+      "returned_commands": [
+        "sort",
+        "sort",
+        "sort",
+        "sort",
+        "chmod"
+      ],
+      "returned_chunk_ids": [
+        "b47d165edc64d171826575ba",
+        "4c0a8e917d7ad6aa15572982",
+        "a69a208b155954056af4e13f",
+        "2a17f45db83251d282bd0868",
+        "e15a635d0f7e4245ec614881"
+      ],
+      "first_correct_rank": 1,
+      "latency_ms": 3.32,
+      "correct_empty": false
+    },
+    {
+      "id": "q106",
+      "query": "Как отсортировать список по убыванию?",
+      "expected_command": "sort",
+      "returned_commands": [
+        "sort",
+        "sort",
+        "ps",
+        "sort",
+        "kill"
+      ],
+      "returned_chunk_ids": [
+        "2a17f45db83251d282bd0868",
+        "b47d165edc64d171826575ba",
+        "621b7819c142e0c84404a22b",
+        "4c0a8e917d7ad6aa15572982",
+        "b83d6603d9bc40721dc53ea0"
+      ],
+      "first_correct_rank": 1,
+      "latency_ms": 3.3,
+      "correct_empty": false
+    },
+    {
+      "id": "q107",
+      "query": "Как посчитать количество повторений одинаковых строк?",
+      "expected_command": "uniq",
+      "returned_commands": [
+        "uniq",
+        "wc",
+        "uniq",
+        "wc",
+        "wc"
+      ],
+      "returned_chunk_ids": [
+        "67968aa202f9526f3594a575",
+        "1003206c049f7d3d0d930fe5",
+        "f24cd0ae43c50e8f67be1b10",
+        "51fc710da64b2c0966f872b9",
+        "41cd9df9ef71e6dd87af8d3f"
+      ],
+      "first_correct_rank": 1,
+      "latency_ms": 11.85,
+      "correct_empty": false
+    },
+    {
+      "id": "q108",
+      "query": "Как убрать соседние дубликаты из текстового файла?",
+      "expected_command": "uniq",
+      "returned_commands": [
+        "uniq",
+        "uniq",
+        "uniq",
+        "uniq",
+        "sort"
+      ],
+      "returned_chunk_ids": [
+        "f24cd0ae43c50e8f67be1b10",
+        "e78f6e6a88b10883f2efae28",
+        "b879ad2791dbcef3a2cf1ddf",
+        "372639b491d51add86a69010",
+        "a69a208b155954056af4e13f"
+      ],
+      "first_correct_rank": 1,
+      "latency_ms": 21.66,
+      "correct_empty": false
+    },
+    {
+      "id": "q109",
+      "query": "Как подсчитать число слов в документе?",
+      "expected_command": "wc",
+      "returned_commands": [
+        "wc",
+        "wc",
+        "wc",
+        "wc",
+        "grep"
+      ],
+      "returned_chunk_ids": [
+        "41cd9df9ef71e6dd87af8d3f",
+        "1003206c049f7d3d0d930fe5",
+        "88fef85b61968a3bd4f791cc",
+        "938aa2181e3f64966111d69b",
+        "ead0680c7561ad8c056a5192"
+      ],
+      "first_correct_rank": 1,
+      "latency_ms": 6.99,
+      "correct_empty": false
+    },
+    {
+      "id": "q110",
+      "query": "Как узнать количество строк в файле?",
+      "expected_command": "wc",
+      "returned_commands": [
+        "wc",
+        "wc",
+        "wc",
+        "wc",
+        "tail"
+      ],
+      "returned_chunk_ids": [
+        "1003206c049f7d3d0d930fe5",
+        "51fc710da64b2c0966f872b9",
+        "938aa2181e3f64966111d69b",
+        "4712b07ebbd4ee7097eefc28",
+        "a38e3aea30880c5e9a0aa8a5"
+      ],
+      "first_correct_rank": 1,
+      "latency_ms": 21.14,
+      "correct_empty": false
+    },
+    {
+      "id": "q111",
+      "query": "Как узнать сколько места занимает каталог?",
+      "expected_command": "du",
+      "returned_commands": [
+        "du",
+        "du",
+        "du",
+        "df",
+        "cp"
+      ],
+      "returned_chunk_ids": [
+        "a9074399dfa33a190e62991a",
+        "5dfd94c325ab05d8d7a7c91e",
+        "247dbe4f8f7303df650e283f",
+        "ff5207719a5de2d5780e45ac",
+        "64a0805a7208baf1f458c65a"
+      ],
+      "first_correct_rank": 1,
+      "latency_ms": 10.61,
+      "correct_empty": false
+    },
+    {
+      "id": "q112",
+      "query": "Как посмотреть размер папки со всеми файлами?",
+      "expected_command": "du",
+      "returned_commands": [
+        "ls",
+        "ls",
+        "cp",
+        "ls",
+        "du"
+      ],
+      "returned_chunk_ids": [
+        "a638d592ee6c38e2b9772345",
+        "aeb81b24036b1bfb585370a4",
+        "64a0805a7208baf1f458c65a",
+        "6876cb56b3d820de3da6a463",
+        "247dbe4f8f7303df650e283f"
+      ],
+      "first_correct_rank": 5,
+      "latency_ms": 18.26,
+      "correct_empty": false
+    },
+    {
+      "id": "q113",
+      "query": "Как проверить сколько свободного места осталось на диске?",
+      "expected_command": "df",
+      "returned_commands": [
+        "df",
+        "df",
+        "du",
+        "du",
+        "du"
+      ],
+      "returned_chunk_ids": [
+        "7286d2feb78ee893cc580c33",
+        "ff5207719a5de2d5780e45ac",
+        "5dfd94c325ab05d8d7a7c91e",
+        "d34b41c055b523066a7d34c5",
+        "26a3e8f4ba8d6ea1ae7e6d94"
+      ],
+      "first_correct_rank": 1,
+      "latency_ms": 3.11,
+      "correct_empty": false
+    },
+    {
+      "id": "q114",
+      "query": "Как проверить использование inode?",
+      "expected_command": "df",
+      "returned_commands": [
+        "df",
+        "find",
+        "ls",
+        "ps",
+        "df"
+      ],
+      "returned_chunk_ids": [
+        "0fc72733d0113bfaeb520d7d",
+        "35b5ce4a9c5f093aece4bc44",
+        "3e5a30531c2baf8d5b1c0185",
+        "621b7819c142e0c84404a22b",
+        "990af5e4c1e84dec71e5456e"
+      ],
+      "first_correct_rank": 1,
+      "latency_ms": 3.03,
+      "correct_empty": false
+    },
+    {
+      "id": "q115",
+      "query": "Как посмотреть список всех запущенных процессов?",
+      "expected_command": "ps",
+      "returned_commands": [
+        "ps",
+        "ps",
+        "kill",
+        "ps",
+        "ps"
+      ],
+      "returned_chunk_ids": [
+        "14c1dab11a193cbecf9c0533",
+        "621b7819c142e0c84404a22b",
+        "b83d6603d9bc40721dc53ea0",
+        "fcee53d11b3e58c5498638df",
+        "e1502d2d4e64f131005baa72"
+      ],
+      "first_correct_rank": 1,
+      "latency_ms": 5.37,
+      "correct_empty": false
+    },
+    {
+      "id": "q116",
+      "query": "Как посмотреть PID и информацию о процессе?",
+      "expected_command": "ps",
+      "returned_commands": [
+        "ps",
+        "df",
+        "ps",
+        "ps",
+        "kill"
+      ],
+      "returned_chunk_ids": [
+        "e1502d2d4e64f131005baa72",
+        "c7d7fba2eb0205ba29e11ada",
+        "67e9b921b8ec90f602d90227",
+        "14c1dab11a193cbecf9c0533",
+        "260b1c262c25b5d673e6a418"
+      ],
+      "first_correct_rank": 1,
+      "latency_ms": 5.75,
+      "correct_empty": false
+    },
+    {
+      "id": "q117",
+      "query": "Как отправить сигнал завершения процессу?",
+      "expected_command": "kill",
+      "returned_commands": [
+        "kill",
+        "kill",
+        "kill",
+        "kill",
+        "kill"
+      ],
+      "returned_chunk_ids": [
+        "260b1c262c25b5d673e6a418",
+        "d8e35f785a570e29fad0623c",
+        "126fd365cbd7654753f5c45e",
+        "baa1d2172f377c3b11525d24",
+        "dc3677d57231d117fa107a14"
+      ],
+      "first_correct_rank": 1,
+      "latency_ms": 3.29,
+      "correct_empty": false
+    },
+    {
+      "id": "q118",
+      "query": "Как принудительно завершить зависший процесс?",
+      "expected_command": "kill",
+      "returned_commands": [
+        "kill",
+        "kill",
+        "kill",
+        "ps",
+        "ps"
+      ],
+      "returned_chunk_ids": [
+        "dc3677d57231d117fa107a14",
+        "d8e35f785a570e29fad0623c",
+        "260b1c262c25b5d673e6a418",
+        "14c1dab11a193cbecf9c0533",
+        "fcee53d11b3e58c5498638df"
+      ],
+      "first_correct_rank": 1,
+      "latency_ms": 2.94,
+      "correct_empty": false
+    },
+    {
+      "id": "q119",
+      "query": "Как безопасно подключиться к удалённому Linux серверу?",
+      "expected_command": "ssh",
+      "returned_commands": [
+        "ssh",
+        "ssh",
+        "ssh",
+        "ssh",
+        "rm"
+      ],
+      "returned_chunk_ids": [
+        "f7f419ae94dbc2b1cd7aac85",
+        "6a12954db5fdf16c4c9f4d70",
+        "506a0b12948a9940dca8dd0b",
+        "4ded628a7b0d90853e1fd378",
+        "cf5fc77540293a458915b9e3"
+      ],
+      "first_correct_rank": 1,
+      "latency_ms": 5.81,
+      "correct_empty": false
+    },
+    {
+      "id": "q120",
+      "query": "Как подключиться к серверу по SSH ключу через другой порт?",
+      "expected_command": "ssh",
+      "returned_commands": [
+        "ssh",
+        "ssh",
+        "ssh",
+        "ssh",
+        "ssh"
+      ],
+      "returned_chunk_ids": [
+        "72c187ddcbd4cd104fb44cd1",
+        "f7f419ae94dbc2b1cd7aac85",
+        "01360dd1fc8c9c9c63f4215b",
+        "4ded628a7b0d90853e1fd378",
+        "6a12954db5fdf16c4c9f4d70"
+      ],
+      "first_correct_rank": 1,
+      "latency_ms": 4.93,
+      "correct_empty": false
+    }
+  ]
+}

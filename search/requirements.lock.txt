@@ -31,7 +31,6 @@ Pygments==2.21.0
 pytest==9.0.2
 python-multipart==0.0.22
 PyYAML==6.0.3
-rank-bm25==0.2.2
 regex==2026.11.19
 rich==15.0.0
 shellingham==1.5.4

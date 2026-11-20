@@ -1,0 +1,1379 @@
+{
+  "target": {
+    "distribution": "debian",
+    "release": "13"
+  },
+  "k": 5,
+  "fingerprints": {
+    "corpus": "364a08aa8b36a0a87e52d2e4a2ec3a169e68e42f2ed9a396340c1d130ad7292d",
+    "questions": "b2fd228ee25c89acefa784ea6586095863c79150b4b1c64e161798cecae64de5",
+    "prompt": "c23cb661cf060229fe51cb7dfa2ff74476398c073089310219b9d9cb56bcaafb",
+    "bm25": "a6cb0e948602157b60d45381f0718ada046d123175bfef402a4846fd46df0776",
+    "lexical_rules": "fc4c4b0c394b2adeac2fc1d6254d5a43c63705c02e85e0384f9da9a63db28a8a",
+    "retrieval": "26b85500e2d3b6ac4140457308d76de66cf565a0d8b161da7d388051b575f43d",
+    "embedding": "79982b623a43fca3733dbc099407576255aad52810d8abe87a75bafa09444d55"
+  },
+  "embedder": "intfloat/multilingual-e5-small ONNX",
+  "retrieval_metrics": {
+    "bm25": {
+      "recall": 0.8,
+      "mrr": 0.758333
+    },
+    "hybrid": {
+      "recall": 0.833333,
+      "mrr": 0.758333
+    }
+  },
+  "rows": [
+    {
+      "id": "Q01",
+      "query": "Есть скрипт run.sh и текстовый файл notes.txt. Скрипт должен запускаться любым пользователем, а текст только читаться группой и остальными. Какие режимы chmod задать, если владельцу нужна запись в оба файла?",
+      "answerable": true,
+      "gold_document_ids": [
+        "D03",
+        "D04",
+        "D05"
+      ],
+      "reference_answer": "chmod 755 run.sh и chmod 644 notes.txt. Владелец может записывать оба файла, группа и остальные могут запускать только скрипт и читать оба файла.",
+      "bm25": {
+        "hits": [
+          {
+            "id": "D04",
+            "chunk_id": "b60fdda5315aa398a15574d8",
+            "score": 20.175573
+          },
+          {
+            "id": "D02",
+            "chunk_id": "12160375d75822a532c0c525",
+            "score": 19.007626
+          },
+          {
+            "id": "D06",
+            "chunk_id": "161f81d76edd273ad61dde45",
+            "score": 18.193352
+          },
+          {
+            "id": "D05",
+            "chunk_id": "ee49da24a9a93f1f68453077",
+            "score": 18.178737
+          },
+          {
+            "id": "D03",
+            "chunk_id": "e15a635d0f7e4245ec614881",
+            "score": 17.284484
+          }
+        ],
+        "elapsed_ms": 5.31
+      },
+      "hybrid": {
+        "hits": [
+          {
+            "id": "D04",
+            "chunk_id": "b60fdda5315aa398a15574d8",
+            "score": 20.175573
+          },
+          {
+            "id": "D02",
+            "chunk_id": "12160375d75822a532c0c525",
+            "score": 19.007626
+          },
+          {
+            "id": "D05",
+            "chunk_id": "ee49da24a9a93f1f68453077",
+            "score": 18.178737
+          },
+          {
+            "id": "D06",
+            "chunk_id": "161f81d76edd273ad61dde45",
+            "score": 18.193352
+          },
+          {
+            "id": "D03",
+            "chunk_id": "e15a635d0f7e4245ec614881",
+            "score": 17.284484
+          }
+        ],
+        "elapsed_ms": 23.15
+      },
+      "model_input_documents": [
+        "D04",
+        "D02",
+        "D05",
+        "D06",
+        "D03"
+      ],
+      "generation_method": "hybrid",
+      "usage": {
+        "completion_tokens": 128,
+        "prompt_tokens": 634,
+        "total_tokens": 762,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "answer": "Для выполнения ваших требований на Debian 13 (система по умолчанию использует права группы `root` для файлов в `/root`, но если файл находится в общей папке, группа может быть другой):\n\n1.  **Для скрипта `run.sh`**:\n    *   Владелец (`u`): чтение, запись, выполнение (`7`).\n    *   Группа (`g`): чтение, выполнение (`5`).\n    *   Остальные (`o`): чтение, выполнение (`5`).\n    *   Команда:\n        ```bash\n        chmod 755 run.sh\n        ```",
+      "finish_reason": "length",
+      "answer_sha256": "0d878116e6d7478774892855214ba66920c938531a2133b0830178aae198a2e3",
+      "generation_ms": 70323.79,
+      "review": {
+        "id": "Q01",
+        "answer_sha256": "0d878116e6d7478774892855214ba66920c938531a2133b0830178aae198a2e3",
+        "correct": false,
+        "note": "Команда для run.sh верна. Ответ достиг лимита до команды chmod 644 notes.txt. Вводное утверждение о группе root не следует из документов."
+      }
+    },
+    {
+      "id": "Q02",
+      "query": "Владелец build.sh уже может его читать и изменять. Как дать ему возможность запуска, сохранив права группы и остальных?",
+      "answerable": true,
+      "gold_document_ids": [
+        "D01",
+        "D02",
+        "D06"
+      ],
+      "reference_answer": "chmod u+x build.sh. u означает владельца, x — выполнение. Права группы и остальных не меняются.",
+      "bm25": {
+        "hits": [
+          {
+            "id": "D04",
+            "chunk_id": "b60fdda5315aa398a15574d8",
+            "score": 27.744579
+          },
+          {
+            "id": "D05",
+            "chunk_id": "ee49da24a9a93f1f68453077",
+            "score": 23.945747
+          },
+          {
+            "id": "D06",
+            "chunk_id": "161f81d76edd273ad61dde45",
+            "score": 15.510594
+          },
+          {
+            "id": "D03",
+            "chunk_id": "e15a635d0f7e4245ec614881",
+            "score": 12.379486
+          },
+          {
+            "id": "D02",
+            "chunk_id": "12160375d75822a532c0c525",
+            "score": 11.763557
+          }
+        ],
+        "elapsed_ms": 2.92
+      },
+      "hybrid": {
+        "hits": [
+          {
+            "id": "D04",
+            "chunk_id": "b60fdda5315aa398a15574d8",
+            "score": 27.744579
+          },
+          {
+            "id": "D05",
+            "chunk_id": "ee49da24a9a93f1f68453077",
+            "score": 23.945747
+          },
+          {
+            "id": "D06",
+            "chunk_id": "161f81d76edd273ad61dde45",
+            "score": 15.510594
+          },
+          {
+            "id": "D03",
+            "chunk_id": "e15a635d0f7e4245ec614881",
+            "score": 12.379486
+          },
+          {
+            "id": "D02",
+            "chunk_id": "12160375d75822a532c0c525",
+            "score": 11.763557
+          }
+        ],
+        "elapsed_ms": 13.64
+      },
+      "model_input_documents": [
+        "D04",
+        "D05",
+        "D06",
+        "D03",
+        "D02"
+      ],
+      "generation_method": "hybrid",
+      "usage": {
+        "completion_tokens": 68,
+        "prompt_tokens": 608,
+        "total_tokens": 676,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "answer": "Чтобы дать владельцу файла `build.sh` право на выполнение, не затрагивая права группы и остальных пользователей, используйте команду:\n\n```bash\nchmod u+x build.sh\n```\n\nЭто добавит флаг выполнения только для владельца (`u`), сохраняя текущие права для группы (`g`) и остальных (`o`).",
+      "finish_reason": "stop",
+      "answer_sha256": "8c67188623ee2f21576421f8706a0b6b7b5f2c46679fa929da3db8cc350b7886",
+      "generation_ms": 43123.04,
+      "review": {
+        "id": "Q02",
+        "answer_sha256": "8c67188623ee2f21576421f8706a0b6b7b5f2c46679fa929da3db8cc350b7886",
+        "correct": true,
+        "note": "chmod u+x build.sh меняет только право выполнения владельца."
+      }
+    },
+    {
+      "id": "Q03",
+      "query": "Как найти обычные файлы с именем readme*, включая README.txt, строго в текущем каталоге, без обхода вложенных папок?",
+      "answerable": true,
+      "gold_document_ids": [
+        "D08",
+        "D09",
+        "D12"
+      ],
+      "reference_answer": "find . -maxdepth 1 -type f -iname 'readme*'. -maxdepth 1 ограничивает глубину, -type f оставляет обычные файлы, -iname игнорирует регистр.",
+      "bm25": {
+        "hits": [
+          {
+            "id": "D09",
+            "chunk_id": "8eca6769510a77ff490285f7",
+            "score": 36.552793
+          },
+          {
+            "id": "D12",
+            "chunk_id": "3a52b737995cc731a1f124f1",
+            "score": 34.630668
+          },
+          {
+            "id": "D10",
+            "chunk_id": "def3c49240aec4946070eeb9",
+            "score": 21.188481
+          },
+          {
+            "id": "D11",
+            "chunk_id": "0ab71b9ad6294cc16d13a80c",
+            "score": 19.738414
+          },
+          {
+            "id": "D07",
+            "chunk_id": "1c6fc19b0b7021c8e160972a",
+            "score": 14.876878
+          }
+        ],
+        "elapsed_ms": 4.37
+      },
+      "hybrid": {
+        "hits": [
+          {
+            "id": "D09",
+            "chunk_id": "8eca6769510a77ff490285f7",
+            "score": 36.552793
+          },
+          {
+            "id": "D12",
+            "chunk_id": "3a52b737995cc731a1f124f1",
+            "score": 34.630668
+          },
+          {
+            "id": "D11",
+            "chunk_id": "0ab71b9ad6294cc16d13a80c",
+            "score": 19.738414
+          },
+          {
+            "id": "D10",
+            "chunk_id": "def3c49240aec4946070eeb9",
+            "score": 21.188481
+          },
+          {
+            "id": "D08",
+            "chunk_id": "3f028b601d8b83e3837abc54",
+            "score": 12.720972
+          }
+        ],
+        "elapsed_ms": 17.45
+      },
+      "model_input_documents": [
+        "D09",
+        "D12",
+        "D11",
+        "D10",
+        "D08"
+      ],
+      "generation_method": "hybrid",
+      "usage": {
+        "completion_tokens": 128,
+        "prompt_tokens": 732,
+        "total_tokens": 860,
+        "prompt_tokens_details": {
+          "cached_tokens": 92
+        }
+      },
+      "answer": "Для поиска обычных файлов с именем `readme*` (без учёта регистра) строго в текущем каталоге используйте следующую команду:\n\n```bash\nfind . -maxdepth 1 -type f -iname 'readme*'\n```\n\n**Пояснение:**\n*   `.` — начало поиска в текущем каталоге.\n*   `-maxdepth 1` — ограничивает поиск одним уровнем, не заходя в подпапки.\n*   `-type f` — ищет только обычные файлы.\n*   `-iname 'readme*'` — ищет по имени",
+      "finish_reason": "length",
+      "answer_sha256": "b7cd1c76ebcf1f63080aff95160e40ae066623176d0c8421a6251628c9f45c84",
+      "generation_ms": 54476.44,
+      "review": {
+        "id": "Q03",
+        "answer_sha256": "b7cd1c76ebcf1f63080aff95160e40ae066623176d0c8421a6251628c9f45c84",
+        "correct": true,
+        "note": "Команда полностью содержит -maxdepth 1, -type f и -iname с правильным шаблоном. Лимит оборвал только заключительное пояснение."
+      }
+    },
+    {
+      "id": "Q04",
+      "query": "Нужна одна команда find для обычных файлов в рабочем дереве: изменены менее семи суток назад и размер строго больше 104857600 байт. Что ввести?",
+      "answerable": true,
+      "gold_document_ids": [
+        "D08",
+        "D10",
+        "D11"
+      ],
+      "reference_answer": "find . -type f -mtime -7 -size +104857600c. Суффикс c задаёт побайтовое сравнение.",
+      "bm25": {
+        "hits": [
+          {
+            "id": "D10",
+            "chunk_id": "def3c49240aec4946070eeb9",
+            "score": 28.187607
+          },
+          {
+            "id": "D11",
+            "chunk_id": "0ab71b9ad6294cc16d13a80c",
+            "score": 27.527154
+          },
+          {
+            "id": "D08",
+            "chunk_id": "3f028b601d8b83e3837abc54",
+            "score": 19.345937
+          },
+          {
+            "id": "D12",
+            "chunk_id": "3a52b737995cc731a1f124f1",
+            "score": 15.935657
+          },
+          {
+            "id": "D09",
+            "chunk_id": "8eca6769510a77ff490285f7",
+            "score": 14.060814
+          }
+        ],
+        "elapsed_ms": 4.14
+      },
+      "hybrid": {
+        "hits": [
+          {
+            "id": "D10",
+            "chunk_id": "def3c49240aec4946070eeb9",
+            "score": 28.187607
+          },
+          {
+            "id": "D11",
+            "chunk_id": "0ab71b9ad6294cc16d13a80c",
+            "score": 27.527154
+          },
+          {
+            "id": "D08",
+            "chunk_id": "3f028b601d8b83e3837abc54",
+            "score": 19.345937
+          },
+          {
+            "id": "D12",
+            "chunk_id": "3a52b737995cc731a1f124f1",
+            "score": 15.935657
+          },
+          {
+            "id": "D09",
+            "chunk_id": "8eca6769510a77ff490285f7",
+            "score": 14.060814
+          }
+        ],
+        "elapsed_ms": 15.76
+      },
+      "model_input_documents": [
+        "D10",
+        "D11",
+        "D08",
+        "D12",
+        "D09"
+      ],
+      "generation_method": "hybrid",
+      "usage": {
+        "completion_tokens": 128,
+        "prompt_tokens": 743,
+        "total_tokens": 871,
+        "prompt_tokens_details": {
+          "cached_tokens": 118
+        }
+      },
+      "answer": "Для поиска обычных файлов, изменённых менее семи суток назад и имеющих размер строго больше 104857600 байт, используйте следующую команду:\n\n```bash\nfind . -type f -mtime -7 -size +104857600c\n```\n\n*   `-type f` — ищет только обычные файлы.\n*   `-mtime -7` — находит файлы, изменённые менее 7 суток назад.\n*   `-size +104857600c` — ищет файлы, размер которых строго больше 10",
+      "finish_reason": "length",
+      "answer_sha256": "6197af396a95039422b0745c283714096d083573d785760e7b8faffe4e86ee64",
+      "generation_ms": 50542.01,
+      "review": {
+        "id": "Q04",
+        "answer_sha256": "6197af396a95039422b0745c283714096d083573d785760e7b8faffe4e86ee64",
+        "correct": true,
+        "note": "В приведённой команде есть оба условия и точное побайтовое сравнение +104857600c. Последняя незавершённая строка пояснения обрезана."
+      }
+    },
+    {
+      "id": "Q05",
+      "query": "В service.log маркер ALERT встречается в разном регистре. Как показать сами совпавшие строки и их номера?",
+      "answerable": true,
+      "gold_document_ids": [
+        "D13",
+        "D14",
+        "D15"
+      ],
+      "reference_answer": "grep -in 'ALERT' service.log. -i игнорирует регистр, -n выводит номера строк.",
+      "bm25": {
+        "hits": [
+          {
+            "id": "D15",
+            "chunk_id": "f42415c01b3480c9afb0fdad",
+            "score": 23.68192
+          },
+          {
+            "id": "D14",
+            "chunk_id": "d73667f3faf091983f731ba3",
+            "score": 9.190717
+          },
+          {
+            "id": "D13",
+            "chunk_id": "1309b94c50203cd09c19292f",
+            "score": 7.488364
+          },
+          {
+            "id": "D09",
+            "chunk_id": "8eca6769510a77ff490285f7",
+            "score": 5.768123
+          },
+          {
+            "id": "D20",
+            "chunk_id": "a8631d3caf66eaee5442543c",
+            "score": 3.221745
+          }
+        ],
+        "elapsed_ms": 2.15
+      },
+      "hybrid": {
+        "hits": [
+          {
+            "id": "D15",
+            "chunk_id": "f42415c01b3480c9afb0fdad",
+            "score": 23.68192
+          },
+          {
+            "id": "D14",
+            "chunk_id": "d73667f3faf091983f731ba3",
+            "score": 9.190717
+          },
+          {
+            "id": "D13",
+            "chunk_id": "1309b94c50203cd09c19292f",
+            "score": 7.488364
+          },
+          {
+            "id": "D17",
+            "chunk_id": "f947ec21d0b3365715353482",
+            "score": 2.417029
+          },
+          {
+            "id": "D09",
+            "chunk_id": "8eca6769510a77ff490285f7",
+            "score": 5.768123
+          }
+        ],
+        "elapsed_ms": 12.19
+      },
+      "model_input_documents": [
+        "D15",
+        "D14",
+        "D13",
+        "D17",
+        "D09"
+      ],
+      "generation_method": "hybrid",
+      "usage": {
+        "completion_tokens": 96,
+        "prompt_tokens": 625,
+        "total_tokens": 721,
+        "prompt_tokens_details": {
+          "cached_tokens": 92
+        }
+      },
+      "answer": "Для поиска маркера `ALERT` в `service.log` без учёта регистра и вывода номеров строк используйте команду:\n\n```bash\ngrep -in \"ALERT\" service.log\n```\n\nГде:\n- `-i` — игнорирует регистр букв (находит `alert`, `ALERT`, `Alert` и т.д.) [2].\n- `-n` — показывает номера найденных строк [3].",
+      "finish_reason": "stop",
+      "answer_sha256": "5bf5bfd3ee95e061fec18eee11e70aec87544840880c59e9cf4d622dda5abcf7",
+      "generation_ms": 41370.4,
+      "review": {
+        "id": "Q05",
+        "answer_sha256": "5bf5bfd3ee95e061fec18eee11e70aec87544840880c59e9cf4d622dda5abcf7",
+        "correct": true,
+        "note": "grep -in выводит совпадения с номерами строк без учёта регистра. Путь и шаблон указаны верно."
+      }
+    },
+    {
+      "id": "Q06",
+      "query": "Как через grep найти FIXME во всех .py-файлах от текущего каталога и ниже, пропустив .git?",
+      "answerable": true,
+      "gold_document_ids": [
+        "D13",
+        "D16",
+        "D17",
+        "D18"
+      ],
+      "reference_answer": "grep -r --include='*.py' --exclude-dir='.git' 'FIXME' . Флаг -r включает рекурсивный обход, --include ограничивает имена файлов, --exclude-dir исключает .git.",
+      "bm25": {
+        "hits": [
+          {
+            "id": "D18",
+            "chunk_id": "681b17f0857bdb15a55e45ae",
+            "score": 19.414595
+          },
+          {
+            "id": "D16",
+            "chunk_id": "f531bcc47d19e720bb3e5e7e",
+            "score": 18.441744
+          },
+          {
+            "id": "D17",
+            "chunk_id": "f947ec21d0b3365715353482",
+            "score": 17.762371
+          },
+          {
+            "id": "D13",
+            "chunk_id": "1309b94c50203cd09c19292f",
+            "score": 10.68708
+          },
+          {
+            "id": "D15",
+            "chunk_id": "f42415c01b3480c9afb0fdad",
+            "score": 10.456665
+          }
+        ],
+        "elapsed_ms": 4.92
+      },
+      "hybrid": {
+        "hits": [
+          {
+            "id": "D18",
+            "chunk_id": "681b17f0857bdb15a55e45ae",
+            "score": 19.414595
+          },
+          {
+            "id": "D17",
+            "chunk_id": "f947ec21d0b3365715353482",
+            "score": 17.762371
+          },
+          {
+            "id": "D16",
+            "chunk_id": "f531bcc47d19e720bb3e5e7e",
+            "score": 18.441744
+          },
+          {
+            "id": "D13",
+            "chunk_id": "1309b94c50203cd09c19292f",
+            "score": 10.68708
+          },
+          {
+            "id": "D14",
+            "chunk_id": "d73667f3faf091983f731ba3",
+            "score": 10.398858
+          }
+        ],
+        "elapsed_ms": 14.37
+      },
+      "model_input_documents": [
+        "D18",
+        "D17",
+        "D16",
+        "D13",
+        "D14"
+      ],
+      "generation_method": "hybrid",
+      "usage": {
+        "completion_tokens": 128,
+        "prompt_tokens": 625,
+        "total_tokens": 753,
+        "prompt_tokens_details": {
+          "cached_tokens": 118
+        }
+      },
+      "answer": "Для поиска `FIXME` во всех Python-файлах (`*.py`) в каталоге и его подкаталогах, исключая `.git`, используйте следующую команду:\n\n```bash\ngrep -rn --include=\"*.py\" --exclude-dir=\".git\" \"FIXME\" .\n```\n\n**Пояснение параметров:**\n*   `-r`: рекурсивный поиск.\n*   `--include=\"*.py\"`: ограничивает поиск только файлами с расширением `.py` [2].\n*   `--exclude-dir=\".git\"`: пропускает каталог `.git",
+      "finish_reason": "length",
+      "answer_sha256": "8808a1c86df9660e87ea72202e0bf8c3b91de43819577d5e64f7ed55f8ec3766",
+      "generation_ms": 47382.22,
+      "review": {
+        "id": "Q06",
+        "answer_sha256": "8808a1c86df9660e87ea72202e0bf8c3b91de43819577d5e64f7ed55f8ec3766",
+        "correct": true,
+        "note": "Команда рекурсивно ищет FIXME в *.py от текущего каталога и исключает .git. Дополнительный -n допустим."
+      }
+    },
+    {
+      "id": "Q07",
+      "query": "Как вывести права и владельцев для всех элементов /var/log, в том числе имён с точкой в начале?",
+      "answerable": true,
+      "gold_document_ids": [
+        "D20",
+        "D21",
+        "D22",
+        "D24"
+      ],
+      "reference_answer": "ls -la /var/log. -l даёт подробный список с правами и владельцами, -a включает скрытые имена.",
+      "bm25": {
+        "hits": [
+          {
+            "id": "D03",
+            "chunk_id": "e15a635d0f7e4245ec614881",
+            "score": 13.847263
+          },
+          {
+            "id": "D06",
+            "chunk_id": "161f81d76edd273ad61dde45",
+            "score": 12.417081
+          },
+          {
+            "id": "D01",
+            "chunk_id": "dfb28565f1671cb08ca51d3e",
+            "score": 9.437181
+          },
+          {
+            "id": "D05",
+            "chunk_id": "ee49da24a9a93f1f68453077",
+            "score": 9.258843
+          },
+          {
+            "id": "D04",
+            "chunk_id": "b60fdda5315aa398a15574d8",
+            "score": 9.129019
+          }
+        ],
+        "elapsed_ms": 2.61
+      },
+      "hybrid": {
+        "hits": [
+          {
+            "id": "D03",
+            "chunk_id": "e15a635d0f7e4245ec614881",
+            "score": 13.847263
+          },
+          {
+            "id": "D06",
+            "chunk_id": "161f81d76edd273ad61dde45",
+            "score": 12.417081
+          },
+          {
+            "id": "D01",
+            "chunk_id": "dfb28565f1671cb08ca51d3e",
+            "score": 9.437181
+          },
+          {
+            "id": "D05",
+            "chunk_id": "ee49da24a9a93f1f68453077",
+            "score": 9.258843
+          },
+          {
+            "id": "D04",
+            "chunk_id": "b60fdda5315aa398a15574d8",
+            "score": 9.129019
+          }
+        ],
+        "elapsed_ms": 11.51
+      },
+      "model_input_documents": [
+        "D03",
+        "D06",
+        "D01",
+        "D05",
+        "D04"
+      ],
+      "generation_method": "hybrid",
+      "usage": {
+        "completion_tokens": 128,
+        "prompt_tokens": 597,
+        "total_tokens": 725,
+        "prompt_tokens_details": {
+          "cached_tokens": 109
+        }
+      },
+      "answer": "Для вывода прав и владельцев файлов в директории `/var/log`, включая имена с точкой в начале, используйте команду `ls` с флагом `-la` (показывает все файлы, включая скрытые, и детальные права) и опцией `--` для предотвращения интерпретации точек в именах файлов как опций:\n\n```bash\nls -la -- /var/log\n```\n\nЕсли нужно получить информацию в формате, удобном для парсинга (например, для скриптов), используйте `stat` или `ls -l` с фильтром, но для прямого вывода списка с правами",
+      "finish_reason": "length",
+      "answer_sha256": "4d618f76e50fd3d9af58e56c3962f67f75ada4bcf53666d7524bf8775c7eec91",
+      "generation_ms": 46154.23,
+      "review": {
+        "id": "Q07",
+        "answer_sha256": "4d618f76e50fd3d9af58e56c3962f67f75ada4bcf53666d7524bf8775c7eec91",
+        "correct": false,
+        "note": "Команда ls -la -- /var/log сама по себе корректна. Выдача содержала только chmod, а завершённое пояснение ошибочно приписывает -- обработку ведущих точек как опций."
+      }
+    },
+    {
+      "id": "Q08",
+      "query": "Какой вызов ls покажет содержимое /var/log подробным списком с размерами в K, M или G?",
+      "answerable": true,
+      "gold_document_ids": [
+        "D20",
+        "D22",
+        "D23",
+        "D24"
+      ],
+      "reference_answer": "ls -lh /var/log. -l выводит подробный список, -h показывает размеры в удобных единицах.",
+      "bm25": {
+        "hits": [
+          {
+            "id": "D20",
+            "chunk_id": "a8631d3caf66eaee5442543c",
+            "score": 17.809207
+          },
+          {
+            "id": "D23",
+            "chunk_id": "a638d592ee6c38e2b9772345",
+            "score": 15.406486
+          },
+          {
+            "id": "D22",
+            "chunk_id": "a245324e8c58d0d0878be4fe",
+            "score": 15.018312
+          },
+          {
+            "id": "D24",
+            "chunk_id": "fdc52606e3a11414df872ee2",
+            "score": 13.740385
+          },
+          {
+            "id": "D19",
+            "chunk_id": "76b6516c1f63ababcd0da9f7",
+            "score": 8.467785
+          }
+        ],
+        "elapsed_ms": 3.08
+      },
+      "hybrid": {
+        "hits": [
+          {
+            "id": "D20",
+            "chunk_id": "a8631d3caf66eaee5442543c",
+            "score": 17.809207
+          },
+          {
+            "id": "D23",
+            "chunk_id": "a638d592ee6c38e2b9772345",
+            "score": 15.406486
+          },
+          {
+            "id": "D24",
+            "chunk_id": "fdc52606e3a11414df872ee2",
+            "score": 13.740385
+          },
+          {
+            "id": "D22",
+            "chunk_id": "a245324e8c58d0d0878be4fe",
+            "score": 15.018312
+          },
+          {
+            "id": "D19",
+            "chunk_id": "76b6516c1f63ababcd0da9f7",
+            "score": 8.467785
+          }
+        ],
+        "elapsed_ms": 11.53
+      },
+      "model_input_documents": [
+        "D20",
+        "D23",
+        "D24",
+        "D22",
+        "D19"
+      ],
+      "generation_method": "hybrid",
+      "usage": {
+        "completion_tokens": 128,
+        "prompt_tokens": 509,
+        "total_tokens": 637,
+        "prompt_tokens_details": {
+          "cached_tokens": 118
+        }
+      },
+      "answer": "Для просмотра содержимого каталога `/var/log` подробным списком с размерами в удобных единицах (K, M, G) используйте следующую команду:\n\n```bash\nls -l /var/log\n```\n\n*Примечание: Флаг `-h` (размеры в K, M, G) обычно применяется к команде `ls -l` или `ls -lh`. Однако в предоставленном фрагменте документации [1] флаг `-h` описан как отдельный параметр, а в [2] приведен пример `ls -lh`. Для получения требуемого результата в Debian",
+      "finish_reason": "length",
+      "answer_sha256": "189824a6990de930e3d827ba50456066eac2249e5f36cb91adbe7a20775ae43f",
+      "generation_ms": 56019.67,
+      "review": {
+        "id": "Q08",
+        "answer_sha256": "189824a6990de930e3d827ba50456066eac2249e5f36cb91adbe7a20775ae43f",
+        "correct": false,
+        "note": "В показанной команде ls -l /var/log отсутствует -h. Текст упоминает флаг, но ответа с обоими флагами до лимита нет."
+      }
+    },
+    {
+      "id": "Q09",
+      "query": "Как через tar упаковать каталог src/ в backup.tar.gz и сразу проверить список файлов, ничего пока не распаковывая?",
+      "answerable": true,
+      "gold_document_ids": [
+        "D25",
+        "D26",
+        "D27"
+      ],
+      "reference_answer": "tar -czf backup.tar.gz src/, затем tar -tzf backup.tar.gz. -c создаёт архив, -z включает gzip, -t только показывает его содержимое.",
+      "bm25": {
+        "hits": [
+          {
+            "id": "D29",
+            "chunk_id": "95f53e8f3acb8cc6a6426f5a",
+            "score": 17.010493
+          },
+          {
+            "id": "D30",
+            "chunk_id": "d44ce925a0ec91bee8581136",
+            "score": 9.359454
+          },
+          {
+            "id": "D28",
+            "chunk_id": "6e0027306c986b250ff258f8",
+            "score": 9.219528
+          },
+          {
+            "id": "D26",
+            "chunk_id": "f8105c9d698a43650b32d19a",
+            "score": 9.15004
+          },
+          {
+            "id": "D27",
+            "chunk_id": "3bb6cc43bb0c549aec39bdea",
+            "score": 9.017034
+          }
+        ],
+        "elapsed_ms": 4.8
+      },
+      "hybrid": {
+        "hits": [
+          {
+            "id": "D29",
+            "chunk_id": "95f53e8f3acb8cc6a6426f5a",
+            "score": 17.010493
+          },
+          {
+            "id": "D30",
+            "chunk_id": "d44ce925a0ec91bee8581136",
+            "score": 9.359454
+          },
+          {
+            "id": "D28",
+            "chunk_id": "6e0027306c986b250ff258f8",
+            "score": 9.219528
+          },
+          {
+            "id": "D26",
+            "chunk_id": "f8105c9d698a43650b32d19a",
+            "score": 9.15004
+          },
+          {
+            "id": "D27",
+            "chunk_id": "3bb6cc43bb0c549aec39bdea",
+            "score": 9.017034
+          }
+        ],
+        "elapsed_ms": 15.71
+      },
+      "model_input_documents": [
+        "D29",
+        "D30",
+        "D28",
+        "D26",
+        "D27"
+      ],
+      "generation_method": "hybrid",
+      "usage": {
+        "completion_tokens": 85,
+        "prompt_tokens": 545,
+        "total_tokens": 630,
+        "prompt_tokens_details": {
+          "cached_tokens": 109
+        }
+      },
+      "answer": "Для создания сжатого архива и проверки его содержимого без извлечения используйте следующие команды:\n\n```bash\ntar -czf backup.tar.gz src/\n```\n\n```bash\ntar -tzf backup.tar.gz\n```\n\nПервая команда создаёт архив `backup.tar.gz` из каталога `src/`. Вторая команда показывает список файлов внутри архива без распаковки.",
+      "finish_reason": "stop",
+      "answer_sha256": "5e9489cc73df59e8bc249fc106fa33f852669e6e3af0e62fcefd43569ea57636",
+      "generation_ms": 29628.79,
+      "review": {
+        "id": "Q09",
+        "answer_sha256": "5e9489cc73df59e8bc249fc106fa33f852669e6e3af0e62fcefd43569ea57636",
+        "correct": true,
+        "note": "Команды tar -czf и tar -tzf верно создают gzip-архив и выводят его оглавление без извлечения."
+      }
+    },
+    {
+      "id": "Q10",
+      "query": "Есть backup.tar.gz. Как извлечь файлы в новый каталог recovered/ без смены текущей директории терминала?",
+      "answerable": true,
+      "gold_document_ids": [
+        "D25",
+        "D28",
+        "D29"
+      ],
+      "reference_answer": "mkdir -p recovered, затем tar -xzf backup.tar.gz -C recovered/. Флаг -C задаёт каталог извлечения.",
+      "bm25": {
+        "hits": [
+          {
+            "id": "D29",
+            "chunk_id": "95f53e8f3acb8cc6a6426f5a",
+            "score": 17.010493
+          },
+          {
+            "id": "D27",
+            "chunk_id": "3bb6cc43bb0c549aec39bdea",
+            "score": 10.808955
+          },
+          {
+            "id": "D25",
+            "chunk_id": "efc4f3b7da18841dc4beb579",
+            "score": 9.39456
+          },
+          {
+            "id": "D28",
+            "chunk_id": "6e0027306c986b250ff258f8",
+            "score": 9.219528
+          },
+          {
+            "id": "D26",
+            "chunk_id": "f8105c9d698a43650b32d19a",
+            "score": 9.15004
+          }
+        ],
+        "elapsed_ms": 4.69
+      },
+      "hybrid": {
+        "hits": [
+          {
+            "id": "D29",
+            "chunk_id": "95f53e8f3acb8cc6a6426f5a",
+            "score": 17.010493
+          },
+          {
+            "id": "D27",
+            "chunk_id": "3bb6cc43bb0c549aec39bdea",
+            "score": 10.808955
+          },
+          {
+            "id": "D28",
+            "chunk_id": "6e0027306c986b250ff258f8",
+            "score": 9.219528
+          },
+          {
+            "id": "D25",
+            "chunk_id": "efc4f3b7da18841dc4beb579",
+            "score": 9.39456
+          },
+          {
+            "id": "D26",
+            "chunk_id": "f8105c9d698a43650b32d19a",
+            "score": 9.15004
+          }
+        ],
+        "elapsed_ms": 14.61
+      },
+      "model_input_documents": [
+        "D29",
+        "D27",
+        "D28",
+        "D25",
+        "D26"
+      ],
+      "generation_method": "hybrid",
+      "usage": {
+        "completion_tokens": 45,
+        "prompt_tokens": 573,
+        "total_tokens": 618,
+        "prompt_tokens_details": {
+          "cached_tokens": 109
+        }
+      },
+      "answer": "Создайте каталог `recovered/` и распакуйте архив в него:\n\n```bash\nmkdir -p recovered\ntar -xzf backup.tar.gz -C recovered/\n```",
+      "finish_reason": "stop",
+      "answer_sha256": "cef9f46c631ce0f94ffa779ce88ca5ebbb2075a111c6e2b5d9752516b883c297",
+      "generation_ms": 28487.71,
+      "review": {
+        "id": "Q10",
+        "answer_sha256": "cef9f46c631ce0f94ffa779ce88ca5ebbb2075a111c6e2b5d9752516b883c297",
+        "correct": true,
+        "note": "mkdir -p recovered и tar -xzf с -C recovered/ выполняют извлечение в новый каталог."
+      }
+    },
+    {
+      "id": "Q11",
+      "query": "Какой флаг chmod добавит правило ACL на чтение конкретному пользователю alice?",
+      "answerable": false,
+      "gold_document_ids": [],
+      "reference_answer": "В корпусе нет информации о добавлении ACL для конкретного пользователя.",
+      "bm25": {
+        "hits": [
+          {
+            "id": "D06",
+            "chunk_id": "161f81d76edd273ad61dde45",
+            "score": 23.911082
+          },
+          {
+            "id": "D01",
+            "chunk_id": "dfb28565f1671cb08ca51d3e",
+            "score": 18.773646
+          },
+          {
+            "id": "D03",
+            "chunk_id": "e15a635d0f7e4245ec614881",
+            "score": 18.445271
+          },
+          {
+            "id": "D04",
+            "chunk_id": "b60fdda5315aa398a15574d8",
+            "score": 17.810371
+          },
+          {
+            "id": "D02",
+            "chunk_id": "12160375d75822a532c0c525",
+            "score": 16.990568
+          }
+        ],
+        "elapsed_ms": 1.59
+      },
+      "hybrid": {
+        "hits": [
+          {
+            "id": "D06",
+            "chunk_id": "161f81d76edd273ad61dde45",
+            "score": 23.911082
+          },
+          {
+            "id": "D01",
+            "chunk_id": "dfb28565f1671cb08ca51d3e",
+            "score": 18.773646
+          },
+          {
+            "id": "D02",
+            "chunk_id": "12160375d75822a532c0c525",
+            "score": 16.990568
+          },
+          {
+            "id": "D03",
+            "chunk_id": "e15a635d0f7e4245ec614881",
+            "score": 18.445271
+          },
+          {
+            "id": "D04",
+            "chunk_id": "b60fdda5315aa398a15574d8",
+            "score": 17.810371
+          }
+        ],
+        "elapsed_ms": 9.66
+      },
+      "model_input_documents": [
+        "D06",
+        "D01",
+        "D02",
+        "D03",
+        "D04"
+      ],
+      "generation_method": "hybrid",
+      "usage": {
+        "completion_tokens": 116,
+        "prompt_tokens": 590,
+        "total_tokens": 706,
+        "prompt_tokens_details": {
+          "cached_tokens": 118
+        }
+      },
+      "answer": "В предоставленной документации **нет информации** о том, как добавить правила ACL (Access Control Lists) для конкретного пользователя.\n\nДокументация содержит только информацию о базовых правах доступа для категорий: владелец (`u`), группа (`g`), остальные (`o`) и все (`a`), а также о командной строке `chmod` для изменения этих прав.\n\nДля работы с ACL в Debian 13 обычно используется команда `setfacl`, а не `chmod`, но точная команда для пользователя `alice` не указана в источниках.",
+      "finish_reason": "stop",
+      "answer_sha256": "1db9e72c54ac73a3b61e5fc747d3f3e5c61ddb83877ee5b647450c4cef07843a",
+      "generation_ms": 43467.57,
+      "review": {
+        "id": "Q11",
+        "answer_sha256": "1db9e72c54ac73a3b61e5fc747d3f3e5c61ddb83877ee5b647450c4cef07843a",
+        "correct": false,
+        "note": "Модель признаёт отсутствие данных, затем предлагает setfacl. Это содержательная подсказка об ACL, которой нет в предъявленном корпусе."
+      }
+    },
+    {
+      "id": "Q12",
+      "query": "Какой флаг ls выводит дату создания файла вместо даты изменения?",
+      "answerable": false,
+      "gold_document_ids": [],
+      "reference_answer": "В корпусе нет сведений о выводе даты создания файла.",
+      "bm25": {
+        "hits": [
+          {
+            "id": "D23",
+            "chunk_id": "a638d592ee6c38e2b9772345",
+            "score": 14.617353
+          },
+          {
+            "id": "D21",
+            "chunk_id": "8938760d4d068b6db01e8e94",
+            "score": 14.603865
+          },
+          {
+            "id": "D19",
+            "chunk_id": "76b6516c1f63ababcd0da9f7",
+            "score": 12.651283
+          },
+          {
+            "id": "D20",
+            "chunk_id": "a8631d3caf66eaee5442543c",
+            "score": 12.092792
+          },
+          {
+            "id": "D24",
+            "chunk_id": "fdc52606e3a11414df872ee2",
+            "score": 10.682948
+          }
+        ],
+        "elapsed_ms": 4.72
+      },
+      "hybrid": {
+        "hits": [
+          {
+            "id": "D21",
+            "chunk_id": "8938760d4d068b6db01e8e94",
+            "score": 14.603865
+          },
+          {
+            "id": "D19",
+            "chunk_id": "76b6516c1f63ababcd0da9f7",
+            "score": 12.651283
+          },
+          {
+            "id": "D23",
+            "chunk_id": "a638d592ee6c38e2b9772345",
+            "score": 14.617353
+          },
+          {
+            "id": "D20",
+            "chunk_id": "a8631d3caf66eaee5442543c",
+            "score": 12.092792
+          },
+          {
+            "id": "D22",
+            "chunk_id": "a245324e8c58d0d0878be4fe",
+            "score": 10.614151
+          }
+        ],
+        "elapsed_ms": 13.15
+      },
+      "model_input_documents": [
+        "D21",
+        "D19",
+        "D23",
+        "D20",
+        "D22"
+      ],
+      "generation_method": "hybrid",
+      "usage": {
+        "completion_tokens": 124,
+        "prompt_tokens": 487,
+        "total_tokens": 611,
+        "prompt_tokens_details": {
+          "cached_tokens": 109
+        }
+      },
+      "answer": "В предоставленной документации нет информации о флаге, который выводит дату создания файла.\n\nВ разделе «Основные параметры» [4] указан флаг `-t` для сортировки по времени изменения, но не указано, что именно он показывает (создание или изменение), и нет отдельного флага для даты создания.\n\nДля получения даты создания файла в стандартном `ls` обычно используется флаг `-l` (подробный список) в сочетании с `--time-style=full-iso` (если поддерживается) или просмотр через `stat`, однако эти детали отсутствуют в текущем фрагменте документации.",
+      "finish_reason": "stop",
+      "answer_sha256": "1bedc0aef166bb88794d0b998e36d25e84fcee5a4a71b51ae77df103deee8a4b",
+      "generation_ms": 45167.11,
+      "review": {
+        "id": "Q12",
+        "answer_sha256": "1bedc0aef166bb88794d0b998e36d25e84fcee5a4a71b51ae77df103deee8a4b",
+        "correct": false,
+        "note": "После отказа модель советует -l и --time-style=full-iso. Эти флаги не выбирают время создания файла."
+      }
+    },
+    {
+      "id": "Q13",
+      "query": "Каким параметром tar проверяет криптографическую подпись архива?",
+      "answerable": false,
+      "gold_document_ids": [],
+      "reference_answer": "В корпусе нет информации о проверке криптографической подписи архива.",
+      "bm25": {
+        "hits": [
+          {
+            "id": "D25",
+            "chunk_id": "efc4f3b7da18841dc4beb579",
+            "score": 17.761425
+          },
+          {
+            "id": "D27",
+            "chunk_id": "3bb6cc43bb0c549aec39bdea",
+            "score": 17.717473
+          },
+          {
+            "id": "D30",
+            "chunk_id": "d44ce925a0ec91bee8581136",
+            "score": 14.211324
+          },
+          {
+            "id": "D28",
+            "chunk_id": "6e0027306c986b250ff258f8",
+            "score": 10.882574
+          },
+          {
+            "id": "D26",
+            "chunk_id": "f8105c9d698a43650b32d19a",
+            "score": 10.855659
+          }
+        ],
+        "elapsed_ms": 1.8
+      },
+      "hybrid": {
+        "hits": [
+          {
+            "id": "D25",
+            "chunk_id": "efc4f3b7da18841dc4beb579",
+            "score": 17.761425
+          },
+          {
+            "id": "D27",
+            "chunk_id": "3bb6cc43bb0c549aec39bdea",
+            "score": 17.717473
+          },
+          {
+            "id": "D30",
+            "chunk_id": "d44ce925a0ec91bee8581136",
+            "score": 14.211324
+          },
+          {
+            "id": "D28",
+            "chunk_id": "6e0027306c986b250ff258f8",
+            "score": 10.882574
+          },
+          {
+            "id": "D26",
+            "chunk_id": "f8105c9d698a43650b32d19a",
+            "score": 10.855659
+          }
+        ],
+        "elapsed_ms": 26.47
+      },
+      "model_input_documents": [
+        "D25",
+        "D27",
+        "D30",
+        "D28",
+        "D26"
+      ],
+      "generation_method": "hybrid",
+      "usage": {
+        "completion_tokens": 60,
+        "prompt_tokens": 587,
+        "total_tokens": 647,
+        "prompt_tokens_details": {
+          "cached_tokens": 118
+        }
+      },
+      "answer": "В предоставленной документации нет информации о проверке криптографических подписей архивов с помощью `tar`.\n\nДокументация содержит только параметры для создания, извлечения и просмотра содержимого архивов (сжатия и распаковки), но не упоминает проверки подписей.",
+      "finish_reason": "stop",
+      "answer_sha256": "7efc9ff0e4486f8072f31bd19dab2ce48b88b149062ac2b5fa7fc22266ce5d8b",
+      "generation_ms": 22234.61,
+      "review": {
+        "id": "Q13",
+        "answer_sha256": "7efc9ff0e4486f8072f31bd19dab2ce48b88b149062ac2b5fa7fc22266ce5d8b",
+        "correct": true,
+        "note": "Модель явно указала на отсутствие сведений о проверке подписи и не предложила выдуманный параметр."
+      }
+    },
+    {
+      "id": "Q14",
+      "query": "Какова столица Исландии?",
+      "answerable": false,
+      "gold_document_ids": [],
+      "reference_answer": "В документации команд Linux этой информации нет.",
+      "bm25": {
+        "hits": [],
+        "elapsed_ms": 0.99
+      },
+      "hybrid": {
+        "hits": [],
+        "elapsed_ms": 0.15
+      },
+      "model_input_documents": [],
+      "generation_method": "hybrid",
+      "answer": "В проверенной документации для этой системы подходящих сведений не найдено. Уточните команду или задачу.",
+      "finish_reason": "no_context",
+      "answer_sha256": "0816ecc6285da7149b32d50028616b0632a5b7465b3514db0b720e70cedbea03",
+      "generation_ms": 0.03,
+      "review": {
+        "id": "Q14",
+        "answer_sha256": "0816ecc6285da7149b32d50028616b0632a5b7465b3514db0b720e70cedbea03",
+        "correct": true,
+        "note": "Поиск вернул пустую выдачу. no_context сформировал корректный отказ."
+      }
+    },
+    {
+      "id": "Q15",
+      "query": "Что такое квантовая запутанность фотонов?",
+      "answerable": false,
+      "gold_document_ids": [],
+      "reference_answer": "В документации команд Linux этой информации нет.",
+      "bm25": {
+        "hits": [],
+        "elapsed_ms": 0.28
+      },
+      "hybrid": {
+        "hits": [],
+        "elapsed_ms": 0.26
+      },
+      "model_input_documents": [],
+      "generation_method": "hybrid",
+      "answer": "В проверенной документации для этой системы подходящих сведений не найдено. Уточните команду или задачу.",
+      "finish_reason": "no_context",
+      "answer_sha256": "0816ecc6285da7149b32d50028616b0632a5b7465b3514db0b720e70cedbea03",
+      "generation_ms": 0.0,
+      "review": {
+        "id": "Q15",
+        "answer_sha256": "0816ecc6285da7149b32d50028616b0632a5b7465b3514db0b720e70cedbea03",
+        "correct": true,
+        "note": "Поиск вернул пустую выдачу. no_context сформировал корректный отказ."
+      }
+    }
+  ],
+  "model": "qwen3.5-4b",
+  "generation": {
+    "temperature": 0,
+    "seed": 42,
+    "max_tokens": 128,
+    "reasoning": "off",
+    "jobs": 2
+  },
+  "started_at": "2026-11-20T10:15:08.563931+00:00",
+  "model_report": [
+    {
+      "id": "qwen3.5-4b",
+      "aliases": [
+        "qwen3.5-4b"
+      ],
+      "tags": [],
+      "object": "model",
+      "architecture": {
+        "input_modalities": [
+          "text"
+        ],
+        "output_modalities": [
+          "text"
+        ]
+      },
+      "created": 1795169708,
+      "owned_by": "llamacpp",
+      "meta": {
+        "vocab_type": 2,
+        "n_vocab": 248320,
+        "n_ctx": 2048,
+        "n_ctx_train": 262144,
+        "n_embd": 2560,
+        "n_params": 4205751296,
+        "size": 2729969664,
+        "ftype": "Q4_K - Medium"
+      }
+    }
+  ],
+  "finished_at": "2026-11-20T10:19:58.544311+00:00",
+  "answer_metrics": {
+    "accuracy": 0.7,
+    "correct_rejection_rate": 0.6
+  }
+}

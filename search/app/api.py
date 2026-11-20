@@ -13,7 +13,7 @@ from starlette.concurrency import run_in_threadpool
 from starlette.datastructures import UploadFile
 from starlette.exceptions import HTTPException
 from pydantic import BaseModel, ConfigDict, Field
-from rank_bm25 import BM25Okapi
+from bm25_index import BM25Index
 
 from app.corpus_store import CorpusStore, DocumentExists, InvalidDocument, MAX_UPLOAD, validate
 from bm25_demo import search, tokenize
@@ -88,47 +88,27 @@ def load_index(directory=INDEX_DIR):
     if version != meta["corpus_version"]:
         raise ValueError("Index version mismatch")
 
-    for filename, hash_key in [
-        ("chunks.json", "chunks_sha256"),
-        ("tokens.json", "tokens_sha256"),
-    ]:
-        digest = hashlib.sha256(
-            (folder / filename).read_bytes()
-        ).hexdigest()
+    def checked_json(filename, hash_key):
+        data = (folder / filename).read_bytes()
+        if hashlib.sha256(data).hexdigest() != meta[hash_key]:
+            raise ValueError(f"Index checksum mismatch: {filename}")
+        return json.loads(data)
 
-        if digest != meta[hash_key]:
-            raise ValueError(
-                f"Index checksum mismatch: {filename}"
-            )
+    chunks = checked_json("chunks.json", "chunks_sha256")
+    if "bm25_sha256" in meta:
+        snapshot = checked_json("bm25.json", "bm25_sha256")
+        bm25 = BM25Index(**snapshot, **meta["bm25"])
+    else:
+        # Existing installations published token rows. Rebuild their postings on load.
+        tokens = checked_json("tokens.json", "tokens_sha256")
+        bm25 = BM25Index.build(tokens, **meta["bm25"])
 
-    chunks = json.loads(
-        (folder / "chunks.json").read_text(
-            encoding="utf-8"
-        )
-    )
-
-    tokens = json.loads(
-        (folder / "tokens.json").read_text(
-            encoding="utf-8"
-        )
-    )
-
-    if (
-        not chunks
-        or len(chunks) != len(tokens)
-        or len(chunks) != meta["count"]
-    ):
+    if not chunks or len(chunks) != len(bm25.lengths) or len(chunks) != meta["count"]:
         raise ValueError("Empty or inconsistent index")
-
-    bm25 = BM25Okapi(
-        tokens,
-        **meta["bm25"]
-    )
 
     return {
         "meta": meta,
         "chunks": chunks,
-        "tokens": tokens,
         "bm25": bm25,
         "commands": {chunk["command"] for chunk in chunks},
     }
@@ -236,6 +216,28 @@ def corpus(request: Request):
     }
 
 
+def retrieve(index, query, target, embedder=None):
+    ranked = search(
+        query,
+        index["chunks"],
+        index["bm25"],
+        top_k=len(index["chunks"])
+    )
+
+    # Явно указанная команда должна присутствовать в корпусе выбранной системы.
+    named_commands = index["commands"].intersection(tokenize(query))
+    compatible = [
+        item
+        for item in ranked
+        if target in item["applies_to"] and (not named_commands or item["command"] in named_commands)
+    ]
+
+    if embedder:
+        compatible = embedder.rerank(query, compatible[:20], index["vectors"])
+
+    return compatible
+
+
 @app.post("/v1/search")
 def search_endpoint(payload: SearchRequest, request: Request):
     index = request.app.state.index
@@ -274,25 +276,7 @@ def search_endpoint(payload: SearchRequest, request: Request):
             "Нет проверенного корпуса для выбранной системы"
         )
 
-    ranked = search(
-        payload.query,
-        index["chunks"],
-        index["bm25"],
-        index["tokens"],
-        top_k=len(index["chunks"])
-    )
-
-    # Явно указанная команда должна присутствовать в корпусе выбранной системы.
-    named_commands = index["commands"].intersection(tokenize(payload.query))
-    compatible = [
-        item
-        for item in ranked
-        if target in item["applies_to"] and (not named_commands or item["command"] in named_commands)
-    ]
-
-    embedder = request.app.state.embedder
-    if embedder:
-        compatible = embedder.rerank(payload.query, compatible[:20], index["vectors"])
+    compatible = retrieve(index, payload.query, target, request.app.state.embedder)
 
     items = []
 
