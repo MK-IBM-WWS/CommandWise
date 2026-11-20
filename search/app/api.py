@@ -1,6 +1,7 @@
 from contextlib import asynccontextmanager
 import hashlib
 import json
+import logging
 import os
 from pathlib import Path
 from typing import Literal
@@ -8,10 +9,16 @@ from typing import Literal
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
+from starlette.concurrency import run_in_threadpool
+from starlette.datastructures import UploadFile
+from starlette.exceptions import HTTPException
 from pydantic import BaseModel, ConfigDict, Field
 from rank_bm25 import BM25Okapi
 
-from bm25_demo import search
+from app.corpus_store import CorpusStore, DocumentExists, InvalidDocument, MAX_UPLOAD, validate
+from bm25_demo import search, tokenize
+
+logger = logging.getLogger(__name__)
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -53,9 +60,9 @@ def error(status, code, message):
     )
 
 
-def load_index():
+def load_index(directory=INDEX_DIR):
     pointer = json.loads(
-        (INDEX_DIR / "current.json").read_text(
+        (directory / "current.json").read_text(
             encoding="utf-8"
         )
     )
@@ -72,7 +79,7 @@ def load_index():
     ):
         raise ValueError("Invalid corpus version")
 
-    folder = INDEX_DIR / version
+    folder = directory / version
 
     meta = json.loads(
         (folder / "meta.json").read_text(encoding="utf-8")
@@ -123,16 +130,31 @@ def load_index():
         "chunks": chunks,
         "tokens": tokens,
         "bm25": bm25,
+        "commands": {chunk["command"] for chunk in chunks},
     }
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    try:
-        app.state.index = load_index()
-    except Exception as exc:
-        app.state.index = None
-        print(f"Ошибка загрузки индекса: {exc}")
+    app.state.store = None
+    app.state.embedder = None
+    runtime = os.getenv("RUNTIME_DIR")
+    if runtime:
+        from app.embedding import E5
+        embedder = E5(Path(os.environ["EMBEDDING_DIR"]))
+        store = CorpusStore(
+            Path(runtime), Path(os.getenv("SEED_CORPUS", str(ROOT / "corpus"))),
+            embedder, load_index,
+        )
+        app.state.index = await run_in_threadpool(store.load)
+        app.state.store = store
+        app.state.embedder = embedder
+    else:
+        try:
+            app.state.index = load_index()
+        except (OSError, ValueError):
+            app.state.index = None
+            logger.exception("Ошибка загрузки индекса")
 
     yield
 
@@ -260,12 +282,17 @@ def search_endpoint(payload: SearchRequest, request: Request):
         top_k=len(index["chunks"])
     )
 
-    # Фильтруем совместимые результаты до выбора top_k.
+    # Явно указанная команда должна присутствовать в корпусе выбранной системы.
+    named_commands = index["commands"].intersection(tokenize(payload.query))
     compatible = [
         item
         for item in ranked
-        if target in item["applies_to"]
+        if target in item["applies_to"] and (not named_commands or item["command"] in named_commands)
     ]
+
+    embedder = request.app.state.embedder
+    if embedder:
+        compatible = embedder.rerank(payload.query, compatible[:20], index["vectors"])
 
     items = []
 
@@ -294,3 +321,50 @@ def search_endpoint(payload: SearchRequest, request: Request):
         "corpus_version": index["meta"]["corpus_version"],
         "items": items
     }
+
+
+@app.get("/v1/admin/documents")
+def documents(request: Request):
+    index = request.app.state.index
+    if request.app.state.store is None or index is None:
+        return error(503, "INDEX_NOT_READY", "Индекс недоступен для записи.")
+    keys = ("document_id", "package", "package_version", "source_url", "collected_at", "verified_targets")
+    items = [{key: item.get(key) or ([] if key == "verified_targets" else "") for key in keys} for item in index["documents"]]
+    return {"corpus_version": index["meta"]["corpus_version"], "items": items}
+
+
+def activate_document(app, document, content):
+    store = app.state.store
+    with store.lock:
+        previous = app.state.index
+        snapshot = store.publish(previous["corpus"], previous, document, content)
+        app.state.index = snapshot
+        return snapshot["meta"]["corpus_version"]
+
+
+@app.post("/v1/admin/documents")
+async def upload_document(request: Request):
+    if request.app.state.store is None or request.app.state.index is None:
+        return error(503, "INDEX_NOT_READY", "Индекс недоступен для записи.")
+    try:
+        async with request.form(max_files=1, max_fields=7, max_part_size=8192) as form:
+            uploaded = form.get("file")
+            if not isinstance(uploaded, UploadFile) or not (uploaded.filename or "").lower().endswith(".md"):
+                return error(400, "INVALID_FILE", "Выберите Markdown-файл с расширением .md.")
+            data = await uploaded.read(MAX_UPLOAD + 1)
+            if len(data) > MAX_UPLOAD:
+                return error(413, "FILE_TOO_LARGE", "Размер Markdown-файла ограничен 512 КиБ.")
+            document, content = validate(form, data)
+        version = await run_in_threadpool(activate_document, request.app, document, content)
+    except DocumentExists as exc:
+        return error(409, "DOCUMENT_EXISTS", str(exc))
+    except InvalidDocument as exc:
+        return error(422, "INVALID_DOCUMENT", str(exc))
+    except HTTPException:
+        return error(400, "INVALID_FILE", "Проверьте формат формы загрузки.")
+    except Exception:
+        logger.exception("Ошибка публикации документа")
+        return error(503, "INDEX_UPDATE_FAILED", "Не удалось опубликовать новую версию корпуса.")
+    return JSONResponse(status_code=201, content={
+        "document_id": document["document_id"], "corpus_version": version,
+    })

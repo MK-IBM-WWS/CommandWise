@@ -1,0 +1,104 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "${CW_BIND:-127.0.0.1}:${CW_PORT:-8080}:80"
+    depends_on:
+      backend:
+        condition: service_started
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./backend
+    environment:
+      DATABASE_URL: postgres://commandwise:${POSTGRES_PASSWORD:?run install-debian.sh or install-fedora.sh}@postgres:5432/commandwise?sslmode=disable
+      JWT_SECRET: ${JWT_SECRET:?run install-debian.sh or install-fedora.sh}
+      COOKIE_SECURE: "${COOKIE_SECURE:-false}"
+      PUBLIC_ORIGIN: "${PUBLIC_ORIGIN:-}"
+      SEARCH_URL: http://search:8000
+      LLM_URL: http://llm:8080
+      LLM_MODEL: qwen3.5-4b
+    depends_on:
+      postgres:
+        condition: service_healthy
+      search:
+        condition: service_healthy
+      llm:
+        condition: service_started
+    restart: unless-stopped
+    stop_grace_period: 15s
+
+  postgres:
+    image: postgres:17-bookworm
+    environment:
+      POSTGRES_DB: commandwise
+      POSTGRES_USER: commandwise
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?run install-debian.sh or install-fedora.sh}
+    volumes:
+      - database:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U commandwise -d commandwise"]
+      interval: 4s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
+  search:
+    build:
+      context: .
+      dockerfile: search/Dockerfile
+    environment:
+      RUNTIME_DIR: /state
+      EMBEDDING_DIR: /models
+      SEED_CORPUS: /opt/commandwise/corpus
+    volumes:
+      - rag:/state
+      - ./.commandwise/models/embedding:/models:ro,Z
+    healthcheck:
+      test: ["CMD", "python", "-c", "from urllib.request import urlopen; urlopen('http://127.0.0.1:8000/ready', timeout=3).close()"]
+      interval: 5s
+      timeout: 4s
+      start_period: 90s
+      retries: 36
+    restart: unless-stopped
+
+  llm:
+    image: ${LLAMA_IMAGE:-ghcr.io/ggml-org/llama.cpp@sha256:6b1c681b535a15d406c7270fd2730f5bd36d3598fbb0ca894bfa47857a700fe3}
+    command:
+      - --host
+      - 0.0.0.0
+      - --port
+      - "8080"
+      - --model
+      - /models/qwen.gguf
+      - --alias
+      - qwen3.5-4b
+      - --n-gpu-layers
+      - all
+      - --ctx-size
+      - "16384"
+      - --parallel
+      - "2"
+      - --cont-batching
+      - --flash-attn
+      - "on"
+      - --no-context-shift
+      - --jinja
+      - --chat-template-kwargs
+      - '{"enable_thinking":false}'
+    volumes:
+      - ./.commandwise/models/llm:/models:ro,Z
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    restart: unless-stopped
+
+volumes:
+  database:
+  rag:

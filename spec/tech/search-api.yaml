@@ -87,6 +87,64 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
+  /v1/admin/documents:
+    get:
+      operationId: getIndexDocuments
+      summary: Метаданные опубликованного снимка корпуса
+      responses:
+        '200':
+          description: Версия и массив документов
+        '503':
+          description: Индекс недоступен
+    post:
+      operationId: publishIndexDocument
+      summary: Добавить документ и опубликовать снимок корпуса
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+              - file
+              - document_id
+              - package
+              - package_version
+              - source_url
+              - collected_at
+              - distribution
+              - release
+              properties:
+                file:
+                  type: string
+                  format: binary
+                document_id:
+                  type: string
+                package:
+                  type: string
+                package_version:
+                  type: string
+                source_url:
+                  type: string
+                collected_at:
+                  type: string
+                distribution:
+                  type: string
+                release:
+                  type: string
+      responses:
+        '201':
+          description: Версия опубликована
+        '400':
+          description: Невалидная форма
+        '409':
+          description: Идентификатор занят
+        '413':
+          description: Файл превышает 512 КиБ
+        '422':
+          description: Невалидные метаданные или Markdown
+        '503':
+          description: Публикация не завершилась
 components:
   schemas:
     Target:

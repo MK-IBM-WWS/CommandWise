@@ -1,3 +1,5 @@
-# Инфраструктура
+# Сборка и развёртывание
 
-Compose, Nginx, Modelfile и server runbook создаются после согласования [архитектуры](../spec/tech/architecture.md) и [CI/CD](../spec/tech/cicd.md). Production работает на сервере команды через Tailscale. Документационный workflow не делает deploy.
+Из корня репозитория выполните `./install-debian.sh` на Debian 13 или `./install-fedora.sh` на Fedora. После установки запустите приложение на Debian командой `./start-debian.sh`. Обе версии поддерживают `./commandwise.sh` для управления контейнерами и просмотра журналов.
+
+Параметры и способ публикации по HTTPS описаны в [главном README](../README.md).

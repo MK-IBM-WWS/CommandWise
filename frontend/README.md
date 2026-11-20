@@ -1,3 +1,3 @@
-# Frontend
+# Интерфейс CommandWise
 
-Production React/TypeScript/Vite SPA ещё не реализована в этом комплекте. Для точки 1 запускается [прототип](../prototype/index.html). Контракт и UX: [интерфейс](../spec/product/interface.md), [Go API](../spec/tech/api.yaml). Здесь будут src, package-lock.json, tests и Dockerfile.
+SPA на React, TypeScript и Vite. Для разработки выполните `npm ci`, затем `npm run dev`. При локальной разработке Vite проксирует API на `127.0.0.1:8081`. Администратор после входа попадает на `/admin`, пользователь — в чат. Сборка приложения выполняется командой `npm run build`.

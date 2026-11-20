@@ -1,4 +1,5 @@
-# Backend
+# Go API
 
-Go/net/http/pgx API и миграции PostgreSQL — следующий этап. Текущий материал: OpenAPI, архитектура, данные. Команды go run/test будут добавлены после создания реального модуля; сейчас они не являются способом запуска прототипа.
+Запуск рабочей сборки описан в [главном README](../README.md). Backend использует `net/http`, PostgreSQL и goose. Основные параметры окружения — `DATABASE_URL`, `JWT_SECRET`, `SEARCH_URL`, `LLM_URL`, `LLM_MODEL`, `LISTEN_ADDR`, `COOKIE_SECURE`, `PUBLIC_ORIGIN`.
 
+Схемы внешнего API и очереди находятся в [технической спецификации](../spec/tech/api.yaml). Интеграционный тест требует переменную `COMMANDWISE_TEST_DSN` с адресом отдельной пустой базы.

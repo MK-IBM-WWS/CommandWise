@@ -97,7 +97,7 @@ def test_unrelated_query_returns_no_sources(client):
     assert response.status_code == 200
     assert response.json()["items"] == []
 
-def test_unverified_commands_not_returned_for_debian(client):
+def test_unverified_commands_have_no_context_for_debian(client):
     draft_commands = {"cp", "mv", "mkdir", "rm", "cat"}
 
     for command in sorted(draft_commands):
@@ -113,9 +113,4 @@ def test_unverified_commands_not_returned_for_debian(client):
 
         assert response.status_code == 200
 
-        returned = {
-            item["command"]
-            for item in response.json()["items"]
-        }
-
-        assert returned.isdisjoint(draft_commands)
+        assert response.json()["items"] == []

@@ -1,14 +1,13 @@
 openapi: 3.0.3
 info:
   title: Linux Command RAG — внешний Go API
-  version: 0.1.0
-  description: Проект контракта для реализации. На контрольной точке 1 работающий HTTP API не представлен;
-    see api-behavior.md. UTF-8, cookie-сессии; examples не подтверждают corpus coverage.
+  version: 1.0.0
+  description: API CommandWise. Контракт SSE и жизненный цикл задания описаны в api-behavior.md.
 servers:
-- url: http://localhost:8081
-  description: Будущий локальный Go API; production same-origin /api/v1
+- url: http://127.0.0.1:8080
 security:
-- BrowserSession: []
+- SessionJWT: []
+- BearerJWT: []
 paths:
   /api/v1/corpus:
     get:
@@ -31,8 +30,7 @@ paths:
   /api/v1/chats:
     get:
       operationId: listChats
-      summary: Чаты текущей browser-сессии; создаёт cookie при отсутствии
-      security: []
+      summary: Чаты текущего пользователя
       responses:
         '200':
           description: Успех
@@ -48,8 +46,7 @@ paths:
                 $ref: '#/components/schemas/ApiError'
     post:
       operationId: createChat
-      summary: Новый чат с фиксированным target; создаёт cookie при отсутствии
-      security: []
+      summary: Новый чат с фиксированным target
       requestBody:
         required: true
         content:
@@ -85,9 +82,16 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
+        '409':
+          description: Достигнут лимит из десяти чатов
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
   /api/v1/chats/{chat_id}/messages:
-    parameters:
-    - name: chat_id
+    parameters: &id002
+    - &id003
+      name: chat_id
       in: path
       required: true
       schema: &id001
@@ -111,7 +115,7 @@ paths:
                 $ref: '#/components/schemas/ApiError'
     post:
       operationId: sendMessage
-      summary: JSON-ответ или поток SSE; подробный протокол api-behavior.md
+      summary: Поставить вопрос в очередь и опционально подписаться на поток
       requestBody:
         required: true
         content:
@@ -124,20 +128,11 @@ paths:
               client_request_id: b2d1f497-03d1-4ef6-980c-530b46fbc962
       responses:
         '200':
-          description: 'stream=false: JSON; stream=true: sources/token/done или terminal error'
+          description: 'SSE: status, sources, token, done или error'
           content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CompletedAnswer'
             text/event-stream:
-              schema:
+              schema: &id007
                 type: string
-              example: 'event: token
-
-                data: {"delta":"Текст"}
-
-
-                '
         '400':
           description: Невалидный вопрос/JSON
           content:
@@ -156,12 +151,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-        '422':
-          description: Target больше не доступен
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
         '429':
           description: Очередь заполнена
           content:
@@ -174,6 +163,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
+        '202':
+          description: Задание принято при stream=false
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
   /api/v1/chats/{chat_id}/messages/{message_id}/sources/{chunk_id}:
     parameters:
     - name: chat_id
@@ -187,7 +182,7 @@ paths:
     - name: chunk_id
       in: path
       required: true
-      schema: &id002
+      schema: &id004
         type: string
     get:
       operationId: getSourceSnapshot
@@ -235,26 +230,251 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
+  /api/v1/auth/register:
+    post:
+      operationId: register
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Credentials'
+      responses:
+        '201':
+          description: Сессия выдана
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResult'
+        '400':
+          description: Некорректные данные
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '429':
+          description: Слишком много попыток
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '409':
+          description: Логин занят
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      parameters:
+      - in: header
+        name: X-Auth-Mode
+        required: false
+        schema:
+          type: string
+          enum:
+          - bearer
+        description: Запросить JWT в JSON. По умолчанию сервер устанавливает HttpOnly-cookie.
+  /api/v1/auth/login:
+    post:
+      operationId: login
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Credentials'
+      responses:
+        '200':
+          description: Сессия выдана
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResult'
+        '400':
+          description: Некорректные данные
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '429':
+          description: Слишком много попыток
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Неверный логин или пароль
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      parameters:
+      - in: header
+        name: X-Auth-Mode
+        required: false
+        schema:
+          type: string
+          enum:
+          - bearer
+        description: Запросить JWT в JSON. По умолчанию сервер устанавливает HttpOnly-cookie.
+  /api/v1/auth/me:
+    get:
+      operationId: getAccount
+      responses:
+        '200':
+          description: Профиль
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        '401':
+          description: Требуется вход
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/v1/auth/logout:
+    post:
+      operationId: logout
+      responses:
+        '204':
+          description: Выход
+        '401':
+          description: Требуется вход
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/v1/chats/{chat_id}:
+    parameters: *id002
+    delete:
+      operationId: deleteChat
+      responses:
+        '204':
+          description: Чат удалён
+        '404':
+          description: Не найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '409':
+          description: Сначала остановите задание
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/v1/chats/{chat_id}/messages/{message_id}/cancel:
+    parameters:
+    - *id003
+    - name: message_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    post:
+      operationId: cancelGeneration
+      responses:
+        '204':
+          description: Остановка запрошена или задание уже завершено
+        '404':
+          description: Не найдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/v1/admin/documents:
+    get:
+      operationId: listRagDocuments
+      responses:
+        '200':
+          description: Документы корпуса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RagDocuments'
+        '403':
+          description: Нужна роль администратора
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    post:
+      operationId: uploadRagDocument
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/RagUpload'
+      responses:
+        '201':
+          description: Индекс опубликован
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RagPublished'
+        '400':
+          description: Файл не принят
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Нужна роль администратора
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '409':
+          description: Идентификатор занят
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '422':
+          description: Метаданные или Markdown не прошли проверку
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '503':
+          description: Индекс недоступен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '413':
+          description: Файл слишком велик
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
 components:
   securitySchemes:
-    BrowserSession:
+    SessionJWT:
       type: apiKey
       in: cookie
-      name: rag_session
-      description: Анонимная browser session; новая cookie создаётся при первом запросе списка/создания
-        чатов. Чужие объекты недоступны.
+      name: cw_session
+      description: JWT в HttpOnly-cookie
+    BearerJWT:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   schemas:
     Target:
       type: object
       properties:
-        distribution: &id003
+        distribution: &id005
           type: string
           enum:
           - debian
           - ubuntu
           - fedora
           - arch
-        release: &id004
+        release: &id006
           type: string
           minLength: 1
       required:
@@ -264,8 +484,8 @@ components:
     Release:
       type: object
       properties:
-        id: *id002
-        label: *id002
+        id: *id004
+        label: *id004
       required:
       - id
       - label
@@ -273,8 +493,8 @@ components:
     Distribution:
       type: object
       properties:
-        id: *id002
-        label: *id002
+        id: *id004
+        label: *id004
         releases:
           type: array
           items:
@@ -287,7 +507,7 @@ components:
     CorpusInfo:
       type: object
       properties:
-        corpus_version: *id002
+        corpus_version: *id004
         distributions:
           type: array
           items:
@@ -302,8 +522,8 @@ components:
         error:
           type: object
           properties:
-            code: *id002
-            message: *id002
+            code: *id004
+            message: *id004
             message_id: *id001
           required:
           - code
@@ -329,7 +549,7 @@ components:
           type: string
           enum:
           - ready
-        corpus_version: *id002
+        corpus_version: *id004
       required:
       - status
       - corpus_version
@@ -337,8 +557,8 @@ components:
     CreateChat:
       type: object
       properties:
-        distribution: *id003
-        release: *id004
+        distribution: *id005
+        release: *id006
         title:
           type: string
           maxLength: 120
@@ -351,17 +571,25 @@ components:
       type: object
       properties:
         id: *id001
-        distribution: *id003
-        release: *id002
-        title: *id002
-        created_at: &id005
+        distribution: *id005
+        release: *id004
+        title: *id004
+        created_at: &id008
           type: string
           format: date-time
+        status:
+          type: string
+          enum:
+          - idle
+          - queued
+          - generating
       required:
       - id
       - distribution
       - release
       - title
+      - status
+      - created_at
       additionalProperties: false
     SourceCard:
       type: object
@@ -369,14 +597,15 @@ components:
         ref:
           type: integer
           minimum: 1
-        chunk_id: *id002
-        document_id: *id002
-        title: *id002
+        chunk_id: *id004
+        document_id: *id004
+        title: *id004
         source_url:
           type: string
           format: uri
-        distribution: *id002
-        release: *id002
+        distribution: *id004
+        release: *id004
+        section: *id007
       required:
       - ref
       - chunk_id
@@ -392,19 +621,20 @@ components:
         ref:
           type: integer
           minimum: 1
-        chunk_id: *id002
-        document_id: *id002
-        title: *id002
+        chunk_id: *id004
+        document_id: *id004
+        title: *id004
         source_url:
           type: string
           format: uri
-        distribution: *id002
-        release: *id002
-        text: *id002
-        command: *id002
-        section: *id002
-        package_version: *id002
-        corpus_version: *id002
+        distribution: *id004
+        release: *id004
+        text: *id004
+        command: *id004
+        section: *id004
+        package_version: *id004
+        corpus_version: *id004
+        collected_at: *id007
       required:
       - ref
       - chunk_id
@@ -428,10 +658,11 @@ components:
           enum:
           - user
           - assistant
-        content: *id002
+        content: *id004
         status:
           type: string
           enum:
+          - queued
           - complete
           - generating
           - cancelled
@@ -440,7 +671,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SourceCard'
-        created_at: *id005
+        created_at: *id008
+        error: *id007
+        finish_reason: *id007
+        corpus_version: *id007
       required:
       - id
       - role
@@ -458,34 +692,11 @@ components:
           maxLength: 4000
         stream:
           type: boolean
-          default: true
+          default: false
         client_request_id: *id001
       required:
       - content
-      - stream
       - client_request_id
-      additionalProperties: false
-    CompletedAnswer:
-      type: object
-      properties:
-        message_id: *id001
-        answer: *id002
-        sources:
-          type: array
-          items:
-            $ref: '#/components/schemas/SourceCard'
-        finish_reason:
-          type: string
-          enum:
-          - stop
-          - no_context
-        corpus_version: *id002
-      required:
-      - message_id
-      - answer
-      - sources
-      - finish_reason
-      - corpus_version
       additionalProperties: false
     ChatList:
       type: object
@@ -511,7 +722,7 @@ components:
       type: object
       properties:
         message_id: *id001
-        corpus_version: *id002
+        corpus_version: *id004
         sources:
           type: array
           items:
@@ -524,7 +735,7 @@ components:
     SseToken:
       type: object
       properties:
-        delta: *id002
+        delta: *id004
       required:
       - delta
       additionalProperties: false
@@ -537,6 +748,8 @@ components:
           enum:
           - stop
           - no_context
+          - length
+          - cancelled
       required:
       - message_id
       - finish_reason
@@ -544,9 +757,123 @@ components:
     SseError:
       type: object
       properties:
-        code: *id002
-        message: *id002
+        code: *id004
+        message: *id004
       required:
       - code
       - message
       additionalProperties: false
+    Credentials:
+      type: object
+      required:
+      - login
+      - password
+      properties:
+        login:
+          type: string
+          minLength: 3
+          maxLength: 40
+        password:
+          type: string
+          minLength: 8
+          description: Максимум 72 байта UTF-8.
+    Account:
+      type: object
+      required:
+      - id
+      - login
+      - role
+      properties:
+        id:
+          type: string
+          format: uuid
+        login: *id007
+        role:
+          type: string
+          enum:
+          - user
+          - admin
+    AuthResult:
+      type: object
+      required:
+      - user
+      properties:
+        user:
+          $ref: '#/components/schemas/Account'
+        token:
+          type: string
+          description: 'Выдаётся при X-Auth-Mode: bearer.'
+    RagUpload:
+      type: object
+      required:
+      - document_id
+      - package
+      - package_version
+      - source_url
+      - collected_at
+      - distribution
+      - release
+      - file
+      properties:
+        document_id: *id007
+        package: *id007
+        package_version: *id007
+        source_url: *id007
+        collected_at: *id007
+        distribution: *id007
+        release: *id007
+        file:
+          type: string
+          format: binary
+          description: 'Markdown UTF-8, до 512 КиБ, с разделами ## или ###.'
+    RagDocument:
+      type: object
+      required:
+      - document_id
+      - package
+      - package_version
+      - source_url
+      - verified_targets
+      properties:
+        document_id: *id007
+        package: *id007
+        package_version: *id007
+        source_url: *id007
+        collected_at: *id007
+        verified_targets:
+          type: array
+          items:
+            $ref: '#/components/schemas/Target'
+    RagDocuments:
+      type: object
+      required:
+      - corpus_version
+      - items
+      properties:
+        corpus_version: *id007
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/RagDocument'
+    RagPublished:
+      type: object
+      required:
+      - corpus_version
+      - document_id
+      properties:
+        corpus_version: *id007
+        document_id: *id007
+    SseStatus:
+      type: object
+      required:
+      - message_id
+      - status
+      properties:
+        message_id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum:
+          - queued
+          - generating

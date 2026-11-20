@@ -1,3 +1,5 @@
 # Search
 
-FastAPI/rank-bm25 реализация и индексатор — следующий этап. [Контракт](../spec/tech/search-api.yaml), [RAG](../spec/tech/rag.md), [проверки](../spec/tech/testing.md). Здесь появятся app, tests, requirements.lock.txt, Dockerfile; сейчас API не запущен данным комплектом.
+FastAPI загружает корпус Linux, ищет фрагменты через BM25 и уточняет их порядок с помощью multilingual-e5-small ONNX. Проверенная система и версия берутся из manifest. При публикации из админки готовится новый снимок корпуса и автоматически переключается текущая версия.
+
+Установка и локальные проверки описаны в [главном README](../README.md). Внутренние маршруты заданы в [OpenAPI](../spec/tech/search-api.yaml), правила индексирования — в [спецификации RAG](../spec/tech/rag.md).
