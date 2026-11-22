@@ -76,9 +76,12 @@ class CorpusStore:
         ready = False
         try:
             corpus = stage / "corpus"
-            shutil.copytree(base, corpus)
-            if previous is not None and base == self.seed:
-                self.merge_uploaded_documents(corpus, previous)
+            if base == self.seed:
+                self.copy_seed(corpus)
+                if previous is not None:
+                    self.merge_uploaded_documents(corpus, previous)
+            else:
+                shutil.copytree(base, corpus)
             if document is not None:
                 manifest_path = corpus / "manifest.json"
                 manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
@@ -112,6 +115,25 @@ class CorpusStore:
                 shutil.rmtree(stage)
             if release is not None and not ready and release.is_dir():
                 shutil.rmtree(release)
+
+    def copy_seed(self, destination):
+        manifest = json.loads((self.seed / "manifest.json").read_text(encoding="utf-8"))
+        listed = {f'{item["document_id"]}.md' for item in manifest["documents"]}
+        docs = self.seed / "docs"
+        files = {path.name for path in docs.glob("*.md") if path.is_file()}
+        missing = listed - files
+        if missing:
+            raise ValueError("Отсутствуют файлы встроенного корпуса: " + ", ".join(sorted(missing)))
+        extras = files - listed
+        if extras:
+            logger.warning("Пропускаем файлы вне манифеста корпуса: %s", ", ".join(sorted(extras)))
+
+        def ignore_unlisted(directory, names):
+            if Path(directory) == docs:
+                return [name for name in names if name.endswith(".md") and name not in listed]
+            return []
+
+        shutil.copytree(self.seed, destination, ignore=ignore_unlisted)
 
     def read_corpus(self, release):
         corpus = release / "corpus"
