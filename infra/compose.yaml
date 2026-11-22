@@ -55,7 +55,13 @@ services:
       SEED_CORPUS: /opt/commandwise/corpus
     volumes:
       - rag:/state
-      - ./.commandwise/models/embedding:/models:ro,Z
+      - type: bind
+        source: ./.commandwise/models/embedding
+        target: /models
+        read_only: true
+        bind:
+          create_host_path: false
+          selinux: Z
     healthcheck:
       test: ["CMD", "python", "-c", "from urllib.request import urlopen; urlopen('http://127.0.0.1:8000/ready', timeout=3).close()"]
       interval: 5s

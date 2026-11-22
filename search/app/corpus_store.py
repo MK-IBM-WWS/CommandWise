@@ -54,12 +54,21 @@ class CorpusStore:
         if not re.fullmatch(r"[a-f0-9]{32}", name):
             raise ValueError("Invalid active corpus pointer")
         path = self.releases / name
-        index = self.load_index(path / "index")
-        previous = self.attach(index, path, np.load(path / "vectors.npy", allow_pickle=False))
+        source = self.read_corpus(path)
+        snapshot = None
+        try:
+            index = self.load_index(path / "index")
+            vectors = np.load(path / "vectors.npy", allow_pickle=False)
+            snapshot = self.attach(index, source, vectors)
+        except (OSError, ValueError, KeyError, TypeError, EOFError):
+            logger.warning("Снимок индекса повреждён. Пересобираем опубликованный корпус.", exc_info=True)
+
         seed_manifest = json.loads((self.seed / "manifest.json").read_text(encoding="utf-8"))
-        if previous["seed_revision"] != seed_manifest.get("seed_revision"):
-            return self.publish(self.seed, previous)
-        return previous
+        if source["seed_revision"] != seed_manifest.get("seed_revision"):
+            return self.publish(self.seed, snapshot or source)
+        if snapshot is None:
+            return self.publish(source["corpus"], source)
+        return snapshot
 
     def publish(self, base, previous=None, document=None, content=None):
         stage = Path(tempfile.mkdtemp(prefix=".stage-", dir=self.releases))
@@ -85,7 +94,7 @@ class CorpusStore:
             np.save(stage / "vectors.npy", vectors, allow_pickle=False)
             release = self.releases / uuid4().hex
             os.replace(stage, release)
-            snapshot = self.attach(index, release, vectors)
+            snapshot = self.attach(index, self.read_corpus(release), vectors)
             pointer = self.directory / (".active-" + release.name)
             try:
                 pointer.write_text(release.name + "\n", encoding="ascii")
@@ -104,16 +113,22 @@ class CorpusStore:
             if release is not None and not ready and release.is_dir():
                 shutil.rmtree(release)
 
-    def attach(self, index, release, vectors):
-        chunks = index["chunks"]
-        if vectors.shape != (len(chunks), self.embedder.dimensions):
-            raise ValueError("Embedding matrix does not match corpus")
+    def read_corpus(self, release):
         corpus = release / "corpus"
         manifest = json.loads((corpus / "manifest.json").read_text(encoding="utf-8"))
-        index["documents"] = manifest["documents"]
-        index["seed_revision"] = manifest.get("seed_revision")
-        index["seed_document_ids"] = manifest.get("seed_document_ids", LEGACY_BUILTINS)
-        index["corpus"] = corpus
+        return {
+            "documents": manifest["documents"],
+            "seed_revision": manifest.get("seed_revision"),
+            "seed_document_ids": manifest.get("seed_document_ids", LEGACY_BUILTINS),
+            "corpus": corpus,
+            "vectors": {},
+        }
+
+    def attach(self, index, source, vectors):
+        chunks = index["chunks"]
+        if not isinstance(vectors, np.ndarray) or vectors.shape != (len(chunks), self.embedder.dimensions):
+            raise ValueError("Embedding matrix does not match corpus")
+        index.update(source)
         index["vectors"] = {item["chunk_id"]: vector for item, vector in zip(chunks, vectors)}
         return index
 

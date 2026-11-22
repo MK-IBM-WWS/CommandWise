@@ -18,7 +18,7 @@ from app.distributions import DISTRIBUTIONS
 from app.corpus_store import CorpusStore, DocumentExists, InvalidDocument, MAX_UPLOAD, validate
 from bm25_demo import search, tokenize
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("uvicorn.error")
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -114,8 +114,10 @@ async def lifespan(app: FastAPI):
     app.state.embedder = None
     runtime = os.getenv("RUNTIME_DIR")
     if runtime:
+        logger.info("Загрузка модели multilingual-e5-small.")
         from app.embedding import E5
         embedder = E5(Path(os.environ["EMBEDDING_DIR"]))
+        logger.info("Подготовка поискового индекса.")
         store = CorpusStore(
             Path(runtime), Path(os.getenv("SEED_CORPUS", str(ROOT / "corpus"))),
             embedder, load_index,
@@ -123,6 +125,7 @@ async def lifespan(app: FastAPI):
         app.state.index = await run_in_threadpool(store.load)
         app.state.store = store
         app.state.embedder = embedder
+        logger.info("Индекс готов: %d фрагментов.", len(app.state.index["chunks"]))
     else:
         try:
             app.state.index = load_index()

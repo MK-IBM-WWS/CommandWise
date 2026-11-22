@@ -3,6 +3,7 @@ from pathlib import Path
 import shutil
 
 import numpy as np
+import pytest
 
 from app.api import load_index, retrieve
 from app.corpus_store import CorpusStore
@@ -49,3 +50,30 @@ def test_seed_update_keeps_uploaded_docs_and_renames_collisions(tmp_path):
     assert renamed["verified_targets"] == [{"distribution": "fedora"}]
     matches = retrieve(upgraded, "ping учебного стенда", {"distribution": "fedora"})
     assert matches[0]["document_id"] == "ping-uploaded-1"
+
+
+@pytest.mark.parametrize("damaged_file", ["index/current.json", "vectors.npy"])
+def test_damaged_index_is_rebuilt_from_the_published_corpus(tmp_path, damaged_file):
+    seed = Path(__file__).resolve().parents[2] / "corpus"
+    store = CorpusStore(tmp_path, seed, TestEmbeddings(), load_index)
+    initial = store.load()
+    document = {
+        "document_id": "example-tool",
+        "path": "docs/example-tool.md",
+        "verified_targets": [{"distribution": "fedora"}],
+        "source_url": "https://example.org/example-tool",
+    }
+    published = store.publish(
+        initial["corpus"], initial, document,
+        "# example-tool\n\n## Пример\n\nПоказывает зелёные яблоки.\n",
+    )
+    damaged = published["corpus"].parent
+    (damaged / damaged_file).write_bytes(b"damaged")
+
+    restored = store.load()
+    assert restored["corpus"].parent != damaged
+    assert restored["meta"]["corpus_version"] == published["meta"]["corpus_version"]
+    assert damaged.is_dir()
+    assert store.load()["corpus"] == restored["corpus"]
+    results = retrieve(restored, "пример example-tool", {"distribution": "fedora"})
+    assert results[0]["document_id"] == "example-tool"
