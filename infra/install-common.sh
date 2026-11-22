@@ -48,7 +48,7 @@ download "$e5/tokenizer.json" "$state/models/embedding/tokenizer.json" '0b44a9d7
 ./commandwise.sh config --quiet
 ./commandwise.sh pull postgres llm
 ./commandwise.sh build backend frontend search
-./commandwise.sh up -d --wait --wait-timeout 120 postgres
+./repair-db-auth.sh
 
 if [[ ! -f "$state/admin.created" ]]; then
     if [[ ! -t 0 ]]; then
@@ -65,11 +65,11 @@ if [[ ! -f "$state/admin.created" ]]; then
         exit 1
     fi
     if ! printf '%s\n' "$admin_password" | ./commandwise.sh run --no-deps --rm -T backend admin "$admin_login"; then
-        echo "Допустимы латиница, цифры, точка, дефис и подчёркивание в логине. Пароль от 8 символов до 72 байт." >&2
+        echo "Не удалось создать администратора CommandWise. Причина указана выше." >&2
         exit 1
     fi
     unset admin_password admin_repeat
     touch "$state/admin.created"
 fi
 
-exec bash "$root/infra/start.sh"
+exec bash "$root/infra/start.sh" --postgres-ready

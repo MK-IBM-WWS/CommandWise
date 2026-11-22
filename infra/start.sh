@@ -10,6 +10,10 @@ if [[ ! -s .commandwise/compose.env || ! -s .commandwise/models/llm/qwen3-14b.gg
     exit 1
 fi
 
+if [[ ${1:-} != --postgres-ready ]]; then
+    ./repair-db-auth.sh
+fi
+
 ./commandwise.sh up -d --no-build
 url="$(./commandwise.sh port frontend 80)"
 url="http://${url/0.0.0.0:/127.0.0.1:}"

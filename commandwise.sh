@@ -8,6 +8,9 @@ if [[ ! -s "$config" ]]; then
     exit 1
 fi
 
+# The deployment file is authoritative for the database credential.
+unset POSTGRES_PASSWORD
+
 docker_args=(docker --host unix:///var/run/docker.sock)
 if (( EUID != 0 )); then
     docker_args=(sudo "${docker_args[@]}")
