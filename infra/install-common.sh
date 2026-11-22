@@ -56,9 +56,9 @@ if [[ ! -f "$state/admin.created" ]]; then
         exit 1
     fi
     read -r -p 'Логин администратора: ' admin_login
-    read -rs -p 'Пароль администратора: ' admin_password
+    IFS= read -rs -p 'Пароль администратора: ' admin_password
     printf '\n'
-    read -rs -p 'Повторите пароль: ' admin_repeat
+    IFS= read -rs -p 'Повторите пароль: ' admin_repeat
     printf '\n'
     if [[ "$admin_password" != "$admin_repeat" ]]; then
         echo "Пароли не совпадают." >&2

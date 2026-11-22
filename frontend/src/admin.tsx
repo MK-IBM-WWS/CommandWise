@@ -1,6 +1,8 @@
 import { useEffect, useState, type FormEvent } from 'react'
-import { api, distributionNames, errorText, targetLabel, type Account, type RagDocuments } from './api'
+import { api, distributionNames, errorText, targetLabel, type RagDocuments } from './api'
 import { Brand } from './brand'
+import { AccountMenu, type AccountMenuProps } from './account'
+import { AdminUsers } from './admin-users'
 
 function dateToday() {
   const date = new Date()
@@ -8,7 +10,7 @@ function dateToday() {
   return local.toISOString().slice(0, 10)
 }
 
-export function AdminPage({ account, logout }: { account: Account; logout: () => Promise<void> }) {
+function AdminCorpus() {
   const [docs, setDocs] = useState<RagDocuments>()
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
@@ -41,10 +43,7 @@ export function AdminPage({ account, logout }: { account: Account; logout: () =>
     finally { setBusy(false) }
   }
 
-  return <div className="admin">
-    <header className="admin-header"><Brand /><div>{account.login} <button className="small-btn" onClick={() => void logout().catch(err => setError(errorText(err)))}>Выйти</button></div></header>
-    <main className="admin-main">
-      <h1>Управление корпусом</h1>
+  return <>
       {error && <p className="notice error" role="alert">{error}</p>}
       {success && <p className="notice" role="status">{success}</p>}
       <section className="card admin-card">
@@ -76,6 +75,26 @@ export function AdminPage({ account, logout }: { account: Account; logout: () =>
           </table></div>
         </>}
       </section>
+  </>
+}
+
+export function AdminPage({ account, onAccountChange, logout }: AccountMenuProps) {
+  const [section, setSection] = useState<'corpus' | 'users'>('corpus')
+  const [error, setError] = useState('')
+
+  return <div className="admin">
+    <header className="admin-header">
+      <Brand />
+      <AccountMenu account={account} onAccountChange={onAccountChange} logout={logout} onError={setError} />
+    </header>
+    <main className="admin-main">
+      <nav className="tabs admin-tabs" aria-label="Разделы администрирования">
+        <button type="button" aria-pressed={section === 'corpus'} onClick={() => setSection('corpus')}>Корпус</button>
+        <button type="button" aria-pressed={section === 'users'} onClick={() => setSection('users')}>Пользователи</button>
+      </nav>
+      <h1>{section === 'corpus' ? 'Управление корпусом' : 'Пользователи'}</h1>
+      {error && <p className="notice error" role="alert">{error}</p>}
+      {section === 'corpus' ? <AdminCorpus /> : <AdminUsers account={account} onAccountChange={onAccountChange} />}
     </main>
   </div>
 }

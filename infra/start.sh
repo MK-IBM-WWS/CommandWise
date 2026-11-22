@@ -6,7 +6,7 @@ cd "$root"
 
 if [[ ! -s .commandwise/compose.env || ! -s .commandwise/models/llm/qwen3-14b.gguf ||
       ! -s .commandwise/models/embedding/model.onnx || ! -s .commandwise/models/embedding/tokenizer.json ]]; then
-    echo "Сначала выполните ./install-debian.sh на Debian 13 или ./install-fedora.sh на Fedora." >&2
+    echo "Сначала выполните ./install-debian.sh на Debian 13." >&2
     exit 1
 fi
 

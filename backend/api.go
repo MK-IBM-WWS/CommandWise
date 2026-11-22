@@ -89,6 +89,7 @@ func (s *server) routes(m *http.ServeMux) {
 	m.HandleFunc("POST /api/v1/auth/register", s.entry(true))
 	m.HandleFunc("POST /api/v1/auth/login", s.entry(false))
 	m.HandleFunc("GET /api/v1/auth/me", s.protected("", func(w http.ResponseWriter, _ *http.Request, a account, _ uuid.UUID) { jsonReply(w, 200, a) }))
+	m.HandleFunc("PATCH /api/v1/auth/me", s.protected("", s.updateProfile))
 	m.HandleFunc("POST /api/v1/auth/logout", s.protected("", s.logout))
 	m.HandleFunc("GET /api/v1/chats", s.protected("user", s.listChats))
 	m.HandleFunc("POST /api/v1/chats", s.protected("user", s.createChat))
@@ -99,6 +100,9 @@ func (s *server) routes(m *http.ServeMux) {
 	m.HandleFunc("GET /api/v1/chats/{chat_id}/messages/{message_id}/sources/{chunk_id}", s.protected("user", s.getSource))
 	m.HandleFunc("GET /api/v1/admin/documents", s.protected("admin", s.adminDocuments))
 	m.HandleFunc("POST /api/v1/admin/documents", s.protected("admin", s.adminDocuments))
+	m.HandleFunc("GET /api/v1/admin/users", s.protected("admin", s.listUsers))
+	m.HandleFunc("PATCH /api/v1/admin/users/{user_id}", s.protected("admin", s.updateUser))
+	m.HandleFunc("DELETE /api/v1/admin/users/{user_id}", s.protected("admin", s.deleteUser))
 	m.HandleFunc("/api/v1/", func(w http.ResponseWriter, _ *http.Request) {
 		fail(w, 404, "NOT_FOUND", "Маршрут не найден.")
 	})

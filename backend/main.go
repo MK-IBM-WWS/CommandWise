@@ -89,7 +89,7 @@ func run(ctx context.Context) error {
 		if len(os.Args) != 3 || os.Args[1] != "admin" {
 			return errors.New("usage: commandwise [admin LOGIN]")
 		}
-		input, err := io.ReadAll(io.LimitReader(os.Stdin, 75))
+		input, err := io.ReadAll(io.LimitReader(os.Stdin, adminPasswordMax+2))
 		if err != nil {
 			return err
 		}

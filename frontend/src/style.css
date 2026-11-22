@@ -15,7 +15,8 @@ a{color:inherit;text-decoration:none}
 .card{width:min(100%,430px);padding:36px 32px;border-radius:28px;background:var(--glass);
 border:1px solid var(--line);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:var(--shadow)}
 .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:20px}
-.brand svg{width:34px;height:34px}
+.brand-mark{width:44px;height:44px;flex:none;border-radius:11px;border:1px solid var(--line)}
+.card .brand-mark{width:56px;height:56px;border-radius:14px}
 .card .brand{margin-bottom:26px}
 h1{margin:0 0 6px;font-size:28px;line-height:1.2}
 .sub{margin:0 0 24px;color:var(--muted)}
@@ -58,8 +59,11 @@ background:rgba(3,12,50,.38);border-right:1px solid var(--line);backdrop-filter:
 .hist small{font-size:12px;color:var(--muted)}
 .hist a.on{background:rgba(255,255,255,.18);color:#fff}
 .me{display:flex;align-items:center;gap:12px;padding:10px;border-radius:14px;border:1px solid var(--line)}
-.me:hover{background:rgba(255,255,255,.08)}
-.me small{display:block;line-height:1.2;color:var(--muted)}
+.profile-trigger{display:flex;flex:1;align-items:center;gap:8px;min-width:0;padding:2px;border:0;border-radius:9px;
+color:inherit;background:transparent;cursor:pointer;font:inherit;text-align:left}
+.profile-trigger:hover{background:rgba(255,255,255,.1)}
+.profile-trigger>span:last-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.me .small-btn{flex:none}
 .chat{flex:1;min-width:0;display:flex;flex-direction:column}
 .msgs{flex:1;overflow:auto;padding:36px 24px 12px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.3) transparent}
 .msgs>div{width:min(100%,780px);margin:0 auto;display:grid;gap:18px}
@@ -78,7 +82,7 @@ color:var(--navy);background:#fff;transition:transform .15s}
 .send svg{width:22px;height:22px}
 
 /* окно «Новый чат» */
-dialog{width:min(420px,92vw);padding:28px;border-radius:24px;border:1px solid var(--line);color:var(--ice);
+dialog{width:min(420px,92vw);max-height:90dvh;overflow:auto;padding:28px;border-radius:24px;border:1px solid var(--line);color:var(--ice);
 background:linear-gradient(160deg,#123fb4,#081c5c);box-shadow:var(--shadow)}
 dialog::backdrop{background:rgba(3,10,40,.55);backdrop-filter:blur(4px)}
 dialog h2{margin:0 0 6px;font-size:22px}
@@ -111,7 +115,6 @@ button:disabled{cursor:default;opacity:.5;transform:none}
 .hist button:hover{background:rgba(255,255,255,.08)}
 .hist button.on{background:rgba(255,255,255,.18);color:#fff}
 .hist button span,.hist button small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.me>span:nth-child(2){min-width:0;flex:1;overflow:hidden;text-overflow:ellipsis}
 .chat-header,.admin-header{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 20px;border-bottom:1px solid var(--line);background:rgba(3,12,50,.26)}
 .chat-heading{min-width:0;flex:1}
 .chat-heading strong,.chat-heading small{display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
@@ -139,13 +142,22 @@ button:disabled{cursor:default;opacity:.5;transform:none}
 .message-status{margin:5px 0 0}
 .sources{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
 .source-dialog{width:min(730px,92vw);max-height:85dvh;overflow:auto}
-.admin-header>div:last-child{display:flex;align-items:center;gap:12px}
+.admin-header .me{min-width:0;padding:0;border:0}
 .admin-main{width:min(980px,calc(100% - 34px));margin:25px auto;display:grid;gap:16px}
 .admin-card{width:100%;padding:23px}
 .admin-card h2{margin:0 0 6px;font-size:1.2rem}
 .admin-card .sub{margin-bottom:13px}
 .admin-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
 .admin-table-header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px}
+.admin-tabs{width:min(100%,350px);margin-bottom:0}
+.admin-users-tools{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+.admin-users-tools .field{width:min(100%,320px)}
+.users-table td:first-child{overflow-wrap:anywhere}
+.user-actions{display:flex;flex-wrap:wrap;gap:6px}
+.current-account-note{margin-left:7px;color:var(--muted)}
+.danger-link{color:#ffd0dc}
+.btn.danger-btn{background:#a42346;box-shadow:none}
+.delete-account-text{overflow-wrap:anywhere}
 .table-scroll{overflow:auto}
 .table-scroll table{width:100%;border-collapse:collapse;text-align:left;font-size:.9rem}
 .table-scroll td,.table-scroll th{padding:8px 9px;border-bottom:1px solid var(--line)}
@@ -154,6 +166,10 @@ button:disabled{cursor:default;opacity:.5;transform:none}
   .side.side-open{display:flex;position:fixed;inset:0 auto 0 0;width:min(320px,85vw);z-index:5;background:#092269}
   .side-backdrop{display:block;position:fixed;inset:0;border:0;z-index:4;background:#0008}
   .chat-header{padding:10px 12px}
+  .admin-header{padding:10px 12px}
+  .admin-header .profile-trigger .ava{display:none}
+  .admin-header .brand{font-size:16px;gap:7px}
+  .admin-header .brand-mark{width:36px;height:36px}
   .admin-fields{grid-template-columns:1fr}
   .admin-card{padding:18px}
 }

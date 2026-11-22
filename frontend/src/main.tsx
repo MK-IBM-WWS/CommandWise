@@ -36,7 +36,7 @@ function SignIn({ onAccount }: { onAccount: (a: Account) => void }) {
     </div>
     <form key={String(register)} onSubmit={submit}>
       <label className="field">Логин<input name="login" autoComplete="username" minLength={3} maxLength={40} required /></label>
-      <label className="field">Пароль<input name="password" type="password" autoComplete={register ? 'new-password' : 'current-password'} minLength={8} required /></label>
+      <label className="field">Пароль<input name="password" type="password" autoComplete={register ? 'new-password' : 'current-password'} minLength={register ? 8 : undefined} required /></label>
       {register && <label className="field">Повторите пароль<input name="repeat" type="password" autoComplete="new-password" required /></label>}
       {error && <p className="notice error" role="alert">{error}</p>}
       <button className="btn" disabled={busy}>{register ? 'Создать аккаунт' : 'Войти'}</button>
@@ -76,8 +76,8 @@ function App() {
     {error ? <><p role="alert">{error}</p><button className="btn" onClick={() => void restore()}>Повторить</button></> : <p role="status">Проверяем сессию…</p>}
   </div></main>
   if (account === null) return <SignIn onAccount={setAccount} />
-  if (account.role === 'admin') return <AdminPage account={account} logout={logout} />
-  return <ChatPage key={account.id} account={account} logout={logout} />
+  if (account.role === 'admin') return <AdminPage account={account} onAccountChange={setAccount} logout={logout} />
+  return <ChatPage key={account.id} account={account} onAccountChange={setAccount} logout={logout} />
 }
 
 createRoot(document.getElementById('root')!).render(<App />)

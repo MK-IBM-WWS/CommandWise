@@ -150,7 +150,8 @@ func (s *server) work(parent context.Context, j job) {
 		defer ticker.Stop()
 		for {
 			var stopped bool
-			if s.db.QueryRow(ctx, "SELECT cancel_requested FROM messages WHERE id=$1", j.ID).Scan(&stopped) == nil && stopped {
+			err := s.db.QueryRow(ctx, "SELECT cancel_requested FROM messages WHERE id=$1", j.ID).Scan(&stopped)
+			if errors.Is(err, pgx.ErrNoRows) || (err == nil && stopped) {
 				cancel()
 				return
 			}

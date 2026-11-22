@@ -50,22 +50,34 @@ type attempts struct {
 }
 
 func validCredentials(c credentials) bool {
-	return loginPattern.MatchString(c.Login) && utf8.RuneCountInString(c.Password) >= 8 && len(c.Password) <= 72 && !strings.ContainsRune(c.Password, 0)
+	return loginPattern.MatchString(c.Login) && validPassword(c.Password)
+}
+
+func validPassword(password string) bool {
+	return utf8.RuneCountInString(password) >= 8 && len(password) <= 72 && !strings.ContainsRune(password, 0)
 }
 
 func normalizeLogin(login string) string { return strings.ToLower(strings.TrimSpace(login)) }
 
+func loginIsTaken(err error) bool {
+	var pgErr *pgconn.PgError
+	return errors.As(err, &pgErr) && pgErr.Code == "23505"
+}
+
 func createAdmin(ctx context.Context, db *pgxpool.Pool, login, password string) error {
 	c := credentials{normalizeLogin(login), password}
-	if !validCredentials(c) {
-		return errors.New("invalid administrator login or password")
+	if !loginPattern.MatchString(c.Login) {
+		return errors.New("логин администратора от 3 до 40 знаков: латиница, цифры, точка, дефис или подчёркивание")
 	}
-	hash, err := bcrypt.GenerateFromPassword([]byte(c.Password), bcrypt.DefaultCost)
+	if !validAdminPassword(c.Password) {
+		return errors.New("укажите непустой пароль администратора до 4096 байт")
+	}
+	hash, err := hashPassword("admin", c.Password)
 	if err != nil {
 		return err
 	}
 	command, err := db.Exec(ctx, `INSERT INTO accounts (id,login,password_hash,role)
-		VALUES ($1,$2,$3,'admin') ON CONFLICT (login) DO NOTHING`, uuid.New(), c.Login, string(hash))
+		VALUES ($1,$2,$3,'admin') ON CONFLICT (login) DO NOTHING`, uuid.New(), c.Login, hash)
 	if err != nil {
 		return err
 	}
@@ -76,7 +88,7 @@ func createAdmin(ctx context.Context, db *pgxpool.Pool, login, password string) 
 	if err := db.QueryRow(ctx, "SELECT role,password_hash FROM accounts WHERE login=$1", c.Login).Scan(&role, &stored); err != nil {
 		return err
 	}
-	if role != "admin" || bcrypt.CompareHashAndPassword([]byte(stored), []byte(c.Password)) != nil {
+	if role != "admin" || !passwordMatches(stored, c.Password) {
 		return errors.New("the login already exists with different credentials")
 	}
 	return nil
@@ -118,24 +130,25 @@ func (s *server) entry(register bool) http.HandlerFunc {
 			fail(w, 429, "AUTH_LIMIT", "Слишком много попыток. Подождите минуту.")
 			return
 		}
-		select {
-		case s.authSlots <- struct{}{}:
-			defer func() { <-s.authSlots }()
-		default:
-			fail(w, 429, "AUTH_LIMIT", "Слишком много запросов. Повторите попытку.")
+		if !s.takeAuthSlot(w) {
 			return
 		}
+		defer func() { <-s.authSlots }()
 		var c credentials
 		if !readJSON(w, r, &c) {
 			return
 		}
 		c.Login = normalizeLogin(c.Login)
-		if !validCredentials(c) {
-			fail(w, 400, "INVALID_CREDENTIALS", "Логин от 3 до 40 знаков: латиница, цифры, точка, дефис или подчёркивание. Пароль от 8 символов до 72 байт.")
+		if register {
+			if !validCredentials(c) {
+				fail(w, 400, "INVALID_CREDENTIALS", "Логин от 3 до 40 знаков: латиница, цифры, точка, дефис или подчёркивание. Пароль от 8 символов до 72 байт.")
+				return
+			}
+			s.register(w, r, c)
 			return
 		}
-		if register {
-			s.register(w, r, c)
+		if !loginPattern.MatchString(c.Login) || !validAdminPassword(c.Password) {
+			fail(w, 400, "INVALID_CREDENTIALS", "Проверьте формат логина и заполните пароль.")
 			return
 		}
 		var user account
@@ -148,24 +161,33 @@ func (s *server) entry(register bool) http.HandlerFunc {
 			serverError(w, err)
 			return
 		}
-		if check := bcrypt.CompareHashAndPassword([]byte(hash), []byte(c.Password)); check != nil || err != nil {
+		if !passwordMatches(hash, c.Password) || err != nil {
 			fail(w, 401, "BAD_LOGIN", "Неверный логин или пароль.")
 			return
 		}
-		s.issue(w, r, user, 200)
+		s.issue(w, r, user, hash, 200)
+	}
+}
+
+func (s *server) takeAuthSlot(w http.ResponseWriter) bool {
+	select {
+	case s.authSlots <- struct{}{}:
+		return true
+	default:
+		fail(w, 429, "AUTH_LIMIT", "Слишком много запросов. Повторите попытку.")
+		return false
 	}
 }
 
 func (s *server) register(w http.ResponseWriter, r *http.Request, c credentials) {
-	hash, err := bcrypt.GenerateFromPassword([]byte(c.Password), bcrypt.DefaultCost)
+	hash, err := hashPassword("user", c.Password)
 	if err != nil {
 		serverError(w, err)
 		return
 	}
 	user := account{uuid.New(), c.Login, "user"}
-	_, err = s.db.Exec(r.Context(), "INSERT INTO accounts (id,login,password_hash,role) VALUES ($1,$2,$3,'user')", user.ID, user.Login, string(hash))
-	var pgErr *pgconn.PgError
-	if errors.As(err, &pgErr) && pgErr.Code == "23505" {
+	_, err = s.db.Exec(r.Context(), "INSERT INTO accounts (id,login,password_hash,role) VALUES ($1,$2,$3,'user')", user.ID, user.Login, hash)
+	if loginIsTaken(err) {
 		fail(w, 409, "LOGIN_EXISTS", "Этот логин уже занят.")
 		return
 	}
@@ -173,10 +195,10 @@ func (s *server) register(w http.ResponseWriter, r *http.Request, c credentials)
 		serverError(w, err)
 		return
 	}
-	s.issue(w, r, user, 201)
+	s.issue(w, r, user, hash, 201)
 }
 
-func (s *server) issue(w http.ResponseWriter, r *http.Request, user account, status int) {
+func (s *server) issue(w http.ResponseWriter, r *http.Request, user account, hash string, status int) {
 	now := time.Now()
 	expiry := jwt.NewNumericDate(now.Add(sessionDuration))
 	sid := uuid.New()
@@ -188,17 +210,25 @@ func (s *server) issue(w http.ResponseWriter, r *http.Request, user account, sta
 		serverError(w, err)
 		return
 	}
-	if _, err = s.db.Exec(r.Context(), "INSERT INTO sessions (id,account_id,expires_at) VALUES ($1,$2,$3)", sid, user.ID, expiry.Time); err != nil {
+	// Serialize issuing a session with credential changes so a verified old password cannot outlive a reset.
+	result, err := s.db.Exec(r.Context(), `INSERT INTO sessions (id,account_id,expires_at)
+		SELECT $1,id,$2 FROM accounts WHERE id=$3 AND login=$4 AND password_hash=$5 FOR SHARE`,
+		sid, expiry.Time, user.ID, user.Login, hash)
+	if err != nil {
 		serverError(w, err)
 		return
 	}
-	result := authResult{User: user}
+	if result.RowsAffected() == 0 {
+		fail(w, 401, "BAD_LOGIN", "Неверный логин или пароль.")
+		return
+	}
+	response := authResult{User: user}
 	if r.Header.Get("X-Auth-Mode") == "bearer" {
-		result.Token = token
+		response.Token = token
 	} else {
 		s.sessionCookie(w, r, token, int(sessionDuration/time.Second))
 	}
-	jsonReply(w, status, result)
+	jsonReply(w, status, response)
 }
 
 func (s *server) sessionCookie(w http.ResponseWriter, r *http.Request, value string, maxAge int) {

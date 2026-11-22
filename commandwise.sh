@@ -17,7 +17,7 @@ if [[ -s "$config" ]]; then
     exec "${compose[@]}" --env-file "$config" "$@"
 fi
 if [[ ${1:-} != down ]]; then
-    echo "Сначала выполните ./install-debian.sh на Debian 13 или ./install-fedora.sh на Fedora." >&2
+    echo "Сначала выполните ./install-debian.sh на Debian 13." >&2
     exit 1
 fi
 

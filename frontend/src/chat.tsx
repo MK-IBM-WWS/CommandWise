@@ -2,9 +2,10 @@ import { Children, Fragment, useEffect, useLayoutEffect, useRef, useState, type 
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { Brand } from './brand'
+import { AccountMenu, type AccountMenuProps } from './account'
 import {
   api, ApiError, errorText, json, newRequestID, streamQuestion, targetLabel,
-  type Account, type Chat, type Corpus, type Message, type Snapshot, type Source,
+  type Chat, type Corpus, type Message, type Snapshot, type Source,
 } from './api'
 
 type Live = { id: string; text: string; status: Message['status']; sources: Source[]; finish?: string; error?: string }
@@ -50,7 +51,7 @@ function Markdown({ text, sources = [], openSource }: { text: string; sources?: 
   }}>{text}</ReactMarkdown></div>
 }
 
-export function ChatPage({ account, logout }: { account: Account; logout: () => Promise<void> }) {
+export function ChatPage({ account, onAccountChange, logout }: AccountMenuProps) {
   const [chats, setChats] = useState<Chat[]>([])
   const [corpus, setCorpus] = useState<Corpus>()
   const [chatID, setChatID] = useState('')
@@ -295,9 +296,7 @@ export function ChatPage({ account, logout }: { account: Account; logout: () => 
           <small>{targetLabel(chat)}{activeStatus(chat.status) ? ' · ' + statusLabel(chat.status) : ''}</small>
         </button>)}
       </nav>
-      <div className="me"><span className="ava">{account.login.slice(0,1).toUpperCase()}</span><span>{account.login}</span>
-        <button className="small-btn" onClick={() => void logout().catch(err => setError(errorText(err)))}>Выйти</button>
-      </div>
+      <AccountMenu account={account} onAccountChange={onAccountChange} logout={logout} onError={setError} />
     </aside>
     <main className="chat">
       <header className="chat-header">
