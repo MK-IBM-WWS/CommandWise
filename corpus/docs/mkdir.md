@@ -64,12 +64,32 @@ mkdir -m 700 private
 
 Параметр `-p` позволяет не считать существующий каталог ошибкой.
 
-## Источник
+## Debian
 
-GNU Coreutils — mkdir invocation:
-https://www.gnu.org/software/coreutils/manual/html_node/mkdir-invocation.html
+Пакет: `coreutils`. -p создаёт недостающие родительские каталоги.
 
-## Применимость
+```bash
+mkdir -p -- demo/reports/2026
+```
 
-Общее руководство GNU Coreutils.
-Конкретные версии Linux ещё не проверены.
+## Fedora
+
+Пакет: `coreutils`. -p создаёт недостающие родительские каталоги.
+
+```bash
+mkdir -p -- demo/reports/2026
+```
+
+## Arch Linux
+
+Пакет: `coreutils`. -p создаёт недостающие родительские каталоги.
+
+```bash
+mkdir -p -- demo/reports/2026
+```
+
+## Источники
+
+- [Debian](https://manpages.debian.org/stable/coreutils/mkdir.1.en.html)
+- [Fedora](https://manpages.debian.org/stable/coreutils/mkdir.1.en.html)
+- [Arch Linux](https://manpages.debian.org/stable/coreutils/mkdir.1.en.html)

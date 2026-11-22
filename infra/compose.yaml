@@ -19,7 +19,7 @@ services:
       PUBLIC_ORIGIN: "${PUBLIC_ORIGIN:-}"
       SEARCH_URL: http://search:8000
       LLM_URL: http://llm:8080
-      LLM_MODEL: qwen3.5-4b
+      LLM_MODEL: qwen3-14b
     depends_on:
       postgres:
         condition: service_healthy
@@ -72,13 +72,13 @@ services:
       - --port
       - "8080"
       - --model
-      - /models/qwen.gguf
+      - /models/qwen3-14b.gguf
       - --alias
-      - qwen3.5-4b
+      - qwen3-14b
       - --n-gpu-layers
       - all
       - --ctx-size
-      - "16384"
+      - "8192"
       - --parallel
       - "2"
       - --cont-batching

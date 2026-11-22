@@ -65,12 +65,32 @@ mv -v old.txt new.txt
 
 Перед выполнением проверь, что не перезаписываешь важные данные.
 
-## Источник
+## Debian
 
-GNU Coreutils — mv invocation:
-https://www.gnu.org/software/coreutils/manual/html_node/mv-invocation.html
+Пакет: `coreutils`. -i запрашивает подтверждение перед заменой существующей цели.
 
-## Применимость
+```bash
+mv -i -- report.txt report-old.txt
+```
 
-Общее руководство GNU Coreutils.
-Конкретные версии Linux ещё не проверены.
+## Fedora
+
+Пакет: `coreutils`. -i запрашивает подтверждение перед заменой существующей цели.
+
+```bash
+mv -i -- report.txt report-old.txt
+```
+
+## Arch Linux
+
+Пакет: `coreutils`. -i запрашивает подтверждение перед заменой существующей цели.
+
+```bash
+mv -i -- report.txt report-old.txt
+```
+
+## Источники
+
+- [Debian](https://manpages.debian.org/stable/coreutils/mv.1.en.html)
+- [Fedora](https://manpages.debian.org/stable/coreutils/mv.1.en.html)
+- [Arch Linux](https://manpages.debian.org/stable/coreutils/mv.1.en.html)

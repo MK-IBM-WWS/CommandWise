@@ -10,21 +10,14 @@ def client():
         yield test_client
 
 
-def test_corpus_contains_debian(client):
+def test_corpus_returns_distributions_without_releases(client):
     response = client.get("/v1/corpus")
-
     assert response.status_code == 200
-
-    distributions = response.json()["distributions"]
-
-    assert any(
-        d["id"] == "debian"
-        and any(
-            r["id"] == "13"
-            for r in d["releases"]
-        )
-        for d in distributions
-    )
+    assert response.json()["distributions"] == [
+        {"id": "debian", "label": "Debian"},
+        {"id": "fedora", "label": "Fedora"},
+        {"id": "arch", "label": "Arch Linux"},
+    ]
 
 
 def test_real_search_finds_find(client):
@@ -33,7 +26,6 @@ def test_real_search_finds_find(client):
         json={
             "query": "Как найти файлы больше 100 МБ?",
             "distribution": "debian",
-            "release": "13",
             "top_k": 5
         }
     )
@@ -57,7 +49,6 @@ def test_unknown_target_rejected(client):
         json={
             "query": "find",
             "distribution": "ubuntu",
-            "release": "24.04",
             "top_k": 5
         }
     )
@@ -75,7 +66,6 @@ def test_invalid_top_k_rejected(client):
         json={
             "query": "find",
             "distribution": "debian",
-            "release": "13",
             "top_k": 11
         }
     )
@@ -89,7 +79,6 @@ def test_unrelated_query_returns_no_sources(client):
         json={
             "query": "квантовая запутанность фотонов",
             "distribution": "debian",
-            "release": "13",
             "top_k": 5
         }
     )
@@ -97,20 +86,30 @@ def test_unrelated_query_returns_no_sources(client):
     assert response.status_code == 200
     assert response.json()["items"] == []
 
-def test_unverified_commands_have_no_context_for_debian(client):
-    draft_commands = {"cp", "mv", "mkdir", "rm", "cat"}
-
-    for command in sorted(draft_commands):
-        response = client.post(
-            "/v1/search",
-            json={
-                "query": f"Как использовать {command}?",
-                "distribution": "debian",
-                "release": "13",
-                "top_k": 10,
-            },
-        )
-
+@pytest.mark.parametrize(("distribution", "manager", "install"), [
+    ("debian", "apt", "sudo apt install dnsutils"),
+    ("fedora", "dnf", "sudo dnf install bind-utils"),
+    ("arch", "pacman", "sudo pacman -Syu bind"),
+])
+def test_distro_specific_packages_and_native_manager(client, distribution, manager, install):
+    def ask(query):
+        response = client.post("/v1/search", json={
+            "query": query, "distribution": distribution, "top_k": 5,
+        })
         assert response.status_code == 200
+        return response.json()["items"]
 
-        assert response.json()["items"] == []
+    items = ask("Как установить dig?")
+    assert any(install in row["text"] for row in items)
+    assert all(row["distribution"] in {distribution, "common"} for row in items)
+    assert ask("Как обновить пакеты системы?")[0]["command"] == manager
+
+    if distribution == "fedora":
+        equivalents = ask("Что можно использовать вместо apt?")
+        assert any("sudo dnf install curl" in row["text"] for row in equivalents)
+
+
+def test_legacy_release_is_ignored(client):
+    data = {"query": "ss", "distribution": "fedora", "top_k": 4}
+    expected = client.post("/v1/search", json=data).json()
+    assert client.post("/v1/search", json={**data, "release": "invalid"}).json() == expected

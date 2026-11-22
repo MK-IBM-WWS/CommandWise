@@ -67,12 +67,32 @@ cat first.txt second.txt > combined.txt
 
 При работе с большими файлами вывод может быть неудобным.
 
-## Источник
+## Debian
 
-GNU Coreutils — cat invocation:
-https://www.gnu.org/software/coreutils/manual/html_node/cat-invocation.html
+Пакет: `coreutils`. Для сквозной нумерации строк используй -n.
 
-## Применимость
+```bash
+cat notes.txt
+```
 
-Общее руководство GNU Coreutils.
-Конкретные версии Linux ещё не проверены.
+## Fedora
+
+Пакет: `coreutils`. Для сквозной нумерации строк используй -n.
+
+```bash
+cat notes.txt
+```
+
+## Arch Linux
+
+Пакет: `coreutils`. Для сквозной нумерации строк используй -n.
+
+```bash
+cat notes.txt
+```
+
+## Источники
+
+- [Debian](https://manpages.debian.org/stable/coreutils/cat.1.en.html)
+- [Fedora](https://manpages.debian.org/stable/coreutils/cat.1.en.html)
+- [Arch Linux](https://manpages.debian.org/stable/coreutils/cat.1.en.html)

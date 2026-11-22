@@ -1,53 +1,36 @@
 import json
+from collections import Counter
 from pathlib import Path
 
 from app.api import load_index
+from app.distributions import DISTRIBUTIONS
+from bm25_demo import split_sections
 
 
 ROOT = Path(__file__).resolve().parents[2]
 CORPUS = ROOT / "corpus"
 
-NEW_COMMANDS = {
-    "head", "tail", "sort", "uniq", "wc",
-    "du", "df", "ps", "kill", "ssh",
-}
 
+def test_fifty_documents_each_have_three_instruction_sections():
+    manifest = json.loads((CORPUS / "manifest.json").read_text(encoding="utf-8"))
+    ids = {item["document_id"] for item in manifest["documents"]}
 
-def test_twenty_documents_registered():
-    manifest = json.loads(
-        (CORPUS / "manifest.json").read_text(
-            encoding="utf-8"
-        )
-    )
-
-    commands = {
-        item["document_id"]
-        for item in manifest["documents"]
+    assert ids == {path.stem for path in (CORPUS / "docs").glob("*.md")}
+    assert len(ids) == 50
+    assert Counter(item["category"] for item in manifest["documents"]) == {
+        "base": 21, "network": 18, "packages": 11,
     }
 
-    assert len(commands) == 30
-    assert NEW_COMMANDS <= commands
+    for document in manifest["documents"]:
+        sections = dict(split_sections((CORPUS / document["path"]).read_text(encoding="utf-8")))
+        for distro, label in DISTRIBUTIONS.items():
+            assert document["distro_sections"][label] == distro
+            assert "bash" in sections[label], (document["document_id"], label)
 
 
-def test_new_documents_are_not_verified():
-    manifest = json.loads(
-        (CORPUS / "manifest.json").read_text(
-            encoding="utf-8"
-        )
-    )
-
-    for item in manifest["documents"]:
-        if item["document_id"] in NEW_COMMANDS:
-            assert item["verified_targets"] == []
-
-
-def test_index_contains_twenty_commands():
+def test_index_contains_fifty_commands_for_each_distro():
     index = load_index()
-
-    commands = {
-        item["command"]
-        for item in index["chunks"]
-    }
-
-    assert len(commands) == 30
-    assert NEW_COMMANDS <= commands
+    for distro in DISTRIBUTIONS:
+        specific = [item for item in index["chunks"] if item["distribution"] == distro]
+        assert len({item["command"] for item in specific}) == 50
+        assert all(item["applies_to"] == [{"distribution": distro}] for item in specific)

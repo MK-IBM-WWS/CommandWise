@@ -1,4 +1,3 @@
-
 # grep — поиск текста в файлах
 
 ## Назначение
@@ -88,13 +87,32 @@ grep -v "DEBUG" app.log
 
 По умолчанию `grep` использует базовые регулярные выражения. Параметр `-E` включает расширенные регулярные выражения.
 
+## Debian
+
+Пакет: `grep`. -i игнорирует регистр, -n добавляет номера строк.
+
+```bash
+grep -in -- 'error' app.log
+```
+
+## Fedora
+
+Пакет: `grep`. -i игнорирует регистр, -n добавляет номера строк.
+
+```bash
+grep -in -- 'error' app.log
+```
+
+## Arch Linux
+
+Пакет: `grep`. -i игнорирует регистр, -n добавляет номера строк.
+
+```bash
+grep -in -- 'error' app.log
+```
+
 ## Источники
 
-GNU Grep Manual:
-https://www.gnu.org/software/grep/manual/
-
-## Применимость
-
-Реализация: GNU grep.
-
-Подтверждение конкретных версий пакетов и дистрибутивов пока не выполнено.
+- [Debian](https://manpages.debian.org/trixie/grep/grep.1.en.html)
+- [Fedora](https://manpages.debian.org/trixie/grep/grep.1.en.html)
+- [Arch Linux](https://manpages.debian.org/trixie/grep/grep.1.en.html)

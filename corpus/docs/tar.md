@@ -1,4 +1,3 @@
-
 # tar — работа с архивами
 
 ## Назначение
@@ -102,13 +101,32 @@ tar -czvf backup.tar.gz documents/
 
 При извлечении файлы могут перезаписываться. Перед распаковкой неизвестного архива рекомендуется посмотреть его содержимое и использовать отдельный тестовый каталог.
 
+## Debian
+
+Пакет: `tar`. -t показывает содержимое, не извлекая файлы. Для gzip используется -z.
+
+```bash
+tar -tzf backup.tar.gz
+```
+
+## Fedora
+
+Пакет: `tar`. -t показывает содержимое, не извлекая файлы. Для gzip используется -z.
+
+```bash
+tar -tzf backup.tar.gz
+```
+
+## Arch Linux
+
+Пакет: `tar`. -t показывает содержимое, не извлекая файлы. Для gzip используется -z.
+
+```bash
+tar -tzf backup.tar.gz
+```
+
 ## Источники
 
-GNU tar Manual:
-https://www.gnu.org/software/tar/manual/
-
-## Применимость
-
-Реализация: GNU tar.
-
-Подтверждение конкретных версий пакетов и дистрибутивов пока не выполнено.
+- [Debian](https://manpages.debian.org/trixie/tar/tar.1.en.html)
+- [Fedora](https://manpages.debian.org/trixie/tar/tar.1.en.html)
+- [Arch Linux](https://manpages.debian.org/trixie/tar/tar.1.en.html)

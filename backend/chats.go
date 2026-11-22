@@ -32,7 +32,6 @@ type source struct {
 	Title          string `json:"title"`
 	URL            string `json:"source_url"`
 	Distribution   string `json:"distribution"`
-	Release        string `json:"release"`
 	Section        string `json:"section"`
 	Command        string `json:"command"`
 	Text           string `json:"text"`
@@ -47,7 +46,6 @@ type sourceCard struct {
 	Title        string `json:"title"`
 	URL          string `json:"source_url"`
 	Distribution string `json:"distribution"`
-	Release      string `json:"release"`
 	Section      string `json:"section"`
 }
 
@@ -74,7 +72,7 @@ func readMessage(row pgx.Row) (message, error) {
 }
 
 func (s *server) listChats(w http.ResponseWriter, r *http.Request, a account, _ uuid.UUID) {
-	rows, err := s.db.Query(r.Context(), `SELECT c.id,c.distribution,c.release,c.title,c.created_at,
+	rows, err := s.db.Query(r.Context(), `SELECT c.id,c.distribution,c.title,c.created_at,
 		COALESCE((SELECT m.status FROM messages m WHERE m.chat_id=c.id AND m.status IN ('queued','generating')), 'idle')
 		FROM chats c WHERE c.account_id=$1 ORDER BY c.created_at DESC`, a.ID)
 	if err != nil {
@@ -85,7 +83,7 @@ func (s *server) listChats(w http.ResponseWriter, r *http.Request, a account, _ 
 	items := make([]chat, 0)
 	for rows.Next() {
 		var c chat
-		if err := rows.Scan(&c.ID, &c.Distribution, &c.Release, &c.Title, &c.Created, &c.Status); err != nil {
+		if err := rows.Scan(&c.ID, &c.Distribution, &c.Title, &c.Created, &c.Status); err != nil {
 			serverError(w, err)
 			return
 		}
@@ -101,7 +99,8 @@ func (s *server) listChats(w http.ResponseWriter, r *http.Request, a account, _ 
 func (s *server) createChat(w http.ResponseWriter, r *http.Request, a account, _ uuid.UUID) {
 	var input struct {
 		target
-		Title string `json:"title"`
+		Title         string `json:"title"`
+		LegacyRelease string `json:"release,omitempty"`
 	}
 	if !readJSON(w, r, &input) {
 		return
@@ -121,14 +120,9 @@ func (s *server) createChat(w http.ResponseWriter, r *http.Request, a account, _
 	}
 	supported := false
 	for _, d := range info.Distributions {
-		if d.ID != input.Distribution {
-			continue
-		}
-		for _, rel := range d.Releases {
-			if rel.ID == input.Release {
-				supported = true
-				break
-			}
+		if d.ID == input.Distribution {
+			supported = true
+			break
 		}
 	}
 	if !supported {
@@ -157,8 +151,8 @@ func (s *server) createChat(w http.ResponseWriter, r *http.Request, a account, _
 		return
 	}
 	item := chat{ID: uuid.New(), target: input.target, Title: input.Title, Status: "idle"}
-	err = tx.QueryRow(ctx, `INSERT INTO chats (id,account_id,distribution,release,title) VALUES ($1,$2,$3,$4,$5)
-		RETURNING created_at`, item.ID, a.ID, item.Distribution, item.Release, item.Title).Scan(&item.Created)
+	err = tx.QueryRow(ctx, `INSERT INTO chats (id,account_id,distribution,title) VALUES ($1,$2,$3,$4)
+		RETURNING created_at`, item.ID, a.ID, item.Distribution, item.Title).Scan(&item.Created)
 	if err == nil {
 		err = tx.Commit(ctx)
 	}

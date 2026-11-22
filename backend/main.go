@@ -101,7 +101,7 @@ func run(ctx context.Context) error {
 		http:         &http.Client{},
 		searchURL:    strings.TrimRight(env("SEARCH_URL", "http://127.0.0.1:8000"), "/"),
 		llmURL:       strings.TrimRight(env("LLM_URL", "http://127.0.0.1:8082"), "/"),
-		model:        env("LLM_MODEL", "qwen3.5-4b"),
+		model:        env("LLM_MODEL", "qwen3-14b"),
 		address:      env("LISTEN_ADDR", ":8081"),
 		publicOrigin: strings.TrimRight(os.Getenv("PUBLIC_ORIGIN"), "/"),
 		secureCookie: os.Getenv("COOKIE_SECURE") == "true",

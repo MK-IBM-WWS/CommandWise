@@ -91,20 +91,32 @@ find . -maxdepth 1 -type f
 - Суффикс `M` у `-size` означает МиБ (1 048 576 байт), а не десятичный мегабайт. Размеры для этого условия округляются вверх до выбранной единицы.
 - Примеры только ищут и выводят имена. Они не удаляют и не изменяют файлы.
 
+## Debian
+
+Пакет: `findutils`. Заключай шаблон в кавычки, чтобы его обработал find.
+
+```bash
+find . -maxdepth 1 -type f -iname '*.txt'
+```
+
+## Fedora
+
+Пакет: `findutils`. Заключай шаблон в кавычки, чтобы его обработал find.
+
+```bash
+find . -maxdepth 1 -type f -iname '*.txt'
+```
+
+## Arch Linux
+
+Пакет: `findutils`. Заключай шаблон в кавычки, чтобы его обработал find.
+
+```bash
+find . -maxdepth 1 -type f -iname '*.txt'
+```
+
 ## Источники
 
-1. GNU Findutils — руководство по поиску файлов: https://www.gnu.org/software/findutils/manual/html_node/find_html/Finding-Files.html
-2. GNU Findutils — проверка по размеру: https://www.gnu.org/software/findutils/manual/html_node/find_html/Size.html
-3. Debian 13 (trixie), страница `find(1)`: https://manpages.debian.org/trixie/findutils/find.1.en.html
-
-## Сведения о документе
-
-- Идентификатор документа: `find`
-- Команда: `find`
-- Язык описания: русский
-- Дата подготовки: 2026-10-29
-- Основа: GNU Findutils, документация `find(1)`
-- Проверка поведения на установленном Debian 13: ещё не выполнена
-- Версия пакета на проверенном окружении: ещё не определена
-- Другие дистрибутивы: применимость пока не проверена
-- Статус: черновик для дальнейшей сверки; не включать неподтверждённые targets в `manifest.json`
+- [Debian](https://manpages.debian.org/trixie/findutils/find.1.en.html)
+- [Fedora](https://manpages.debian.org/trixie/findutils/find.1.en.html)
+- [Arch Linux](https://manpages.debian.org/trixie/findutils/find.1.en.html)

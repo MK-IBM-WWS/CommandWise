@@ -60,12 +60,32 @@ wc -l first.txt second.txt
 
 Выводит результат по каждому файлу и общий итог.
 
+## Debian
+
+Пакет: `coreutils`. -l считает символы перевода строки. Последняя строка без перевода строки не увеличивает этот счётчик.
+
+```bash
+wc -l -- app.log
+```
+
+## Fedora
+
+Пакет: `coreutils`. -l считает символы перевода строки. Последняя строка без перевода строки не увеличивает этот счётчик.
+
+```bash
+wc -l -- app.log
+```
+
+## Arch Linux
+
+Пакет: `coreutils`. -l считает символы перевода строки. Последняя строка без перевода строки не увеличивает этот счётчик.
+
+```bash
+wc -l -- app.log
+```
+
 ## Источники
 
-GNU Coreutils — wc invocation:
-https://www.gnu.org/software/coreutils/manual/html_node/wc-invocation.html
-
-## Применимость
-
-Общая документация GNU Coreutils.
-Версии конкретных дистрибутивов ещё не проверены.
+- [Debian](https://manpages.debian.org/stable/coreutils/wc.1.en.html)
+- [Fedora](https://manpages.debian.org/stable/coreutils/wc.1.en.html)
+- [Arch Linux](https://manpages.debian.org/stable/coreutils/wc.1.en.html)

@@ -39,9 +39,9 @@ download() {
     chmod 0644 "$dest.part"
     mv -f -- "$dest.part" "$dest"
 }
-qwen='https://huggingface.co/unsloth/Qwen3.5-4B-GGUF/resolve/e87f176479d0855a907a41277aca2f8ee7a09523'
+qwen='https://huggingface.co/Qwen/Qwen3-14B-GGUF/resolve/530227a7d994db8eca5ab5ced2fb692b614357fd'
 e5='https://huggingface.co/intfloat/multilingual-e5-small/resolve/614241f622f53c4eeff9890bdc4f31cfecc418b3/onnx'
-download "$qwen/Qwen3.5-4B-Q4_K_M.gguf" "$state/models/llm/qwen.gguf" '00fe7986ff5f6b463e62455821146049db6f9313603938a70800d1fb69ef11a4'
+download "$qwen/Qwen3-14B-Q4_K_M.gguf" "$state/models/llm/qwen3-14b.gguf" '500a8806e85ee9c83f3ae08420295592451379b4f8cf2d0f41c15dffeb6b81f0'
 download "$e5/model.onnx" "$state/models/embedding/model.onnx" 'ca456c06b3a9505ddfd9131408916dd79290368331e7d76bb621f1cba6bc8665'
 download "$e5/tokenizer.json" "$state/models/embedding/tokenizer.json" '0b44a9d7b51c3c62626640cda0e2c2f70fdacdc25bbbd68038369d14ebdf4c39'
 

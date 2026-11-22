@@ -58,12 +58,32 @@ df -i
 
 Если нужно определить размер конкретного каталога, используй `du`.
 
+## Debian
+
+Пакет: `coreutils`. Путь помогает выбрать файловую систему, размеры выводятся в удобных единицах.
+
+```bash
+df -h /
+```
+
+## Fedora
+
+Пакет: `coreutils`. Путь помогает выбрать файловую систему, размеры выводятся в удобных единицах.
+
+```bash
+df -h /
+```
+
+## Arch Linux
+
+Пакет: `coreutils`. Путь помогает выбрать файловую систему, размеры выводятся в удобных единицах.
+
+```bash
+df -h /
+```
+
 ## Источники
 
-GNU Coreutils — df invocation:
-https://www.gnu.org/software/coreutils/manual/html_node/df-invocation.html
-
-## Применимость
-
-Общая документация GNU Coreutils.
-Версии конкретных дистрибутивов ещё не проверены.
+- [Debian](https://manpages.debian.org/stable/coreutils/df.1.en.html)
+- [Fedora](https://manpages.debian.org/stable/coreutils/df.1.en.html)
+- [Arch Linux](https://manpages.debian.org/stable/coreutils/df.1.en.html)

@@ -14,13 +14,16 @@ from uuid import uuid4
 
 import numpy as np
 
+from app.distributions import DISTRIBUTIONS
 from app.indexer import build, write_json
 from bm25_demo import SKIP_SECTIONS, split_sections
 
 logger = logging.getLogger(__name__)
 MAX_UPLOAD = 512 * 1024
 DOCUMENT_ID = re.compile(r"[a-z0-9][a-z0-9_-]{0,63}")
-DISTRIBUTIONS = {"debian", "ubuntu", "fedora", "arch"}
+LEGACY_BUILTINS = frozenset((
+    "cat chmod cp df du find grep head kill ls mkdir mv ps rm sort ssh tail tar uniq wc"
+).split())
 
 
 class InvalidDocument(ValueError):
@@ -52,7 +55,11 @@ class CorpusStore:
             raise ValueError("Invalid active corpus pointer")
         path = self.releases / name
         index = self.load_index(path / "index")
-        return self.attach(index, path, np.load(path / "vectors.npy", allow_pickle=False))
+        previous = self.attach(index, path, np.load(path / "vectors.npy", allow_pickle=False))
+        seed_manifest = json.loads((self.seed / "manifest.json").read_text(encoding="utf-8"))
+        if previous["seed_revision"] != seed_manifest.get("seed_revision"):
+            return self.publish(self.seed, previous)
+        return previous
 
     def publish(self, base, previous=None, document=None, content=None):
         stage = Path(tempfile.mkdtemp(prefix=".stage-", dir=self.releases))
@@ -61,14 +68,13 @@ class CorpusStore:
         try:
             corpus = stage / "corpus"
             shutil.copytree(base, corpus)
+            if previous is not None and base == self.seed:
+                self.merge_uploaded_documents(corpus, previous)
             if document is not None:
                 manifest_path = corpus / "manifest.json"
                 manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
                 if any(item["document_id"] == document["document_id"] for item in manifest["documents"]):
                     raise DocumentExists("Идентификатор документа уже занят.")
-                verified = document["verified_targets"][0]
-                if not any(all(item.get(key) == value for key, value in verified.items()) for item in manifest["supported_targets"]):
-                    manifest["supported_targets"].append({**verified, "label": verified["release"]})
                 manifest["documents"].append(document)
                 write_json(manifest_path, manifest)
                 (corpus / document["path"]).write_text(content, encoding="utf-8")
@@ -105,9 +111,36 @@ class CorpusStore:
         corpus = release / "corpus"
         manifest = json.loads((corpus / "manifest.json").read_text(encoding="utf-8"))
         index["documents"] = manifest["documents"]
+        index["seed_revision"] = manifest.get("seed_revision")
+        index["seed_document_ids"] = manifest.get("seed_document_ids", LEGACY_BUILTINS)
         index["corpus"] = corpus
         index["vectors"] = {item["chunk_id"]: vector for item, vector in zip(chunks, vectors)}
         return index
+
+    def merge_uploaded_documents(self, corpus, previous):
+        manifest_path = corpus / "manifest.json"
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        occupied = {item["document_id"] for item in manifest["documents"]}
+        for old in previous["documents"]:
+            source_id = old["document_id"]
+            if source_id in previous["seed_document_ids"]:
+                continue
+            document = dict(old)
+            document["verified_targets"] = list({
+                target["distribution"]: {"distribution": target["distribution"]}
+                for target in old["verified_targets"]
+            }.values())
+            for suffix in range(len(occupied) + 1):
+                new_id = source_id if suffix == 0 else f"{source_id[:45]}-uploaded-{suffix}"
+                if new_id not in occupied:
+                    break
+            document["document_id"] = new_id
+            document["command"] = old.get("command", source_id)
+            document["path"] = f"docs/{new_id}.md"
+            shutil.copyfile(previous["corpus"] / old["path"], corpus / document["path"])
+            occupied.add(new_id)
+            manifest["documents"].append(document)
+        write_json(manifest_path, manifest)
 
     def prune(self, release, previous):
         retained = {release}
@@ -138,7 +171,6 @@ def validate(form, data):
     distribution = clean_field(form, "distribution", 12)
     if distribution not in DISTRIBUTIONS:
         raise InvalidDocument("Выберите поддерживаемый дистрибутив.")
-    release = clean_field(form, "release", 48)
     package = clean_field(form, "package", 80)
     package_version = clean_field(form, "package_version", 80)
     source_url = clean_field(form, "source_url", 2048)
@@ -165,7 +197,7 @@ def validate(form, data):
         raise InvalidDocument("Добавьте раздел с заголовком ## или ### и текстом.")
     if len(sections) > 120 or any(len(text) > 4000 for text in sections):
         raise InvalidDocument("Допускается до 120 разделов, каждый до 4000 символов.")
-    verified = {"distribution": distribution, "release": release}
+    verified = {"distribution": distribution}
     return {
         "document_id": document_id, "path": f"docs/{document_id}.md",
         "package": package, "package_version": package_version, "source_url": source_url,

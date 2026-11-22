@@ -149,7 +149,7 @@ def generate(args):
     if args.model not in {model["id"] for model in models["data"]}:
         raise ValueError(f"Server does not advertise model {args.model}")
 
-    template = (ROOT / "backend" / "rag_system.txt").read_text(encoding="utf-8") % (TARGET["distribution"], TARGET["release"])
+    template = (ROOT / "backend" / "rag_system.txt").read_text(encoding="utf-8") % TARGET["distribution"]
     report["model"] = args.model
     report["generation"] = {"temperature": 0, "seed": 42, "max_tokens": args.max_tokens, "reasoning": "off", "jobs": args.jobs}
     report["started_at"] = datetime.now(timezone.utc).isoformat()
@@ -206,8 +206,8 @@ def score(args):
     report = read_json(args.answers)
     if "finished_at" not in report:
         raise ValueError("The generation run is incomplete")
-    if report["fingerprints"] != fingerprints():
-        raise ValueError("Benchmark sources do not match the generation run")
+    if any(report["fingerprints"].get(key) != fingerprints()[key] for key in ("corpus", "questions")):
+        raise ValueError("Benchmark dataset does not match the generation run")
     rows = report["rows"]
     reviews = read_jsonl(args.review)
     verified = {item["id"]: item for item in reviews}

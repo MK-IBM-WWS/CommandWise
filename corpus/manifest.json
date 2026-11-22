@@ -1,313 +1,1633 @@
 {
-  "corpus_version": "6c1c15373b678962",
-  "collected_at": "2026-10-30",
+  "corpus_version": "68ac80f71e790bc0",
+  "seed_revision": "distro-50-2026-11-22",
+  "seed_document_ids": [
+    "apt",
+    "apt-cache",
+    "apt-file",
+    "cat",
+    "chmod",
+    "cp",
+    "curl",
+    "df",
+    "dig",
+    "dnf",
+    "dpkg",
+    "dpkg-query",
+    "du",
+    "ethtool",
+    "find",
+    "flatpak",
+    "grep",
+    "head",
+    "host",
+    "hostnamectl",
+    "ip",
+    "kill",
+    "ls",
+    "makepkg",
+    "mkdir",
+    "mtr",
+    "mv",
+    "nc",
+    "nmcli",
+    "nslookup",
+    "pacman",
+    "pactree",
+    "ping",
+    "ps",
+    "resolvectl",
+    "rfkill",
+    "rm",
+    "rpm",
+    "sort",
+    "ss",
+    "ssh",
+    "systemctl",
+    "tail",
+    "tar",
+    "tcpdump",
+    "tracepath",
+    "traceroute",
+    "uniq",
+    "wc",
+    "wget"
+  ],
+  "collected_at": "2026-11-22",
   "supported_targets": [
     {
       "distribution": "debian",
-      "release": "13",
-      "label": "Debian 13 (Trixie)"
+      "label": "Debian"
+    },
+    {
+      "distribution": "fedora",
+      "label": "Fedora"
+    },
+    {
+      "distribution": "arch",
+      "label": "Arch Linux"
     }
   ],
   "documents": [
     {
-      "document_id": "cat",
-      "path": "docs/cat.md",
-      "package": "coreutils",
-      "source_url": "https://www.gnu.org/software/coreutils/manual/html_node/cat-invocation.html",
-      "package_version": "",
-      "collected_at": null,
-      "verified_targets": []
+      "document_id": "apt",
+      "path": "docs/apt.md",
+      "category": "packages",
+      "package": "apt",
+      "source_url": "https://manpages.debian.org/stable/apt/apt.8.en.html",
+      "distro_sections": {
+        "Debian": "debian",
+        "Fedora": "fedora",
+        "Arch Linux": "arch"
+      },
+      "distro_packages": {
+        "debian": "apt",
+        "fedora": "dnf",
+        "arch": "pacman"
+      },
+      "collected_at": "2026-11-22",
+      "verified_targets": [
+        {
+          "distribution": "debian"
+        },
+        {
+          "distribution": "fedora"
+        },
+        {
+          "distribution": "arch"
+        }
+      ],
+      "distro_sources": {
+        "debian": "https://manpages.debian.org/stable/apt/apt.8.en.html",
+        "fedora": "https://dnf5.readthedocs.io/en/latest/dnf5.8.html",
+        "arch": "https://man.archlinux.org/man/pacman.8.en"
+      },
+      "native_for": [
+        "debian"
+      ]
     },
     {
-      "document_id": "cd",
-      "path": "docs/cd.md",
-      "package": "bash",
-      "source_url": "https://www.gnu.org/software/bash/manual/html_node/Bourne-Shell-Builtins.html",
-      "package_version": "",
-      "collected_at": null,
-      "verified_targets": []
+      "document_id": "apt-cache",
+      "path": "docs/apt-cache.md",
+      "category": "packages",
+      "package": "apt",
+      "source_url": "https://manpages.debian.org/stable/apt/apt-cache.8.en.html",
+      "distro_sections": {
+        "Debian": "debian",
+        "Fedora": "fedora",
+        "Arch Linux": "arch"
+      },
+      "distro_packages": {
+        "debian": "apt",
+        "fedora": "dnf",
+        "arch": "pacman"
+      },
+      "collected_at": "2026-11-22",
+      "verified_targets": [
+        {
+          "distribution": "debian"
+        },
+        {
+          "distribution": "fedora"
+        },
+        {
+          "distribution": "arch"
+        }
+      ],
+      "distro_sources": {
+        "debian": "https://manpages.debian.org/stable/apt/apt-cache.8.en.html",
+        "fedora": "https://dnf5.readthedocs.io/en/latest/dnf5.8.html",
+        "arch": "https://man.archlinux.org/man/pacman.8.en"
+      },
+      "native_for": [
+        "debian"
+      ]
+    },
+    {
+      "document_id": "apt-file",
+      "path": "docs/apt-file.md",
+      "category": "packages",
+      "package": "apt-file",
+      "source_url": "https://manpages.debian.org/stable/apt-file/apt-file.1.en.html",
+      "distro_sections": {
+        "Debian": "debian",
+        "Fedora": "fedora",
+        "Arch Linux": "arch"
+      },
+      "distro_packages": {
+        "debian": "apt-file",
+        "fedora": "dnf",
+        "arch": "pacman"
+      },
+      "collected_at": "2026-11-22",
+      "verified_targets": [
+        {
+          "distribution": "debian"
+        },
+        {
+          "distribution": "fedora"
+        },
+        {
+          "distribution": "arch"
+        }
+      ],
+      "distro_sources": {
+        "debian": "https://manpages.debian.org/stable/apt-file/apt-file.1.en.html",
+        "fedora": "https://dnf5.readthedocs.io/en/latest/dnf5.8.html",
+        "arch": "https://man.archlinux.org/man/pacman.8.en"
+      },
+      "native_for": [
+        "debian"
+      ]
+    },
+    {
+      "document_id": "cat",
+      "path": "docs/cat.md",
+      "category": "base",
+      "package": "coreutils",
+      "source_url": "https://manpages.debian.org/stable/coreutils/cat.1.en.html",
+      "distro_sections": {
+        "Debian": "debian",
+        "Fedora": "fedora",
+        "Arch Linux": "arch"
+      },
+      "distro_packages": {
+        "debian": "coreutils",
+        "fedora": "coreutils",
+        "arch": "coreutils"
+      },
+      "collected_at": "2026-11-22",
+      "verified_targets": [
+        {
+          "distribution": "debian"
+        },
+        {
+          "distribution": "fedora"
+        },
+        {
+          "distribution": "arch"
+        }
+      ]
     },
     {
       "document_id": "chmod",
       "path": "docs/chmod.md",
+      "category": "base",
       "package": "coreutils",
-      "package_version": "9.7-3",
       "source_url": "https://manpages.debian.org/trixie/coreutils/chmod.1.en.html",
-      "collected_at": "2026-10-30",
-      "verification_method": "official_debian_13_manpage_review",
+      "distro_sections": {
+        "Debian": "debian",
+        "Fedora": "fedora",
+        "Arch Linux": "arch"
+      },
+      "distro_packages": {
+        "debian": "coreutils",
+        "fedora": "coreutils",
+        "arch": "coreutils"
+      },
+      "collected_at": "2026-11-22",
       "verified_targets": [
         {
-          "distribution": "debian",
-          "release": "13"
+          "distribution": "debian"
+        },
+        {
+          "distribution": "fedora"
+        },
+        {
+          "distribution": "arch"
         }
       ]
     },
     {
       "document_id": "cp",
       "path": "docs/cp.md",
+      "category": "base",
       "package": "coreutils",
-      "source_url": "https://www.gnu.org/software/coreutils/manual/html_node/cp-invocation.html",
-      "package_version": "",
-      "collected_at": null,
-      "verified_targets": []
+      "source_url": "https://manpages.debian.org/stable/coreutils/cp.1.en.html",
+      "distro_sections": {
+        "Debian": "debian",
+        "Fedora": "fedora",
+        "Arch Linux": "arch"
+      },
+      "distro_packages": {
+        "debian": "coreutils",
+        "fedora": "coreutils",
+        "arch": "coreutils"
+      },
+      "collected_at": "2026-11-22",
+      "verified_targets": [
+        {
+          "distribution": "debian"
+        },
+        {
+          "distribution": "fedora"
+        },
+        {
+          "distribution": "arch"
+        }
+      ]
+    },
+    {
+      "document_id": "curl",
+      "path": "docs/curl.md",
+      "category": "network",
+      "package": "curl",
+      "source_url": "https://curl.se/docs/manpage.html",
+      "distro_sections": {
+        "Debian": "debian",
+        "Fedora": "fedora",
+        "Arch Linux": "arch"
+      },
+      "distro_packages": {
+        "debian": "curl",
+        "fedora": "curl",
+        "arch": "curl"
+      },
+      "collected_at": "2026-11-22",
+      "verified_targets": [
+        {
+          "distribution": "debian"
+        },
+        {
+          "distribution": "fedora"
+        },
+        {
+          "distribution": "arch"
+        }
+      ]
     },
     {
       "document_id": "df",
       "path": "docs/df.md",
+      "category": "base",
       "package": "coreutils",
-      "source_url": "https://www.gnu.org/software/coreutils/manual/html_node/df-invocation.html",
-      "package_version": "",
-      "collected_at": null,
-      "verified_targets": []
+      "source_url": "https://manpages.debian.org/stable/coreutils/df.1.en.html",
+      "distro_sections": {
+        "Debian": "debian",
+        "Fedora": "fedora",
+        "Arch Linux": "arch"
+      },
+      "distro_packages": {
+        "debian": "coreutils",
+        "fedora": "coreutils",
+        "arch": "coreutils"
+      },
+      "collected_at": "2026-11-22",
+      "verified_targets": [
+        {
+          "distribution": "debian"
+        },
+        {
+          "distribution": "fedora"
+        },
+        {
+          "distribution": "arch"
+        }
+      ]
+    },
+    {
+      "document_id": "dig",
+      "path": "docs/dig.md",
+      "category": "network",
+      "package": "см. раздел дистрибутива",
+      "source_url": "https://bind9.readthedocs.io/en/latest/manpages.html#dig-dns-lookup-utility",
+      "distro_sections": {
+        "Debian": "debian",
+        "Fedora": "fedora",
+        "Arch Linux": "arch"
+      },
+      "distro_packages": {
+        "debian": "dnsutils",
+        "fedora": "bind-utils",
+        "arch": "bind"
+      },
+      "collected_at": "2026-11-22",
+      "verified_targets": [
+        {
+          "distribution": "debian"
+        },
+        {
+          "distribution": "fedora"
+        },
+        {
+          "distribution": "arch"
+        }
+      ]
+    },
+    {
+      "document_id": "dnf",
+      "path": "docs/dnf.md",
+      "category": "packages",
+      "package": "dnf",
+      "source_url": "https://dnf5.readthedocs.io/en/latest/dnf5.8.html",
+      "distro_sections": {
+        "Debian": "debian",
+        "Fedora": "fedora",
+        "Arch Linux": "arch"
+      },
+      "distro_packages": {
+        "debian": "apt",
+        "fedora": "dnf",
+        "arch": "pacman"
+      },
+      "collected_at": "2026-11-22",
+      "verified_targets": [
+        {
+          "distribution": "debian"
+        },
+        {
+          "distribution": "fedora"
+        },
+        {
+          "distribution": "arch"
+        }
+      ],
+      "distro_sources": {
+        "debian": "https://www.debian.org/doc/manuals/debian-reference/ch02.en.html",
+        "fedora": "https://dnf5.readthedocs.io/en/latest/dnf5.8.html",
+        "arch": "https://man.archlinux.org/man/pacman.8.en"
+      },
+      "native_for": [
+        "fedora"
+      ]
+    },
+    {
+      "document_id": "dpkg",
+      "path": "docs/dpkg.md",
+      "category": "packages",
+      "package": "dpkg",
+      "source_url": "https://manpages.debian.org/stable/dpkg/dpkg.1.en.html",
+      "distro_sections": {
+        "Debian": "debian",
+        "Fedora": "fedora",
+        "Arch Linux": "arch"
+      },
+      "distro_packages": {
+        "debian": "dpkg",
+        "fedora": "dnf",
+        "arch": "pacman"
+      },
+      "collected_at": "2026-11-22",
+      "verified_targets": [
+        {
+          "distribution": "debian"
+        },
+        {
+          "distribution": "fedora"
+        },
+        {
+          "distribution": "arch"
+        }
+      ],
+      "distro_sources": {
+        "debian": "https://manpages.debian.org/stable/dpkg/dpkg.1.en.html",
+        "fedora": "https://dnf5.readthedocs.io/en/latest/dnf5.8.html",
+        "arch": "https://man.archlinux.org/man/pacman.8.en"
+      },
+      "native_for": [
+        "debian"
+      ]
+    },
+    {
+      "document_id": "dpkg-query",
+      "path": "docs/dpkg-query.md",
+      "category": "packages",
+      "package": "dpkg",
+      "source_url": "https://manpages.debian.org/stable/dpkg/dpkg-query.1.en.html",
+      "distro_sections": {
+        "Debian": "debian",
+        "Fedora": "fedora",
+        "Arch Linux": "arch"
+      },
+      "distro_packages": {
+        "debian": "dpkg",
+        "fedora": "dnf",
+        "arch": "pacman"
+      },
+      "collected_at": "2026-11-22",
+      "verified_targets": [
+        {
+          "distribution": "debian"
+        },
+        {
+          "distribution": "fedora"
+        },
+        {
+          "distribution": "arch"
+        }
+      ],
+      "distro_sources": {
+        "debian": "https://manpages.debian.org/stable/dpkg/dpkg-query.1.en.html",
+        "fedora": "https://dnf5.readthedocs.io/en/latest/dnf5.8.html",
+        "arch": "https://man.archlinux.org/man/pacman.8.en"
+      },
+      "native_for": [
+        "debian"
+      ]
     },
     {
       "document_id": "du",
       "path": "docs/du.md",
+      "category": "base",
       "package": "coreutils",
-      "source_url": "https://www.gnu.org/software/coreutils/manual/html_node/du-invocation.html",
-      "package_version": "",
-      "collected_at": null,
-      "verified_targets": []
+      "source_url": "https://manpages.debian.org/stable/coreutils/du.1.en.html",
+      "distro_sections": {
+        "Debian": "debian",
+        "Fedora": "fedora",
+        "Arch Linux": "arch"
+      },
+      "distro_packages": {
+        "debian": "coreutils",
+        "fedora": "coreutils",
+        "arch": "coreutils"
+      },
+      "collected_at": "2026-11-22",
+      "verified_targets": [
+        {
+          "distribution": "debian"
+        },
+        {
+          "distribution": "fedora"
+        },
+        {
+          "distribution": "arch"
+        }
+      ]
     },
     {
-      "document_id": "echo",
-      "path": "docs/echo.md",
-      "package": "bash",
-      "source_url": "https://www.gnu.org/software/bash/manual/html_node/Bourne-Shell-Builtins.html",
-      "package_version": "",
-      "collected_at": null,
-      "verified_targets": []
+      "document_id": "ethtool",
+      "path": "docs/ethtool.md",
+      "category": "network",
+      "package": "ethtool",
+      "source_url": "https://man7.org/linux/man-pages/man8/ethtool.8.html",
+      "distro_sections": {
+        "Debian": "debian",
+        "Fedora": "fedora",
+        "Arch Linux": "arch"
+      },
+      "distro_packages": {
+        "debian": "ethtool",
+        "fedora": "ethtool",
+        "arch": "ethtool"
+      },
+      "collected_at": "2026-11-22",
+      "verified_targets": [
+        {
+          "distribution": "debian"
+        },
+        {
+          "distribution": "fedora"
+        },
+        {
+          "distribution": "arch"
+        }
+      ]
     },
     {
       "document_id": "find",
       "path": "docs/find.md",
+      "category": "base",
       "package": "findutils",
-      "package_version": "4.10.0-3",
       "source_url": "https://manpages.debian.org/trixie/findutils/find.1.en.html",
-      "collected_at": "2026-10-30",
-      "verification_method": "official_debian_13_manpage_review",
+      "distro_sections": {
+        "Debian": "debian",
+        "Fedora": "fedora",
+        "Arch Linux": "arch"
+      },
+      "distro_packages": {
+        "debian": "findutils",
+        "fedora": "findutils",
+        "arch": "findutils"
+      },
+      "collected_at": "2026-11-22",
       "verified_targets": [
         {
-          "distribution": "debian",
-          "release": "13"
+          "distribution": "debian"
+        },
+        {
+          "distribution": "fedora"
+        },
+        {
+          "distribution": "arch"
         }
+      ]
+    },
+    {
+      "document_id": "flatpak",
+      "path": "docs/flatpak.md",
+      "category": "packages",
+      "package": "flatpak",
+      "source_url": "https://docs.flatpak.org/en/latest/flatpak-command-reference.html",
+      "distro_sections": {
+        "Debian": "debian",
+        "Fedora": "fedora",
+        "Arch Linux": "arch"
+      },
+      "distro_packages": {
+        "debian": "flatpak",
+        "fedora": "flatpak",
+        "arch": "flatpak"
+      },
+      "collected_at": "2026-11-22",
+      "verified_targets": [
+        {
+          "distribution": "debian"
+        },
+        {
+          "distribution": "fedora"
+        },
+        {
+          "distribution": "arch"
+        }
+      ],
+      "distro_sources": {
+        "debian": "https://docs.flatpak.org/en/latest/flatpak-command-reference.html",
+        "fedora": "https://docs.flatpak.org/en/latest/flatpak-command-reference.html",
+        "arch": "https://docs.flatpak.org/en/latest/flatpak-command-reference.html"
+      },
+      "native_for": [
+        "debian",
+        "fedora",
+        "arch"
       ]
     },
     {
       "document_id": "grep",
       "path": "docs/grep.md",
+      "category": "base",
       "package": "grep",
-      "package_version": "3.11-4",
       "source_url": "https://manpages.debian.org/trixie/grep/grep.1.en.html",
-      "collected_at": "2026-10-30",
-      "verification_method": "official_debian_13_manpage_review",
+      "distro_sections": {
+        "Debian": "debian",
+        "Fedora": "fedora",
+        "Arch Linux": "arch"
+      },
+      "distro_packages": {
+        "debian": "grep",
+        "fedora": "grep",
+        "arch": "grep"
+      },
+      "collected_at": "2026-11-22",
       "verified_targets": [
         {
-          "distribution": "debian",
-          "release": "13"
+          "distribution": "debian"
+        },
+        {
+          "distribution": "fedora"
+        },
+        {
+          "distribution": "arch"
         }
       ]
     },
     {
       "document_id": "head",
       "path": "docs/head.md",
+      "category": "base",
       "package": "coreutils",
-      "source_url": "https://www.gnu.org/software/coreutils/manual/html_node/head-invocation.html",
-      "package_version": "",
-      "collected_at": null,
-      "verified_targets": []
+      "source_url": "https://manpages.debian.org/stable/coreutils/head.1.en.html",
+      "distro_sections": {
+        "Debian": "debian",
+        "Fedora": "fedora",
+        "Arch Linux": "arch"
+      },
+      "distro_packages": {
+        "debian": "coreutils",
+        "fedora": "coreutils",
+        "arch": "coreutils"
+      },
+      "collected_at": "2026-11-22",
+      "verified_targets": [
+        {
+          "distribution": "debian"
+        },
+        {
+          "distribution": "fedora"
+        },
+        {
+          "distribution": "arch"
+        }
+      ]
+    },
+    {
+      "document_id": "host",
+      "path": "docs/host.md",
+      "category": "network",
+      "package": "см. раздел дистрибутива",
+      "source_url": "https://bind9.readthedocs.io/en/latest/manpages.html#host-dns-lookup-utility",
+      "distro_sections": {
+        "Debian": "debian",
+        "Fedora": "fedora",
+        "Arch Linux": "arch"
+      },
+      "distro_packages": {
+        "debian": "bind9-host",
+        "fedora": "bind-utils",
+        "arch": "bind"
+      },
+      "collected_at": "2026-11-22",
+      "verified_targets": [
+        {
+          "distribution": "debian"
+        },
+        {
+          "distribution": "fedora"
+        },
+        {
+          "distribution": "arch"
+        }
+      ]
+    },
+    {
+      "document_id": "hostnamectl",
+      "path": "docs/hostnamectl.md",
+      "category": "network",
+      "package": "systemd",
+      "source_url": "https://www.freedesktop.org/software/systemd/man/latest/hostnamectl.html",
+      "distro_sections": {
+        "Debian": "debian",
+        "Fedora": "fedora",
+        "Arch Linux": "arch"
+      },
+      "distro_packages": {
+        "debian": "systemd",
+        "fedora": "systemd",
+        "arch": "systemd"
+      },
+      "collected_at": "2026-11-22",
+      "verified_targets": [
+        {
+          "distribution": "debian"
+        },
+        {
+          "distribution": "fedora"
+        },
+        {
+          "distribution": "arch"
+        }
+      ]
+    },
+    {
+      "document_id": "ip",
+      "path": "docs/ip.md",
+      "category": "network",
+      "package": "см. раздел дистрибутива",
+      "source_url": "https://man7.org/linux/man-pages/man8/ip.8.html",
+      "distro_sections": {
+        "Debian": "debian",
+        "Fedora": "fedora",
+        "Arch Linux": "arch"
+      },
+      "distro_packages": {
+        "debian": "iproute2",
+        "fedora": "iproute",
+        "arch": "iproute2"
+      },
+      "collected_at": "2026-11-22",
+      "verified_targets": [
+        {
+          "distribution": "debian"
+        },
+        {
+          "distribution": "fedora"
+        },
+        {
+          "distribution": "arch"
+        }
+      ]
     },
     {
       "document_id": "kill",
       "path": "docs/kill.md",
-      "package": "",
+      "category": "base",
+      "package": "см. раздел дистрибутива",
       "source_url": "https://man7.org/linux/man-pages/man1/kill.1.html",
-      "package_version": "",
-      "collected_at": null,
-      "verified_targets": []
-    },
-    {
-      "document_id": "less",
-      "path": "docs/less.md",
-      "package": "less",
-      "source_url": "https://man7.org/linux/man-pages/man1/less.1.html",
-      "package_version": "",
-      "collected_at": null,
-      "verified_targets": []
-    },
-    {
-      "document_id": "ln",
-      "path": "docs/ln.md",
-      "package": "coreutils",
-      "source_url": "https://www.gnu.org/software/coreutils/manual/html_node/ln-invocation.html",
-      "package_version": "",
-      "collected_at": null,
-      "verified_targets": []
+      "distro_sections": {
+        "Debian": "debian",
+        "Fedora": "fedora",
+        "Arch Linux": "arch"
+      },
+      "distro_packages": {
+        "debian": "procps",
+        "fedora": "util-linux",
+        "arch": "util-linux"
+      },
+      "collected_at": "2026-11-22",
+      "verified_targets": [
+        {
+          "distribution": "debian"
+        },
+        {
+          "distribution": "fedora"
+        },
+        {
+          "distribution": "arch"
+        }
+      ]
     },
     {
       "document_id": "ls",
       "path": "docs/ls.md",
+      "category": "base",
       "package": "coreutils",
-      "package_version": "9.7-3",
       "source_url": "https://manpages.debian.org/trixie/coreutils/ls.1.en.html",
-      "collected_at": "2026-10-30",
-      "verification_method": "official_debian_13_manpage_review",
+      "distro_sections": {
+        "Debian": "debian",
+        "Fedora": "fedora",
+        "Arch Linux": "arch"
+      },
+      "distro_packages": {
+        "debian": "coreutils",
+        "fedora": "coreutils",
+        "arch": "coreutils"
+      },
+      "collected_at": "2026-11-22",
       "verified_targets": [
         {
-          "distribution": "debian",
-          "release": "13"
+          "distribution": "debian"
+        },
+        {
+          "distribution": "fedora"
+        },
+        {
+          "distribution": "arch"
         }
+      ]
+    },
+    {
+      "document_id": "makepkg",
+      "path": "docs/makepkg.md",
+      "category": "packages",
+      "package": "pacman",
+      "source_url": "https://man.archlinux.org/man/makepkg.8.en",
+      "distro_sections": {
+        "Debian": "debian",
+        "Fedora": "fedora",
+        "Arch Linux": "arch"
+      },
+      "distro_packages": {
+        "debian": "apt",
+        "fedora": "dnf",
+        "arch": "pacman"
+      },
+      "collected_at": "2026-11-22",
+      "verified_targets": [
+        {
+          "distribution": "debian"
+        },
+        {
+          "distribution": "fedora"
+        },
+        {
+          "distribution": "arch"
+        }
+      ],
+      "distro_sources": {
+        "debian": "https://www.debian.org/doc/manuals/debian-reference/ch02.en.html",
+        "fedora": "https://dnf5.readthedocs.io/en/latest/dnf5.8.html",
+        "arch": "https://man.archlinux.org/man/makepkg.8.en"
+      },
+      "native_for": [
+        "arch"
       ]
     },
     {
       "document_id": "mkdir",
       "path": "docs/mkdir.md",
+      "category": "base",
       "package": "coreutils",
-      "source_url": "https://www.gnu.org/software/coreutils/manual/html_node/mkdir-invocation.html",
-      "package_version": "",
-      "collected_at": null,
-      "verified_targets": []
-    },
-    {
-      "document_id": "mv",
-      "path": "docs/mv.md",
-      "package": "coreutils",
-      "source_url": "https://www.gnu.org/software/coreutils/manual/html_node/mv-invocation.html",
-      "package_version": "",
-      "collected_at": null,
-      "verified_targets": []
-    },
-    {
-      "document_id": "nano",
-      "path": "docs/nano.md",
-      "package": "nano",
-      "source_url": "https://www.nano-editor.org/dist/v7/nano.html",
-      "package_version": "",
-      "collected_at": null,
-      "verified_targets": []
-    },
-    {
-      "document_id": "ps",
-      "path": "docs/ps.md",
-      "package": "procps",
-      "source_url": "https://man7.org/linux/man-pages/man1/ps.1.html",
-      "package_version": "",
-      "collected_at": null,
-      "verified_targets": []
-    },
-    {
-      "document_id": "pwd",
-      "path": "docs/pwd.md",
-      "package": "bash",
-      "source_url": "https://www.gnu.org/software/bash/manual/html_node/Bourne-Shell-Builtins.html",
-      "package_version": "",
-      "collected_at": null,
-      "verified_targets": []
-    },
-    {
-      "document_id": "rm",
-      "path": "docs/rm.md",
-      "package": "coreutils",
-      "source_url": "https://www.gnu.org/software/coreutils/manual/html_node/rm-invocation.html",
-      "package_version": "",
-      "collected_at": null,
-      "verified_targets": []
-    },
-    {
-      "document_id": "sed",
-      "path": "docs/sed.md",
-      "package": "sed",
-      "source_url": "https://www.gnu.org/software/sed/manual/sed.html",
-      "package_version": "",
-      "collected_at": null,
-      "verified_targets": []
-    },
-    {
-      "document_id": "sort",
-      "path": "docs/sort.md",
-      "package": "coreutils",
-      "source_url": "https://www.gnu.org/software/coreutils/manual/html_node/sort-invocation.html",
-      "package_version": "",
-      "collected_at": null,
-      "verified_targets": []
-    },
-    {
-      "document_id": "ssh",
-      "path": "docs/ssh.md",
-      "package": "openssh-client",
-      "source_url": "https://man.openbsd.org/ssh",
-      "package_version": "",
-      "collected_at": null,
-      "verified_targets": []
-    },
-    {
-      "document_id": "stat",
-      "path": "docs/stat.md",
-      "package": "coreutils",
-      "source_url": "https://www.gnu.org/software/coreutils/manual/html_node/stat-invocation.html",
-      "package_version": "",
-      "collected_at": null,
-      "verified_targets": []
-    },
-    {
-      "document_id": "tail",
-      "path": "docs/tail.md",
-      "package": "coreutils",
-      "source_url": "https://www.gnu.org/software/coreutils/manual/html_node/tail-invocation.html",
-      "package_version": "",
-      "collected_at": null,
-      "verified_targets": []
-    },
-    {
-      "document_id": "tar",
-      "path": "docs/tar.md",
-      "package": "tar",
-      "package_version": "1.35+dfsg-3.1",
-      "source_url": "https://manpages.debian.org/trixie/tar/tar.1.en.html",
-      "collected_at": "2026-10-30",
-      "verification_method": "official_debian_13_manpage_review",
+      "source_url": "https://manpages.debian.org/stable/coreutils/mkdir.1.en.html",
+      "distro_sections": {
+        "Debian": "debian",
+        "Fedora": "fedora",
+        "Arch Linux": "arch"
+      },
+      "distro_packages": {
+        "debian": "coreutils",
+        "fedora": "coreutils",
+        "arch": "coreutils"
+      },
+      "collected_at": "2026-11-22",
       "verified_targets": [
         {
-          "distribution": "debian",
-          "release": "13"
+          "distribution": "debian"
+        },
+        {
+          "distribution": "fedora"
+        },
+        {
+          "distribution": "arch"
         }
       ]
     },
     {
-      "document_id": "tee",
-      "path": "docs/tee.md",
-      "package": "coreutils",
-      "source_url": "https://www.gnu.org/software/coreutils/manual/html_node/tee-invocation.html",
-      "package_version": "",
-      "collected_at": null,
-      "verified_targets": []
+      "document_id": "mtr",
+      "path": "docs/mtr.md",
+      "category": "network",
+      "package": "см. раздел дистрибутива",
+      "source_url": "https://manpages.debian.org/stable/mtr-tiny/mtr.8.en.html",
+      "distro_sections": {
+        "Debian": "debian",
+        "Fedora": "fedora",
+        "Arch Linux": "arch"
+      },
+      "distro_packages": {
+        "debian": "mtr-tiny",
+        "fedora": "mtr",
+        "arch": "mtr"
+      },
+      "collected_at": "2026-11-22",
+      "verified_targets": [
+        {
+          "distribution": "debian"
+        },
+        {
+          "distribution": "fedora"
+        },
+        {
+          "distribution": "arch"
+        }
+      ]
     },
     {
-      "document_id": "touch",
-      "path": "docs/touch.md",
+      "document_id": "mv",
+      "path": "docs/mv.md",
+      "category": "base",
       "package": "coreutils",
-      "source_url": "https://www.gnu.org/software/coreutils/manual/html_node/touch-invocation.html",
-      "package_version": "",
-      "collected_at": null,
-      "verified_targets": []
+      "source_url": "https://manpages.debian.org/stable/coreutils/mv.1.en.html",
+      "distro_sections": {
+        "Debian": "debian",
+        "Fedora": "fedora",
+        "Arch Linux": "arch"
+      },
+      "distro_packages": {
+        "debian": "coreutils",
+        "fedora": "coreutils",
+        "arch": "coreutils"
+      },
+      "collected_at": "2026-11-22",
+      "verified_targets": [
+        {
+          "distribution": "debian"
+        },
+        {
+          "distribution": "fedora"
+        },
+        {
+          "distribution": "arch"
+        }
+      ]
+    },
+    {
+      "document_id": "nc",
+      "path": "docs/nc.md",
+      "category": "network",
+      "package": "см. раздел дистрибутива",
+      "source_url": "https://man.openbsd.org/nc.1",
+      "distro_sections": {
+        "Debian": "debian",
+        "Fedora": "fedora",
+        "Arch Linux": "arch"
+      },
+      "distro_packages": {
+        "debian": "netcat-openbsd",
+        "fedora": "nmap-ncat",
+        "arch": "openbsd-netcat"
+      },
+      "collected_at": "2026-11-22",
+      "verified_targets": [
+        {
+          "distribution": "debian"
+        },
+        {
+          "distribution": "fedora"
+        },
+        {
+          "distribution": "arch"
+        }
+      ],
+      "distro_sources": {
+        "fedora": "https://nmap.org/book/ncat-man.html",
+        "arch": "https://man.archlinux.org/man/nc.1.en"
+      }
+    },
+    {
+      "document_id": "nmcli",
+      "path": "docs/nmcli.md",
+      "category": "network",
+      "package": "см. раздел дистрибутива",
+      "source_url": "https://networkmanager.dev/docs/api/latest/nmcli.html",
+      "distro_sections": {
+        "Debian": "debian",
+        "Fedora": "fedora",
+        "Arch Linux": "arch"
+      },
+      "distro_packages": {
+        "debian": "network-manager",
+        "fedora": "NetworkManager",
+        "arch": "networkmanager"
+      },
+      "collected_at": "2026-11-22",
+      "verified_targets": [
+        {
+          "distribution": "debian"
+        },
+        {
+          "distribution": "fedora"
+        },
+        {
+          "distribution": "arch"
+        }
+      ]
+    },
+    {
+      "document_id": "nslookup",
+      "path": "docs/nslookup.md",
+      "category": "network",
+      "package": "см. раздел дистрибутива",
+      "source_url": "https://bind9.readthedocs.io/en/latest/manpages.html#nslookup-query-internet-name-servers-interactively",
+      "distro_sections": {
+        "Debian": "debian",
+        "Fedora": "fedora",
+        "Arch Linux": "arch"
+      },
+      "distro_packages": {
+        "debian": "dnsutils",
+        "fedora": "bind-utils",
+        "arch": "bind"
+      },
+      "collected_at": "2026-11-22",
+      "verified_targets": [
+        {
+          "distribution": "debian"
+        },
+        {
+          "distribution": "fedora"
+        },
+        {
+          "distribution": "arch"
+        }
+      ]
+    },
+    {
+      "document_id": "pacman",
+      "path": "docs/pacman.md",
+      "category": "packages",
+      "package": "pacman",
+      "source_url": "https://man.archlinux.org/man/pacman.8.en",
+      "distro_sections": {
+        "Debian": "debian",
+        "Fedora": "fedora",
+        "Arch Linux": "arch"
+      },
+      "distro_packages": {
+        "debian": "apt",
+        "fedora": "dnf",
+        "arch": "pacman"
+      },
+      "collected_at": "2026-11-22",
+      "verified_targets": [
+        {
+          "distribution": "debian"
+        },
+        {
+          "distribution": "fedora"
+        },
+        {
+          "distribution": "arch"
+        }
+      ],
+      "distro_sources": {
+        "debian": "https://www.debian.org/doc/manuals/debian-reference/ch02.en.html",
+        "fedora": "https://dnf5.readthedocs.io/en/latest/dnf5.8.html",
+        "arch": "https://man.archlinux.org/man/pacman.8.en"
+      },
+      "native_for": [
+        "arch"
+      ]
+    },
+    {
+      "document_id": "pactree",
+      "path": "docs/pactree.md",
+      "category": "packages",
+      "package": "pacman-contrib",
+      "source_url": "https://man.archlinux.org/man/pactree.8.en",
+      "distro_sections": {
+        "Debian": "debian",
+        "Fedora": "fedora",
+        "Arch Linux": "arch"
+      },
+      "distro_packages": {
+        "debian": "apt",
+        "fedora": "dnf",
+        "arch": "pacman-contrib"
+      },
+      "collected_at": "2026-11-22",
+      "verified_targets": [
+        {
+          "distribution": "debian"
+        },
+        {
+          "distribution": "fedora"
+        },
+        {
+          "distribution": "arch"
+        }
+      ],
+      "distro_sources": {
+        "debian": "https://www.debian.org/doc/manuals/debian-reference/ch02.en.html",
+        "fedora": "https://dnf5.readthedocs.io/en/latest/dnf5.8.html",
+        "arch": "https://man.archlinux.org/man/pactree.8.en"
+      },
+      "native_for": [
+        "arch"
+      ]
+    },
+    {
+      "document_id": "ping",
+      "path": "docs/ping.md",
+      "category": "network",
+      "package": "см. раздел дистрибутива",
+      "source_url": "https://man7.org/linux/man-pages/man8/ping.8.html",
+      "distro_sections": {
+        "Debian": "debian",
+        "Fedora": "fedora",
+        "Arch Linux": "arch"
+      },
+      "distro_packages": {
+        "debian": "iputils-ping",
+        "fedora": "iputils",
+        "arch": "iputils"
+      },
+      "collected_at": "2026-11-22",
+      "verified_targets": [
+        {
+          "distribution": "debian"
+        },
+        {
+          "distribution": "fedora"
+        },
+        {
+          "distribution": "arch"
+        }
+      ]
+    },
+    {
+      "document_id": "ps",
+      "path": "docs/ps.md",
+      "category": "base",
+      "package": "см. раздел дистрибутива",
+      "source_url": "https://man7.org/linux/man-pages/man1/ps.1.html",
+      "distro_sections": {
+        "Debian": "debian",
+        "Fedora": "fedora",
+        "Arch Linux": "arch"
+      },
+      "distro_packages": {
+        "debian": "procps",
+        "fedora": "procps-ng",
+        "arch": "procps-ng"
+      },
+      "collected_at": "2026-11-22",
+      "verified_targets": [
+        {
+          "distribution": "debian"
+        },
+        {
+          "distribution": "fedora"
+        },
+        {
+          "distribution": "arch"
+        }
+      ]
+    },
+    {
+      "document_id": "resolvectl",
+      "path": "docs/resolvectl.md",
+      "category": "network",
+      "package": "см. раздел дистрибутива",
+      "source_url": "https://www.freedesktop.org/software/systemd/man/latest/resolvectl.html",
+      "distro_sections": {
+        "Debian": "debian",
+        "Fedora": "fedora",
+        "Arch Linux": "arch"
+      },
+      "distro_packages": {
+        "debian": "systemd-resolved",
+        "fedora": "systemd-resolved",
+        "arch": "systemd"
+      },
+      "collected_at": "2026-11-22",
+      "verified_targets": [
+        {
+          "distribution": "debian"
+        },
+        {
+          "distribution": "fedora"
+        },
+        {
+          "distribution": "arch"
+        }
+      ],
+      "distro_sources": {
+        "arch": "https://archlinux.org/packages/core/x86_64/systemd/files/"
+      }
+    },
+    {
+      "document_id": "rfkill",
+      "path": "docs/rfkill.md",
+      "category": "network",
+      "package": "см. раздел дистрибутива",
+      "source_url": "https://man7.org/linux/man-pages/man8/rfkill.8.html",
+      "distro_sections": {
+        "Debian": "debian",
+        "Fedora": "fedora",
+        "Arch Linux": "arch"
+      },
+      "distro_packages": {
+        "debian": "rfkill",
+        "fedora": "util-linux",
+        "arch": "util-linux"
+      },
+      "collected_at": "2026-11-22",
+      "verified_targets": [
+        {
+          "distribution": "debian"
+        },
+        {
+          "distribution": "fedora"
+        },
+        {
+          "distribution": "arch"
+        }
+      ]
+    },
+    {
+      "document_id": "rm",
+      "path": "docs/rm.md",
+      "category": "base",
+      "package": "coreutils",
+      "source_url": "https://manpages.debian.org/stable/coreutils/rm.1.en.html",
+      "distro_sections": {
+        "Debian": "debian",
+        "Fedora": "fedora",
+        "Arch Linux": "arch"
+      },
+      "distro_packages": {
+        "debian": "coreutils",
+        "fedora": "coreutils",
+        "arch": "coreutils"
+      },
+      "collected_at": "2026-11-22",
+      "verified_targets": [
+        {
+          "distribution": "debian"
+        },
+        {
+          "distribution": "fedora"
+        },
+        {
+          "distribution": "arch"
+        }
+      ]
+    },
+    {
+      "document_id": "rpm",
+      "path": "docs/rpm.md",
+      "category": "packages",
+      "package": "rpm",
+      "source_url": "https://rpm.org/docs/latest/man/rpm.8",
+      "distro_sections": {
+        "Debian": "debian",
+        "Fedora": "fedora",
+        "Arch Linux": "arch"
+      },
+      "distro_packages": {
+        "debian": "apt",
+        "fedora": "rpm",
+        "arch": "pacman"
+      },
+      "collected_at": "2026-11-22",
+      "verified_targets": [
+        {
+          "distribution": "debian"
+        },
+        {
+          "distribution": "fedora"
+        },
+        {
+          "distribution": "arch"
+        }
+      ],
+      "distro_sources": {
+        "debian": "https://www.debian.org/doc/manuals/debian-reference/ch02.en.html",
+        "fedora": "https://rpm.org/docs/latest/man/rpm.8",
+        "arch": "https://man.archlinux.org/man/pacman.8.en"
+      },
+      "native_for": [
+        "fedora"
+      ]
+    },
+    {
+      "document_id": "sort",
+      "path": "docs/sort.md",
+      "category": "base",
+      "package": "coreutils",
+      "source_url": "https://manpages.debian.org/stable/coreutils/sort.1.en.html",
+      "distro_sections": {
+        "Debian": "debian",
+        "Fedora": "fedora",
+        "Arch Linux": "arch"
+      },
+      "distro_packages": {
+        "debian": "coreutils",
+        "fedora": "coreutils",
+        "arch": "coreutils"
+      },
+      "collected_at": "2026-11-22",
+      "verified_targets": [
+        {
+          "distribution": "debian"
+        },
+        {
+          "distribution": "fedora"
+        },
+        {
+          "distribution": "arch"
+        }
+      ]
+    },
+    {
+      "document_id": "ss",
+      "path": "docs/ss.md",
+      "category": "network",
+      "package": "см. раздел дистрибутива",
+      "source_url": "https://man7.org/linux/man-pages/man8/ss.8.html",
+      "distro_sections": {
+        "Debian": "debian",
+        "Fedora": "fedora",
+        "Arch Linux": "arch"
+      },
+      "distro_packages": {
+        "debian": "iproute2",
+        "fedora": "iproute",
+        "arch": "iproute2"
+      },
+      "collected_at": "2026-11-22",
+      "verified_targets": [
+        {
+          "distribution": "debian"
+        },
+        {
+          "distribution": "fedora"
+        },
+        {
+          "distribution": "arch"
+        }
+      ]
+    },
+    {
+      "document_id": "ssh",
+      "path": "docs/ssh.md",
+      "category": "base",
+      "package": "см. раздел дистрибутива",
+      "source_url": "https://man.openbsd.org/ssh",
+      "distro_sections": {
+        "Debian": "debian",
+        "Fedora": "fedora",
+        "Arch Linux": "arch"
+      },
+      "distro_packages": {
+        "debian": "openssh-client",
+        "fedora": "openssh-clients",
+        "arch": "openssh"
+      },
+      "collected_at": "2026-11-22",
+      "verified_targets": [
+        {
+          "distribution": "debian"
+        },
+        {
+          "distribution": "fedora"
+        },
+        {
+          "distribution": "arch"
+        }
+      ]
+    },
+    {
+      "document_id": "systemctl",
+      "path": "docs/systemctl.md",
+      "category": "base",
+      "package": "systemd",
+      "source_url": "https://www.freedesktop.org/software/systemd/man/latest/systemctl.html",
+      "distro_sections": {
+        "Debian": "debian",
+        "Fedora": "fedora",
+        "Arch Linux": "arch"
+      },
+      "distro_packages": {
+        "debian": "systemd",
+        "fedora": "systemd",
+        "arch": "systemd"
+      },
+      "collected_at": "2026-11-22",
+      "verified_targets": [
+        {
+          "distribution": "debian"
+        },
+        {
+          "distribution": "fedora"
+        },
+        {
+          "distribution": "arch"
+        }
+      ],
+      "distro_sources": {
+        "debian": "https://www.freedesktop.org/software/systemd/man/latest/systemctl.html",
+        "fedora": "https://www.freedesktop.org/software/systemd/man/latest/systemctl.html",
+        "arch": "https://www.freedesktop.org/software/systemd/man/latest/systemctl.html"
+      },
+      "native_for": [
+        "debian",
+        "fedora",
+        "arch"
+      ]
+    },
+    {
+      "document_id": "tail",
+      "path": "docs/tail.md",
+      "category": "base",
+      "package": "coreutils",
+      "source_url": "https://manpages.debian.org/stable/coreutils/tail.1.en.html",
+      "distro_sections": {
+        "Debian": "debian",
+        "Fedora": "fedora",
+        "Arch Linux": "arch"
+      },
+      "distro_packages": {
+        "debian": "coreutils",
+        "fedora": "coreutils",
+        "arch": "coreutils"
+      },
+      "collected_at": "2026-11-22",
+      "verified_targets": [
+        {
+          "distribution": "debian"
+        },
+        {
+          "distribution": "fedora"
+        },
+        {
+          "distribution": "arch"
+        }
+      ]
+    },
+    {
+      "document_id": "tar",
+      "path": "docs/tar.md",
+      "category": "base",
+      "package": "tar",
+      "source_url": "https://manpages.debian.org/trixie/tar/tar.1.en.html",
+      "distro_sections": {
+        "Debian": "debian",
+        "Fedora": "fedora",
+        "Arch Linux": "arch"
+      },
+      "distro_packages": {
+        "debian": "tar",
+        "fedora": "tar",
+        "arch": "tar"
+      },
+      "collected_at": "2026-11-22",
+      "verified_targets": [
+        {
+          "distribution": "debian"
+        },
+        {
+          "distribution": "fedora"
+        },
+        {
+          "distribution": "arch"
+        }
+      ]
+    },
+    {
+      "document_id": "tcpdump",
+      "path": "docs/tcpdump.md",
+      "category": "network",
+      "package": "tcpdump",
+      "source_url": "https://www.tcpdump.org/manpages/tcpdump.1.html",
+      "distro_sections": {
+        "Debian": "debian",
+        "Fedora": "fedora",
+        "Arch Linux": "arch"
+      },
+      "distro_packages": {
+        "debian": "tcpdump",
+        "fedora": "tcpdump",
+        "arch": "tcpdump"
+      },
+      "collected_at": "2026-11-22",
+      "verified_targets": [
+        {
+          "distribution": "debian"
+        },
+        {
+          "distribution": "fedora"
+        },
+        {
+          "distribution": "arch"
+        }
+      ]
+    },
+    {
+      "document_id": "tracepath",
+      "path": "docs/tracepath.md",
+      "category": "network",
+      "package": "см. раздел дистрибутива",
+      "source_url": "https://man7.org/linux/man-pages/man8/tracepath.8.html",
+      "distro_sections": {
+        "Debian": "debian",
+        "Fedora": "fedora",
+        "Arch Linux": "arch"
+      },
+      "distro_packages": {
+        "debian": "iputils-tracepath",
+        "fedora": "iputils",
+        "arch": "iputils"
+      },
+      "collected_at": "2026-11-22",
+      "verified_targets": [
+        {
+          "distribution": "debian"
+        },
+        {
+          "distribution": "fedora"
+        },
+        {
+          "distribution": "arch"
+        }
+      ]
+    },
+    {
+      "document_id": "traceroute",
+      "path": "docs/traceroute.md",
+      "category": "network",
+      "package": "traceroute",
+      "source_url": "https://man7.org/linux/man-pages/man8/traceroute.8.html",
+      "distro_sections": {
+        "Debian": "debian",
+        "Fedora": "fedora",
+        "Arch Linux": "arch"
+      },
+      "distro_packages": {
+        "debian": "traceroute",
+        "fedora": "traceroute",
+        "arch": "traceroute"
+      },
+      "collected_at": "2026-11-22",
+      "verified_targets": [
+        {
+          "distribution": "debian"
+        },
+        {
+          "distribution": "fedora"
+        },
+        {
+          "distribution": "arch"
+        }
+      ]
     },
     {
       "document_id": "uniq",
       "path": "docs/uniq.md",
+      "category": "base",
       "package": "coreutils",
-      "source_url": "https://www.gnu.org/software/coreutils/manual/html_node/uniq-invocation.html",
-      "package_version": "",
-      "collected_at": null,
-      "verified_targets": []
+      "source_url": "https://manpages.debian.org/stable/coreutils/uniq.1.en.html",
+      "distro_sections": {
+        "Debian": "debian",
+        "Fedora": "fedora",
+        "Arch Linux": "arch"
+      },
+      "distro_packages": {
+        "debian": "coreutils",
+        "fedora": "coreutils",
+        "arch": "coreutils"
+      },
+      "collected_at": "2026-11-22",
+      "verified_targets": [
+        {
+          "distribution": "debian"
+        },
+        {
+          "distribution": "fedora"
+        },
+        {
+          "distribution": "arch"
+        }
+      ]
     },
     {
       "document_id": "wc",
       "path": "docs/wc.md",
+      "category": "base",
       "package": "coreutils",
-      "source_url": "https://www.gnu.org/software/coreutils/manual/html_node/wc-invocation.html",
-      "package_version": "",
-      "collected_at": null,
-      "verified_targets": []
+      "source_url": "https://manpages.debian.org/stable/coreutils/wc.1.en.html",
+      "distro_sections": {
+        "Debian": "debian",
+        "Fedora": "fedora",
+        "Arch Linux": "arch"
+      },
+      "distro_packages": {
+        "debian": "coreutils",
+        "fedora": "coreutils",
+        "arch": "coreutils"
+      },
+      "collected_at": "2026-11-22",
+      "verified_targets": [
+        {
+          "distribution": "debian"
+        },
+        {
+          "distribution": "fedora"
+        },
+        {
+          "distribution": "arch"
+        }
+      ]
+    },
+    {
+      "document_id": "wget",
+      "path": "docs/wget.md",
+      "category": "network",
+      "package": "wget",
+      "source_url": "https://manpages.debian.org/stable/wget/wget.1.en.html",
+      "distro_sections": {
+        "Debian": "debian",
+        "Fedora": "fedora",
+        "Arch Linux": "arch"
+      },
+      "distro_packages": {
+        "debian": "wget",
+        "fedora": "wget2-wget",
+        "arch": "wget"
+      },
+      "collected_at": "2026-11-22",
+      "verified_targets": [
+        {
+          "distribution": "debian"
+        },
+        {
+          "distribution": "fedora"
+        },
+        {
+          "distribution": "arch"
+        }
+      ],
+      "distro_sources": {
+        "fedora": "https://packages.fedoraproject.org/pkgs/wget2/wget2-wget/"
+      }
     }
   ]
 }

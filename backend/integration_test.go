@@ -41,7 +41,7 @@ func TestIntegration(t *testing.T) {
 		case "/health":
 			jsonReply(w, 200, map[string]string{"status": "ok"})
 		case "/v1/corpus":
-			fmt.Fprint(w, `{"corpus_version":"test1","distributions":[{"id":"debian","label":"Debian","releases":[{"id":"13","label":"Debian 13"}]}]}`)
+			fmt.Fprint(w, `{"corpus_version":"test1","distributions":[{"id":"debian","label":"Debian"},{"id":"fedora","label":"Fedora"},{"id":"arch","label":"Arch Linux"}]}`)
 		case "/v1/admin/documents":
 			fmt.Fprint(w, `{"corpus_version":"test1","items":[]}`)
 		case "/v1/search":
@@ -52,7 +52,7 @@ func TestIntegration(t *testing.T) {
 			if input.Query == "missing" {
 				fmt.Fprint(w, `{"corpus_version":"test1","items":[]}`)
 			} else {
-				fmt.Fprint(w, `{"corpus_version":"test1","items":[{"chunk_id":"test-chunk","document_id":"find","title":"find","source_url":"https://example.org/find","distribution":"common","release":"*","text":"## Примеры","section":"Примеры","command":"find","package_version":"1"}]}`)
+				fmt.Fprint(w, `{"corpus_version":"test1","items":[{"chunk_id":"test-chunk","document_id":"find","title":"find","source_url":"https://example.org/find","distribution":"common","text":"## Примеры","section":"Примеры","command":"find","package_version":"1"}]}`)
 			}
 		case "/apply-template":
 			fmt.Fprint(w, `{"prompt":"test prompt"}`)
@@ -110,8 +110,19 @@ func TestIntegration(t *testing.T) {
 	admin.json("GET", "/chats", nil, 403, nil)
 	newTestClient(t, app.URL).json("GET", "/chats", nil, 401, nil)
 
+	var distroChat chat
+	other.json("POST", "/chats", map[string]string{"distribution": "fedora", "release": "legacy"}, 201, &distroChat)
+	if distroChat.Distribution != "fedora" {
+		t.Fatalf("expected Fedora chat, got %q", distroChat.Distribution)
+	}
+	other.json("POST", "/chats", target{"arch"}, 201, &distroChat)
+	if distroChat.Distribution != "arch" {
+		t.Fatalf("expected Arch chat, got %q", distroChat.Distribution)
+	}
+	other.json("POST", "/chats", target{"ubuntu"}, 422, nil)
+
 	chats := createTestChats(t, owner, 10)
-	owner.json("POST", "/chats", target{"debian", "13"}, 409, nil)
+	owner.json("POST", "/chats", target{"debian"}, 409, nil)
 	x := createTestChats(t, other, 1)[0]
 	base := func(id uuid.UUID) string { return "/chats/" + id.String() + "/messages" }
 	other.json("GET", base(chats[0]), nil, 404, nil)
@@ -229,7 +240,7 @@ func createTestChats(t *testing.T, c *testClient, n int) []uuid.UUID {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			status, body, err := c.call("POST", "/chats", target{"debian", "13"})
+			status, body, err := c.call("POST", "/chats", target{"debian"})
 			if err != nil || status != 201 {
 				failures <- fmt.Errorf("create chat: %d %s %v", status, body, err)
 				return

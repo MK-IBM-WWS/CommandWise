@@ -21,7 +21,6 @@ paths:
             example:
               query: Как найти обычные файлы больше 100 МиБ?
               distribution: debian
-              release: '13'
               top_k: 5
       responses:
         '200':
@@ -113,7 +112,6 @@ paths:
               - source_url
               - collected_at
               - distribution
-              - release
               properties:
                 file:
                   type: string
@@ -129,8 +127,6 @@ paths:
                 collected_at:
                   type: string
                 distribution:
-                  type: string
-                release:
                   type: string
       responses:
         '201':
@@ -150,48 +146,31 @@ components:
     Target:
       type: object
       properties:
-        distribution: &id002
+        distribution:
           type: string
-          enum:
+          enum: &id001
           - debian
-          - ubuntu
           - fedora
           - arch
-        release: &id003
-          type: string
-          minLength: 1
       required:
       - distribution
-      - release
-      additionalProperties: false
-    Release:
-      type: object
-      properties:
-        id: &id001
-          type: string
-        label: *id001
-      required:
-      - id
-      - label
       additionalProperties: false
     Distribution:
       type: object
       properties:
-        id: *id001
-        label: *id001
-        releases:
-          type: array
-          items:
-            $ref: '#/components/schemas/Release'
+        id:
+          type: string
+          enum: *id001
+        label: &id002
+          type: string
       required:
       - id
       - label
-      - releases
       additionalProperties: false
     CorpusInfo:
       type: object
       properties:
-        corpus_version: *id001
+        corpus_version: *id002
         distributions:
           type: array
           items:
@@ -206,8 +185,8 @@ components:
         error:
           type: object
           properties:
-            code: *id001
-            message: *id001
+            code: *id002
+            message: *id002
             message_id:
               type: string
               format: uuid
@@ -235,7 +214,7 @@ components:
           type: string
           enum:
           - ready
-        corpus_version: *id001
+        corpus_version: *id002
       required:
       - status
       - corpus_version
@@ -247,27 +226,31 @@ components:
           type: string
           minLength: 1
           maxLength: 4000
-        distribution: *id002
-        release: *id003
+        distribution:
+          type: string
+          enum: *id001
         top_k:
           type: integer
           minimum: 1
           maximum: 10
           default: 5
+        release:
+          type: string
+          deprecated: true
+          description: Поле старого клиента, игнорируется.
       required:
       - query
       - distribution
-      - release
       - top_k
       additionalProperties: false
     Chunk:
       type: object
       properties:
-        chunk_id: *id001
-        document_id: *id001
-        command: *id001
-        title: *id001
-        text: *id001
+        chunk_id: *id002
+        document_id: *id002
+        command: *id002
+        title: *id002
+        text: *id002
         source_url:
           type: string
           format: uri
@@ -280,15 +263,13 @@ components:
           enum:
           - common
           - debian
-          - ubuntu
           - fedora
           - arch
-        release: *id001
-        package_version: *id001
-        section: *id001
+        package_version: *id002
+        section: *id002
         collected_at:
           type: string
-          format: date-time
+          format: date
         applies_to:
           type: array
           items:
@@ -302,14 +283,13 @@ components:
       - source_url
       - score
       - distribution
-      - release
       - package_version
       - section
       additionalProperties: false
     SearchResult:
       type: object
       properties:
-        corpus_version: *id001
+        corpus_version: *id002
         items:
           type: array
           items:

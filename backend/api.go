@@ -16,18 +16,13 @@ import (
 
 type target struct {
 	Distribution string `json:"distribution"`
-	Release      string `json:"release"`
 }
 
 type corpusInfo struct {
 	Version       string `json:"corpus_version"`
 	Distributions []struct {
-		ID       string `json:"id"`
-		Label    string `json:"label"`
-		Releases []struct {
-			ID    string `json:"id"`
-			Label string `json:"label"`
-		} `json:"releases"`
+		ID    string `json:"id"`
+		Label string `json:"label"`
 	} `json:"distributions"`
 }
 

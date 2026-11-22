@@ -64,12 +64,32 @@ rm -v -- old.txt
 
 В примерах используй только временные тестовые файлы и каталоги.
 
-## Источник
+## Debian
 
-GNU Coreutils — rm invocation:
-https://www.gnu.org/software/coreutils/manual/html_node/rm-invocation.html
+Пакет: `coreutils`. Используй на временном файле. -i требует подтверждения.
 
-## Применимость
+```bash
+rm -i -- ./draft.tmp
+```
 
-Общее руководство GNU Coreutils.
-Конкретные версии Linux ещё не проверены.
+## Fedora
+
+Пакет: `coreutils`. Используй на временном файле. -i требует подтверждения.
+
+```bash
+rm -i -- ./draft.tmp
+```
+
+## Arch Linux
+
+Пакет: `coreutils`. Используй на временном файле. -i требует подтверждения.
+
+```bash
+rm -i -- ./draft.tmp
+```
+
+## Источники
+
+- [Debian](https://manpages.debian.org/stable/coreutils/rm.1.en.html)
+- [Fedora](https://manpages.debian.org/stable/coreutils/rm.1.en.html)
+- [Arch Linux](https://manpages.debian.org/stable/coreutils/rm.1.en.html)

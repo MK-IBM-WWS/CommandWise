@@ -57,12 +57,32 @@ sort names.txt | uniq -d
 
 Она сравнивает только соседние строки, поэтому часто используется вместе с `sort`.
 
+## Debian
+
+Пакет: `coreutils`. uniq объединяет соседние одинаковые строки, поэтому сначала их сортируют.
+
+```bash
+sort -- names.txt | uniq -c
+```
+
+## Fedora
+
+Пакет: `coreutils`. uniq объединяет соседние одинаковые строки, поэтому сначала их сортируют.
+
+```bash
+sort -- names.txt | uniq -c
+```
+
+## Arch Linux
+
+Пакет: `coreutils`. uniq объединяет соседние одинаковые строки, поэтому сначала их сортируют.
+
+```bash
+sort -- names.txt | uniq -c
+```
+
 ## Источники
 
-GNU Coreutils — uniq invocation:
-https://www.gnu.org/software/coreutils/manual/html_node/uniq-invocation.html
-
-## Применимость
-
-Общая документация GNU Coreutils.
-Версии конкретных дистрибутивов ещё не проверены.
+- [Debian](https://manpages.debian.org/stable/coreutils/uniq.1.en.html)
+- [Fedora](https://manpages.debian.org/stable/coreutils/uniq.1.en.html)
+- [Arch Linux](https://manpages.debian.org/stable/coreutils/uniq.1.en.html)

@@ -7,7 +7,7 @@
 | frontend | React, TypeScript, Vite, Nginx | Интерфейс чата и отдельный интерфейс администратора |
 | backend | Go, net/http, pgx/v5, goose | JWT, история, очередь, SSE, сборка RAG-запроса |
 | search | FastAPI, BM25, multilingual-e5-small ONNX | Поиск по проверенному корпусу, переупорядочивание кандидатов, публикация индекса |
-| llm | llama.cpp CUDA, Qwen3.5-4B Q4_K_M | Два параллельных ответа с общим контекстом 16384 и 8192 токенами на слот |
+| llm | llama.cpp CUDA, Qwen3-14B Q4_K_M | Два параллельных ответа с общим контекстом 8192 и 4096 токенами на слот |
 | postgres | PostgreSQL | Аккаунты, JWT-сессии, чаты, очередь, snapshot источников |
 
 Браузер обращается к Nginx через один origin. Nginx проксирует `/api/v1` в Go. База, Search API и llama-server доступны во внутренней сети Compose. Поиск и эмбедер используют CPU. GPU получает только llama-server.

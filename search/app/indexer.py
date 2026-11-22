@@ -6,6 +6,7 @@ from pathlib import Path
 import shutil
 import uuid
 
+from app.distributions import DISTRIBUTIONS
 from bm25_index import BM25Index
 from bm25_demo import SKIP_SECTIONS, split_sections, tokenize
 
@@ -101,52 +102,38 @@ def build(corpus: Path, output: Path):
             doc_id,
         )
 
+        distro_sections = doc.get("distro_sections", {})
+        section_distribution = None
+        command = doc.get("command", doc_id)
         for heading, section_text in split_sections(content):
-            if heading.lower() in SKIP_SECTIONS:
-                continue
-
-            if not section_text.strip():
+            if heading in DISTRIBUTIONS.values() and heading in distro_sections:
+                section_distribution = distro_sections[heading]
+            if heading.casefold() in SKIP_SECTIONS or not section_text.partition("\n")[2].strip():
                 continue
 
             target_list = doc.get("verified_targets", [])
+            if section_distribution:
+                target_list = [item for item in target_list if item["distribution"] == section_distribution]
+                if not target_list:
+                    raise ValueError(f"Unexpected distribution for {doc_id}: {section_distribution}")
 
-            if target_list and (
-                not doc.get("package_version")
-                or not doc.get("collected_at")
-            ):
-                raise ValueError(
-                    f"Не заполнены сведения о версии: {doc_id}"
-                )
-
-            search_text = (
-                f"{doc_id} {heading} {section_text}"
-            )
-
-            identity = [
-                doc_id,
-                heading,
-                section_text,
-                target_list,
-            ]
-
-            chunk_id = hashlib.sha256(
-                as_bytes(identity)
-            ).hexdigest()[:24]
-
+            search_text = f"{command} {heading} {section_text}"
+            identity = [doc_id, heading, section_text, target_list]
+            chunk_id = hashlib.sha256(as_bytes(identity)).hexdigest()[:24]
             chunks.append({
                 "chunk_id": chunk_id,
                 "document_id": doc_id,
-                "command": doc_id,
+                "command": command,
                 "title": title,
                 "section": heading,
                 "text": section_text,
                 "search_text": search_text,
-                "source_url": doc["source_url"],
-                "distribution": "common",
-                "release": "*",
-                "package_version": doc.get(
-                    "package_version", ""
+                "source_url": doc.get("distro_sources", {}).get(section_distribution, doc["source_url"]),
+                "distribution": section_distribution or (
+                    target_list[0]["distribution"] if len(target_list) == 1 else "common"
                 ),
+                "equivalent_only": bool(doc.get("native_for") and section_distribution not in doc["native_for"]),
+                "package_version": doc.get("package_version", ""),
                 "collected_at": doc.get("collected_at"),
                 "applies_to": target_list,
             })

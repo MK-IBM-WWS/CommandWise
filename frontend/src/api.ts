@@ -1,7 +1,6 @@
 export type Account = { id: string; login: string; role: 'user' | 'admin' }
-export type Target = { distribution: string; release: string }
-export type Release = { id: string; label: string }
-export type Distribution = { id: string; label: string; releases: Release[] }
+export type Target = { distribution: string }
+export type Distribution = { id: string; label: string }
 export type Corpus = { corpus_version: string; distributions: Distribution[] }
 export type Chat = Target & { id: string; title: string; status: 'idle' | 'queued' | 'generating'; created_at: string }
 export type Source = Target & { ref: number; chunk_id: string; document_id: string; title: string; section: string; source_url: string }
@@ -98,5 +97,5 @@ export function newRequestID() {
   return [hex.slice(0, 8), hex.slice(8, 12), hex.slice(12, 16), hex.slice(16, 20), hex.slice(20)].join('-')
 }
 
-export const distributionNames: Record<string,string> = { debian: 'Debian', ubuntu: 'Ubuntu', fedora: 'Fedora', arch: 'Arch Linux' }
-export const targetLabel = (value: Target) => `${distributionNames[value.distribution] ?? value.distribution} · ${value.release}`
+export const distributionNames: Record<string,string> = { debian: 'Debian', fedora: 'Fedora', arch: 'Arch Linux' }
+export const targetLabel = (value: Target) => distributionNames[value.distribution] ?? value.distribution

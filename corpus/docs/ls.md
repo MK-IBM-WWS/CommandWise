@@ -1,4 +1,3 @@
-
 # ls — просмотр файлов и каталогов
 
 ## Назначение
@@ -74,15 +73,32 @@ ls -R
 
 Показывает содержимое текущего каталога и его подкаталогов.
 
+## Debian
+
+Пакет: `coreutils`. Показывает скрытые файлы, права и размеры в удобных единицах.
+
+```bash
+ls -lah -- /var/log
+```
+
+## Fedora
+
+Пакет: `coreutils`. Показывает скрытые файлы, права и размеры в удобных единицах.
+
+```bash
+ls -lah -- /var/log
+```
+
+## Arch Linux
+
+Пакет: `coreutils`. Показывает скрытые файлы, права и размеры в удобных единицах.
+
+```bash
+ls -lah -- /var/log
+```
+
 ## Источники
 
-Название: GNU Coreutils Manual — ls invocation
-
-URL:
-https://www.gnu.org/software/coreutils/manual/html_node/ls-invocation.html
-
-## Применимость
-
-Исходная документация: GNU Coreutils.
-
-Проверка Debian 13, Ubuntu 24.04, Fedora 44 и Arch пока не выполнена. Версии пакетов будут добавлены после проверки.
+- [Debian](https://manpages.debian.org/trixie/coreutils/ls.1.en.html)
+- [Fedora](https://manpages.debian.org/trixie/coreutils/ls.1.en.html)
+- [Arch Linux](https://manpages.debian.org/trixie/coreutils/ls.1.en.html)

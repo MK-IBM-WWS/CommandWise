@@ -64,7 +64,6 @@ export function ChatPage({ account, logout }: { account: Account; logout: () => 
   const [chatErrors, setChatErrors] = useState<Record<string, string>>({})
   const [sidebar, setSidebar] = useState(false)
   const [distribution, setDistribution] = useState('')
-  const [release, setRelease] = useState('')
   const [creating, setCreating] = useState(false)
   const [stopping, setStopping] = useState(false)
   const [source, setSource] = useState<Snapshot>()
@@ -84,7 +83,6 @@ export function ChatPage({ account, logout }: { account: Account; logout: () => 
   const liveAlreadySaved = messages.some(message => message.id === currentLive?.id)
   const pendingID = pending?.id ?? (!liveAlreadySaved && activeStatus(currentLive?.status) ? currentLive.id : undefined)
   const busy = Boolean(sending[chatID] || pendingID || activeStatus(current?.status))
-  const options = corpus?.distributions.find(item => item.id === distribution)?.releases ?? []
 
   function select(id: string) {
     const previous = connections.current.get(selected.current)
@@ -164,7 +162,6 @@ export function ChatPage({ account, logout }: { account: Account; logout: () => 
       const first = actual.distributions[0]
       setCorpus(actual)
       setDistribution(first?.id ?? '')
-      setRelease(first?.releases[0]?.id ?? '')
       newDialog.current?.showModal()
     } catch (err) { setError(errorText(err)) }
   }
@@ -174,7 +171,7 @@ export function ChatPage({ account, logout }: { account: Account; logout: () => 
     setCreating(true)
     setError('')
     try {
-      const newChat = await api<Chat>('/chats', json({ distribution, release }))
+      const newChat = await api<Chat>('/chats', json({ distribution }))
       setChats(items => [newChat, ...items.filter(item => item.id !== newChat.id)])
       select(newChat.id)
       newDialog.current?.close()
@@ -350,16 +347,11 @@ export function ChatPage({ account, logout }: { account: Account; logout: () => 
       <form onSubmit={create}>
         <h2>Новый чат</h2>
         <p className="sub">Выберите систему, по которой будете задавать вопросы.</p>
-        <label className="field">Дистрибутив<select value={distribution} required onChange={event => {
-          const value = event.target.value
-          setDistribution(value)
-          setRelease(corpus?.distributions.find(item => item.id === value)?.releases[0]?.id ?? '')
-        }}>{corpus?.distributions.map(item => <option key={item.id} value={item.id}>{item.label}</option>)}</select></label>
-        <label className="field">Версия<select value={release} required onChange={event => setRelease(event.target.value)}>
-          {options.map(item => <option key={item.id} value={item.id}>{item.label}</option>)}
+        <label className="field">Дистрибутив<select value={distribution} required onChange={event => setDistribution(event.target.value)}>
+          {corpus?.distributions.map(item => <option key={item.id} value={item.id}>{item.label}</option>)}
         </select></label>
         <div className="actions"><button className="btn ghost" type="button" onClick={() => newDialog.current?.close()}>Отмена</button>
-          <button className="btn" disabled={creating || !release}>Создать чат</button></div>
+          <button className="btn" disabled={creating || !distribution}>Создать чат</button></div>
       </form>
     </dialog>
     <dialog className="source-dialog" ref={sourceDialog} onClose={() => sourceRequest.current?.abort()}>

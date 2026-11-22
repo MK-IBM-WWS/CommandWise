@@ -61,12 +61,32 @@ sort names.txt -o sorted.txt
 
 Записывает результат в `sorted.txt`.
 
+## Debian
+
+Пакет: `coreutils`. -n сортирует по числовому значению. Для текстовых данных порядок зависит от локали.
+
+```bash
+sort -n -- numbers.txt
+```
+
+## Fedora
+
+Пакет: `coreutils`. -n сортирует по числовому значению. Для текстовых данных порядок зависит от локали.
+
+```bash
+sort -n -- numbers.txt
+```
+
+## Arch Linux
+
+Пакет: `coreutils`. -n сортирует по числовому значению. Для текстовых данных порядок зависит от локали.
+
+```bash
+sort -n -- numbers.txt
+```
+
 ## Источники
 
-GNU Coreutils — sort invocation:
-https://www.gnu.org/software/coreutils/manual/html_node/sort-invocation.html
-
-## Применимость
-
-Общая документация GNU Coreutils.
-Версии конкретных дистрибутивов ещё не проверены.
+- [Debian](https://manpages.debian.org/stable/coreutils/sort.1.en.html)
+- [Fedora](https://manpages.debian.org/stable/coreutils/sort.1.en.html)
+- [Arch Linux](https://manpages.debian.org/stable/coreutils/sort.1.en.html)

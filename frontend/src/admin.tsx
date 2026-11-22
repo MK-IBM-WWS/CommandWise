@@ -57,7 +57,6 @@ export function AdminPage({ account, logout }: { account: Account; logout: () =>
             <label className="field">Пакет<input name="package" maxLength={80} required /></label>
             <label className="field">Версия пакета<input name="package_version" maxLength={80} required /></label>
             <label className="field">Дистрибутив<select name="distribution" defaultValue="debian">{Object.entries(distributionNames).map(([id, name]) => <option key={id} value={id}>{name}</option>)}</select></label>
-            <label className="field">Версия дистрибутива<input name="release" maxLength={48} defaultValue="13" required /></label>
             <label className="field">Ссылка на оригинал<input name="source_url" type="url" placeholder="https://…" maxLength={2048} required /></label>
             <label className="field">Дата проверки<input name="collected_at" type="date" defaultValue={dateToday()} required /></label>
           </div>

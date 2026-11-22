@@ -4,7 +4,6 @@ import json
 import logging
 import os
 from pathlib import Path
-from typing import Literal
 
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
@@ -15,6 +14,7 @@ from starlette.exceptions import HTTPException
 from pydantic import BaseModel, ConfigDict, Field
 from bm25_index import BM25Index
 
+from app.distributions import DISTRIBUTIONS
 from app.corpus_store import CorpusStore, DocumentExists, InvalidDocument, MAX_UPLOAD, validate
 from bm25_demo import search, tokenize
 
@@ -36,14 +36,8 @@ class SearchRequest(BaseModel):
 
     query: str = Field(min_length=1, max_length=4000)
 
-    distribution: Literal[
-        "debian",
-        "ubuntu",
-        "fedora",
-        "arch"
-    ]
-
-    release: str = Field(min_length=1)
+    distribution: str = Field(min_length=1, max_length=32)
+    release: str | None = None  # Accepted for older API clients.
 
     top_k: int = Field(ge=1, le=10)
 
@@ -151,7 +145,7 @@ def validation_error(request: Request, exc: RequestValidationError):
     return error(
         422,
         "INVALID_REQUEST",
-        "Проверь поля query, distribution, release, top_k"
+        "Проверь поля query, distribution, top_k"
     )
 
 
@@ -188,32 +182,22 @@ def corpus(request: Request):
             "Поисковый индекс не загружен"
         )
 
-    groups = {}
-
-    for target in index["meta"]["supported_targets"]:
-        distribution = target["distribution"]
-
-        groups.setdefault(distribution, []).append({
-            "id": target["release"],
-            "label": target.get(
-                "label",
-                target["release"]
-            )
-        })
-
+    available = {item["distribution"] for item in index["meta"]["supported_targets"]}
     distributions = [
-        {
-            "id": distribution,
-            "label": distribution.capitalize(),
-            "releases": releases
-        }
-        for distribution, releases in sorted(groups.items())
+        {"id": key, "label": name}
+        for key, name in DISTRIBUTIONS.items()
+        if key in available
     ]
 
     return {
         "corpus_version": index["meta"]["corpus_version"],
         "distributions": distributions
     }
+
+
+PACKAGE_MANAGERS = {"debian": "apt", "fedora": "dnf", "arch": "pacman"}
+PACKAGE_TERMS = set(tokenize("пакет пакеты репозиторий репозитории"))
+UPGRADE_TERMS = set(tokenize("обновить обновление обновлять обнови обновляется"))
 
 
 def retrieve(index, query, target, embedder=None):
@@ -225,16 +209,23 @@ def retrieve(index, query, target, embedder=None):
     )
 
     # Явно указанная команда должна присутствовать в корпусе выбранной системы.
-    named_commands = index["commands"].intersection(tokenize(query))
+    terms = set(tokenize(query))
+    named_commands = index["commands"].intersection(terms)
+    distribution = target["distribution"]
     compatible = [
         item
         for item in ranked
-        if target in item["applies_to"] and (not named_commands or item["command"] in named_commands)
+        if any(saved["distribution"] == distribution for saved in item["applies_to"])
+        and (item["command"] in named_commands if named_commands else not item.get("equivalent_only"))
     ]
+
 
     if embedder:
         compatible = embedder.rerank(query, compatible[:20], index["vectors"])
 
+    if not named_commands and terms & PACKAGE_TERMS and terms & UPGRADE_TERMS:
+        package_command = PACKAGE_MANAGERS.get(distribution)
+        compatible.sort(key=lambda item: item["command"] != package_command)
     return compatible
 
 
@@ -256,20 +247,12 @@ def search_endpoint(payload: SearchRequest, request: Request):
             "Вопрос не должен быть пустым"
         )
 
-    target = {
-        "distribution": payload.distribution,
-        "release": payload.release
-    }
-
+    target = {"distribution": payload.distribution}
     supported = any(
-        all(
-            saved.get(key) == value
-            for key, value in target.items()
-        )
-        for saved in index["meta"]["supported_targets"]
+        item["distribution"] == payload.distribution for item in index["meta"]["supported_targets"]
     )
 
-    if not supported:
+    if payload.distribution not in DISTRIBUTIONS or not supported:
         return error(
             422,
             "UNSUPPORTED_TARGET",
@@ -290,10 +273,9 @@ def search_endpoint(payload: SearchRequest, request: Request):
             "source_url": item["source_url"],
             "score": item["final_score"],
             "distribution": item["distribution"],
-            "release": item["release"],
             "package_version": item["package_version"],
             "section": item["section"],
-            "applies_to": item["applies_to"],
+            "applies_to": [{"distribution": target["distribution"]} for target in item["applies_to"]],
         }
 
         if item["collected_at"]:
@@ -314,6 +296,8 @@ def documents(request: Request):
         return error(503, "INDEX_NOT_READY", "Индекс недоступен для записи.")
     keys = ("document_id", "package", "package_version", "source_url", "collected_at", "verified_targets")
     items = [{key: item.get(key) or ([] if key == "verified_targets" else "") for key in keys} for item in index["documents"]]
+    for item in items:
+        item["verified_targets"] = [{"distribution": value["distribution"]} for value in item["verified_targets"]]
     return {"corpus_version": index["meta"]["corpus_version"], "items": items}
 
 

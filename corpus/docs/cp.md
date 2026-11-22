@@ -65,12 +65,32 @@ cp -i report.txt backup.txt
 
 Перед копированием проверяй целевой путь: существующий файл может быть перезаписан.
 
-## Источник
+## Debian
 
-GNU Coreutils — cp invocation:
-https://www.gnu.org/software/coreutils/manual/html_node/cp-invocation.html
+Пакет: `coreutils`. Флаг -i запрашивает подтверждение перед перезаписью.
 
-## Применимость
+```bash
+cp -i -- report.txt report-copy.txt
+```
 
-Общее руководство GNU Coreutils.
-Конкретные версии Linux ещё не проверены.
+## Fedora
+
+Пакет: `coreutils`. Флаг -i запрашивает подтверждение перед перезаписью.
+
+```bash
+cp -i -- report.txt report-copy.txt
+```
+
+## Arch Linux
+
+Пакет: `coreutils`. Флаг -i запрашивает подтверждение перед перезаписью.
+
+```bash
+cp -i -- report.txt report-copy.txt
+```
+
+## Источники
+
+- [Debian](https://manpages.debian.org/stable/coreutils/cp.1.en.html)
+- [Fedora](https://manpages.debian.org/stable/coreutils/cp.1.en.html)
+- [Arch Linux](https://manpages.debian.org/stable/coreutils/cp.1.en.html)

@@ -1,4 +1,3 @@
-
 # chmod — изменение прав доступа
 
 ## Назначение
@@ -116,13 +115,32 @@ chmod -R u+rwX project/
 
 Не рекомендуется без необходимости задавать права `777`, особенно в общедоступных каталогах.
 
+## Debian
+
+Пакет: `coreutils`. Режимы 644 и 755 используют одинаковый синтаксис GNU chmod.
+
+```bash
+chmod u+x script.sh
+```
+
+## Fedora
+
+Пакет: `coreutils`. Режимы 644 и 755 используют одинаковый синтаксис GNU chmod.
+
+```bash
+chmod u+x script.sh
+```
+
+## Arch Linux
+
+Пакет: `coreutils`. Режимы 644 и 755 используют одинаковый синтаксис GNU chmod.
+
+```bash
+chmod u+x script.sh
+```
+
 ## Источники
 
-GNU Coreutils — chmod invocation:
-https://www.gnu.org/software/coreutils/manual/html_node/chmod-invocation.html
-
-## Применимость
-
-Реализация: GNU Coreutils.
-
-Подтверждение конкретных версий пакетов и дистрибутивов пока не выполнено.
+- [Debian](https://manpages.debian.org/trixie/coreutils/chmod.1.en.html)
+- [Fedora](https://manpages.debian.org/trixie/coreutils/chmod.1.en.html)
+- [Arch Linux](https://manpages.debian.org/trixie/coreutils/chmod.1.en.html)

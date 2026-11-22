@@ -55,7 +55,6 @@ paths:
               $ref: '#/components/schemas/CreateChat'
             example:
               distribution: debian
-              release: '13'
               title: Новый чат
       responses:
         '201':
@@ -131,7 +130,7 @@ paths:
           description: 'SSE: status, sources, token, done или error'
           content:
             text/event-stream:
-              schema: &id007
+              schema: &id006
                 type: string
         '400':
           description: Невалидный вопрос/JSON
@@ -182,7 +181,7 @@ paths:
     - name: chunk_id
       in: path
       required: true
-      schema: &id004
+      schema: &id005
         type: string
     get:
       operationId: getSourceSnapshot
@@ -467,47 +466,30 @@ components:
     Target:
       type: object
       properties:
-        distribution: &id005
+        distribution:
           type: string
-          enum:
+          enum: &id004
           - debian
-          - ubuntu
           - fedora
           - arch
-        release: &id006
-          type: string
-          minLength: 1
       required:
       - distribution
-      - release
-      additionalProperties: false
-    Release:
-      type: object
-      properties:
-        id: *id004
-        label: *id004
-      required:
-      - id
-      - label
       additionalProperties: false
     Distribution:
       type: object
       properties:
-        id: *id004
-        label: *id004
-        releases:
-          type: array
-          items:
-            $ref: '#/components/schemas/Release'
+        id:
+          type: string
+          enum: *id004
+        label: *id005
       required:
       - id
       - label
-      - releases
       additionalProperties: false
     CorpusInfo:
       type: object
       properties:
-        corpus_version: *id004
+        corpus_version: *id005
         distributions:
           type: array
           items:
@@ -522,8 +504,8 @@ components:
         error:
           type: object
           properties:
-            code: *id004
-            message: *id004
+            code: *id005
+            message: *id005
             message_id: *id001
           required:
           - code
@@ -549,7 +531,7 @@ components:
           type: string
           enum:
           - ready
-        corpus_version: *id004
+        corpus_version: *id005
       required:
       - status
       - corpus_version
@@ -557,24 +539,33 @@ components:
     CreateChat:
       type: object
       properties:
-        distribution: *id005
-        release: *id006
+        distribution:
+          type: string
+          enum: *id004
         title:
           type: string
           maxLength: 120
           default: Новый чат
+        release:
+          type: string
+          deprecated: true
+          description: Поле старого клиента, игнорируется.
       required:
       - distribution
-      - release
       additionalProperties: false
     Chat:
       type: object
       properties:
         id: *id001
-        distribution: *id005
-        release: *id004
-        title: *id004
-        created_at: &id008
+        distribution:
+          type: string
+          enum:
+          - debian
+          - ubuntu
+          - fedora
+          - arch
+        title: *id005
+        created_at: &id007
           type: string
           format: date-time
         status:
@@ -586,7 +577,6 @@ components:
       required:
       - id
       - distribution
-      - release
       - title
       - status
       - created_at
@@ -597,15 +587,14 @@ components:
         ref:
           type: integer
           minimum: 1
-        chunk_id: *id004
-        document_id: *id004
-        title: *id004
+        chunk_id: *id005
+        document_id: *id005
+        title: *id005
         source_url:
           type: string
           format: uri
-        distribution: *id004
-        release: *id004
-        section: *id007
+        distribution: *id005
+        section: *id006
       required:
       - ref
       - chunk_id
@@ -613,7 +602,6 @@ components:
       - title
       - source_url
       - distribution
-      - release
       additionalProperties: false
     SourceSnapshot:
       type: object
@@ -621,20 +609,19 @@ components:
         ref:
           type: integer
           minimum: 1
-        chunk_id: *id004
-        document_id: *id004
-        title: *id004
+        chunk_id: *id005
+        document_id: *id005
+        title: *id005
         source_url:
           type: string
           format: uri
-        distribution: *id004
-        release: *id004
-        text: *id004
-        command: *id004
-        section: *id004
-        package_version: *id004
-        corpus_version: *id004
-        collected_at: *id007
+        distribution: *id005
+        text: *id005
+        command: *id005
+        section: *id005
+        package_version: *id005
+        corpus_version: *id005
+        collected_at: *id006
       required:
       - ref
       - chunk_id
@@ -642,7 +629,6 @@ components:
       - title
       - source_url
       - distribution
-      - release
       - text
       - command
       - section
@@ -658,7 +644,7 @@ components:
           enum:
           - user
           - assistant
-        content: *id004
+        content: *id005
         status:
           type: string
           enum:
@@ -671,10 +657,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SourceCard'
-        created_at: *id008
-        error: *id007
-        finish_reason: *id007
-        corpus_version: *id007
+        created_at: *id007
+        error: *id006
+        finish_reason: *id006
+        corpus_version: *id006
       required:
       - id
       - role
@@ -722,7 +708,7 @@ components:
       type: object
       properties:
         message_id: *id001
-        corpus_version: *id004
+        corpus_version: *id005
         sources:
           type: array
           items:
@@ -735,7 +721,7 @@ components:
     SseToken:
       type: object
       properties:
-        delta: *id004
+        delta: *id005
       required:
       - delta
       additionalProperties: false
@@ -757,8 +743,8 @@ components:
     SseError:
       type: object
       properties:
-        code: *id004
-        message: *id004
+        code: *id005
+        message: *id005
       required:
       - code
       - message
@@ -787,7 +773,7 @@ components:
         id:
           type: string
           format: uuid
-        login: *id007
+        login: *id006
         role:
           type: string
           enum:
@@ -812,16 +798,16 @@ components:
       - source_url
       - collected_at
       - distribution
-      - release
       - file
       properties:
-        document_id: *id007
-        package: *id007
-        package_version: *id007
-        source_url: *id007
-        collected_at: *id007
-        distribution: *id007
-        release: *id007
+        document_id: *id006
+        package: *id006
+        package_version: *id006
+        source_url: *id006
+        collected_at: *id006
+        distribution:
+          type: string
+          enum: *id004
         file:
           type: string
           format: binary
@@ -835,11 +821,11 @@ components:
       - source_url
       - verified_targets
       properties:
-        document_id: *id007
-        package: *id007
-        package_version: *id007
-        source_url: *id007
-        collected_at: *id007
+        document_id: *id006
+        package: *id006
+        package_version: *id006
+        source_url: *id006
+        collected_at: *id006
         verified_targets:
           type: array
           items:
@@ -850,7 +836,7 @@ components:
       - corpus_version
       - items
       properties:
-        corpus_version: *id007
+        corpus_version: *id006
         items:
           type: array
           items:
@@ -861,8 +847,8 @@ components:
       - corpus_version
       - document_id
       properties:
-        corpus_version: *id007
-        document_id: *id007
+        corpus_version: *id006
+        document_id: *id006
     SseStatus:
       type: object
       required:

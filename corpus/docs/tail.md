@@ -53,12 +53,32 @@ tail -F app.log
 
 Продолжает попытки отслеживать файл по имени, даже если он был заменён или временно отсутствует.
 
+## Debian
+
+Пакет: `coreutils`. -F повторно открывает файл по имени, что удобно при ротации журнала.
+
+```bash
+tail -F -- app.log
+```
+
+## Fedora
+
+Пакет: `coreutils`. -F повторно открывает файл по имени, что удобно при ротации журнала.
+
+```bash
+tail -F -- app.log
+```
+
+## Arch Linux
+
+Пакет: `coreutils`. -F повторно открывает файл по имени, что удобно при ротации журнала.
+
+```bash
+tail -F -- app.log
+```
+
 ## Источники
 
-GNU Coreutils — tail invocation:
-https://www.gnu.org/software/coreutils/manual/html_node/tail-invocation.html
-
-## Применимость
-
-Общая документация GNU Coreutils.
-Версии конкретных дистрибутивов ещё не проверены.
+- [Debian](https://manpages.debian.org/stable/coreutils/tail.1.en.html)
+- [Fedora](https://manpages.debian.org/stable/coreutils/tail.1.en.html)
+- [Arch Linux](https://manpages.debian.org/stable/coreutils/tail.1.en.html)

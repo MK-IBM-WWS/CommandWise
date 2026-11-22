@@ -72,12 +72,32 @@ ssh student@server.example.com "hostname"
 
 Не передавай закрытый SSH-ключ другим пользователям и не сохраняй его в Git.
 
+## Debian
+
+Пакет: `openssh-client`. Этот пакет устанавливает клиент SSH. Сверь отпечаток сервера. Для клиента порт задаётся строчной -p.
+
+```bash
+ssh -p 2222 user@example.com
+```
+
+## Fedora
+
+Пакет: `openssh-clients`. Этот пакет устанавливает клиент SSH. Сверь отпечаток сервера. Для клиента порт задаётся строчной -p.
+
+```bash
+ssh -p 2222 user@example.com
+```
+
+## Arch Linux
+
+Пакет: `openssh`. Этот пакет содержит и клиент, и сервер. Сверь отпечаток сервера. Для клиента порт задаётся строчной -p.
+
+```bash
+ssh -p 2222 user@example.com
+```
+
 ## Источники
 
-OpenSSH ssh(1):
-https://man.openbsd.org/ssh
-
-## Применимость
-
-Общая документация OpenSSH.
-Конкретная версия клиента Debian 13 ещё не проверена.
+- [Debian](https://man.openbsd.org/ssh)
+- [Fedora](https://man.openbsd.org/ssh)
+- [Arch Linux](https://man.openbsd.org/ssh)

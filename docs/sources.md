@@ -21,10 +21,10 @@
 - Tailscale: https://tailscale.com/docs/reference/connection-types
 - Go: https://pkg.go.dev/net/http
 - FastAPI: https://fastapi.tiangolo.com/tutorial/
-- rank-bm25: https://github.com/dorianbrown/rank_bm25
+- Qwen3-14B GGUF: https://huggingface.co/Qwen/Qwen3-14B-GGUF
+- multilingual-e5-small: https://huggingface.co/intfloat/multilingual-e5-small
 - React/Vite: https://react.dev/learn и https://vite.dev/guide/
 - Ollama GPU/API: https://docs.ollama.com/gpu и https://docs.ollama.com/api/openai-compatibility
-- Qwen GGUF: https://huggingface.co/Qwen/Qwen2.5-7B-Instruct-GGUF
 
 ## Источники будущего corpus
 

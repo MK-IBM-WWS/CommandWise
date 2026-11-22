@@ -58,12 +58,32 @@ du -ah documents/
 
 Для проверки свободного места на файловых системах используется другая команда — `df`.
 
+## Debian
+
+Пакет: `coreutils`. -s выводит итог по каталогу, -h выбирает удобные единицы.
+
+```bash
+du -sh -- ~/Documents
+```
+
+## Fedora
+
+Пакет: `coreutils`. -s выводит итог по каталогу, -h выбирает удобные единицы.
+
+```bash
+du -sh -- ~/Documents
+```
+
+## Arch Linux
+
+Пакет: `coreutils`. -s выводит итог по каталогу, -h выбирает удобные единицы.
+
+```bash
+du -sh -- ~/Documents
+```
+
 ## Источники
 
-GNU Coreutils — du invocation:
-https://www.gnu.org/software/coreutils/manual/html_node/du-invocation.html
-
-## Применимость
-
-Общая документация GNU Coreutils.
-Версии конкретных дистрибутивов ещё не проверены.
+- [Debian](https://manpages.debian.org/stable/coreutils/du.1.en.html)
+- [Fedora](https://manpages.debian.org/stable/coreutils/du.1.en.html)
+- [Arch Linux](https://manpages.debian.org/stable/coreutils/du.1.en.html)

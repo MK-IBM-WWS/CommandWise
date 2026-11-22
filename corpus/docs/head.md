@@ -51,12 +51,32 @@ head -n 5 first.txt second.txt
 
 Показывает первые пять строк каждого файла.
 
+## Debian
+
+Пакет: `coreutils`. -n задаёт число строк с начала файла.
+
+```bash
+head -n 20 -- app.log
+```
+
+## Fedora
+
+Пакет: `coreutils`. -n задаёт число строк с начала файла.
+
+```bash
+head -n 20 -- app.log
+```
+
+## Arch Linux
+
+Пакет: `coreutils`. -n задаёт число строк с начала файла.
+
+```bash
+head -n 20 -- app.log
+```
+
 ## Источники
 
-GNU Coreutils — head invocation:
-https://www.gnu.org/software/coreutils/manual/html_node/head-invocation.html
-
-## Применимость
-
-Общая документация GNU Coreutils.
-Версии конкретных дистрибутивов ещё не проверены.
+- [Debian](https://manpages.debian.org/stable/coreutils/head.1.en.html)
+- [Fedora](https://manpages.debian.org/stable/coreutils/head.1.en.html)
+- [Arch Linux](https://manpages.debian.org/stable/coreutils/head.1.en.html)

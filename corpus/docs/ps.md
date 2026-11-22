@@ -68,12 +68,32 @@ ps -p 1234 -o pid,ppid,cmd
 
 Синтаксис `ps aux` отличается от `ps -aux`: в Linux смешение BSD и UNIX-форматов может менять смысл параметров.
 
+## Debian
+
+Пакет: `procps`. -e выбирает все процессы, -o задаёт поля вывода.
+
+```bash
+ps -eo pid,ppid,user,comm
+```
+
+## Fedora
+
+Пакет: `procps-ng`. -e выбирает все процессы, -o задаёт поля вывода.
+
+```bash
+ps -eo pid,ppid,user,comm
+```
+
+## Arch Linux
+
+Пакет: `procps-ng`. -e выбирает все процессы, -o задаёт поля вывода.
+
+```bash
+ps -eo pid,ppid,user,comm
+```
+
 ## Источники
 
-Linux ps(1):
-https://man7.org/linux/man-pages/man1/ps.1.html
-
-## Применимость
-
-Документация для реализации procps-ng.
-Конкретная версия Debian 13 ещё не проверена.
+- [Debian](https://man7.org/linux/man-pages/man1/ps.1.html)
+- [Fedora](https://man7.org/linux/man-pages/man1/ps.1.html)
+- [Arch Linux](https://man7.org/linux/man-pages/man1/ps.1.html)
