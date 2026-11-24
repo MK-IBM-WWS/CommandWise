@@ -2,8 +2,18 @@ services:
   frontend:
     build:
       context: ./frontend
+    environment:
+      CW_DOMAIN: "${CW_DOMAIN:-commandwise.invalid}"
+      NGINX_ENVSUBST_FILTER: "^CW_DOMAIN"
     ports:
-      - "${CW_BIND:-127.0.0.1}:${CW_PORT:-8080}:80"
+      - "443:443"
+    volumes:
+      - type: bind
+        source: ./.commandwise/tls
+        target: /etc/nginx/tls
+        read_only: true
+        bind:
+          create_host_path: false
     depends_on:
       backend:
         condition: service_started
@@ -15,8 +25,8 @@ services:
     environment:
       DATABASE_URL: postgres://commandwise:${POSTGRES_PASSWORD:?run install-debian.sh}@postgres:5432/commandwise?sslmode=disable
       JWT_SECRET: ${JWT_SECRET:?run install-debian.sh}
-      COOKIE_SECURE: "${COOKIE_SECURE:-false}"
-      PUBLIC_ORIGIN: "${PUBLIC_ORIGIN:-}"
+      COOKIE_SECURE: "true"
+      PUBLIC_ORIGIN: "https://${CW_DOMAIN:-commandwise.invalid}"
       SEARCH_URL: http://search:8000
       LLM_URL: http://llm:8080
       LLM_MODEL: qwen3-14b

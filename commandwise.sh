@@ -4,8 +4,8 @@ set -euo pipefail
 root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 config="$root/.commandwise/compose.env"
 
-# The deployment file is authoritative for the database credential.
-unset POSTGRES_PASSWORD
+# The deployment file is authoritative for the database credential and TLS name.
+unset POSTGRES_PASSWORD CW_DOMAIN
 
 docker_args=(docker --host unix:///var/run/docker.sock)
 if (( EUID != 0 )); then

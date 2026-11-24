@@ -3,24 +3,53 @@ set -euo pipefail
 
 root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$root"
+source "$root/infra/https.sh"
 
 # Keep configuration private. Model files remain readable by the containers.
 state="$root/.commandwise"
 mkdir -p "$state/models/llm" "$state/models/embedding"
 chmod 700 "$state"
 config="$state/compose.env"
-if [[ ! -s "$config" ]]; then
+domain=
+if [[ -s "$config" ]]; then
+    domain="$(configured_domain "$config")"
+fi
+if [[ -z "$domain" ]]; then
+    if [[ ! -t 0 ]]; then
+        echo "Запустите установщик из интерактивного терминала, чтобы указать DNS-имя." >&2
+        exit 1
+    fi
+    while true; do
+        read -r -p 'DNS-имя CommandWise (например, cw.example.org): ' domain
+        domain="${domain,,}"
+        domain="${domain%.}"
+        if valid_domain "$domain"; then
+            break
+        fi
+        echo "Укажите DNS-имя с точкой, без протокола, порта и IP-адреса." >&2
+    done
     (
         umask 077
         temporary="$(mktemp "$state/.env-XXXXXX")"
+        trap 'rm -f -- "$temporary"' EXIT
         {
-            printf 'POSTGRES_PASSWORD=%s\n' "$(openssl rand -hex 32)"
-            printf 'JWT_SECRET=%s\n' "$(openssl rand -hex 48)"
-            printf 'CW_BIND=127.0.0.1\nCW_PORT=8080\nCOOKIE_SECURE=false\nPUBLIC_ORIGIN=\n'
+            if [[ -s "$config" ]]; then
+                sed -E '/^(CW_DOMAIN|CW_BIND|CW_PORT|COOKIE_SECURE|PUBLIC_ORIGIN)=/d' "$config"
+            else
+                postgres_password="$(openssl rand -hex 32)"
+                jwt_secret="$(openssl rand -hex 48)"
+                printf 'POSTGRES_PASSWORD=%s\nJWT_SECRET=%s\n' "$postgres_password" "$jwt_secret"
+            fi
+            printf '\nCW_DOMAIN=%s\n' "$domain"
         } > "$temporary"
         mv -f -- "$temporary" "$config"
     )
 fi
+if ! valid_domain "$domain"; then
+    echo "Неверное значение CW_DOMAIN в .commandwise/compose.env." >&2
+    exit 1
+fi
+ensure_tls_certificate "$domain" "$state/tls"
 
 download() {
     local url="$1" dest="$2" sha="$3"
