@@ -18,9 +18,6 @@
 
 Сертификат создаётся в `.commandwise/tls/server.crt`. Передайте клиентам этот файл доверенным способом и добавьте его в хранилище доверия, которое использует браузер. Отпечаток для сверки можно получить командой `openssl x509 -in .commandwise/tls/server.crt -noout -fingerprint -sha256`. Приватный ключ `server.key` остаётся на сервере. Для проверки с клиента без импорта в хранилище:
 
-```bash
-curl --cacert ./server.crt https://cw.example.org/api/v1/ready
-```
 
 Повторный запуск:
 
